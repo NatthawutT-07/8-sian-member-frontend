@@ -16,27 +16,29 @@ export default function LandingPage({ onAuthenticated, authMode = null }) {
     [faq, setFaq] = useState(null);
   return (
     <>
-      <header className="header">
-        <a className="brand" href="/">
-          <BrandLogo />
-          <span>
-            8 เซียน<span className="brand-sub">ราชาหมูกระทะ</span>
-          </span>
-        </a>
-        <nav>
-          <a href="/#benefits">สิทธิพิเศษสมาชิก</a>
-          <a href="/#faq">คำถามที่พบบ่อย</a>
-          <a href="/coupons">ใช้คูปอง</a>
-        </nav>
-        <div className="header-auth-actions">
-          <a className="login-shortcut" href="/login">
-            เข้าสู่ระบบ
+      {authMode !== 'register' && (
+        <header className="header">
+          <a className="brand" href="/">
+            <BrandLogo />
+            <span>
+              8 เซียน<span className="brand-sub">ราชาหมูกระทะ</span>
+            </span>
           </a>
-          <a className="nav-cta" href="/register">
-            สมัครสมาชิก <ArrowUpRight size={16} />
-          </a>
-        </div>
-      </header>
+          <nav>
+            <a href="/#benefits">สิทธิพิเศษสมาชิก</a>
+            <a href="/#faq">คำถามที่พบบ่อย</a>
+            <a href="/coupons">ใช้คูปอง</a>
+          </nav>
+          <div className="header-auth-actions">
+            <a className="login-shortcut" href="/login">
+              เข้าสู่ระบบ
+            </a>
+            <a className="nav-cta" href="/register">
+              สมัครสมาชิก <ArrowUpRight size={16} />
+            </a>
+          </div>
+        </header>
+      )}
       <main>
         {!authMode && (
           <>
@@ -160,56 +162,63 @@ export default function LandingPage({ onAuthenticated, authMode = null }) {
           </>
         )}
         {authMode && (
-          <section id="register" className="registration auth-route">
-            <div className="register-copy">
-              {authMode === 'login' ? (
-                <>
-                  <div className="eyebrow">8 SIAN MEMBER CLUB</div>
-                  <h2>
-                    เข้าสู่ระบบ
-                    <br />
-                    เพื่อใช้คูปองของคุณ
-                  </h2>
-                  <p>เข้าสู่ระบบด้วยเบอร์โทรศัพท์และรหัสผ่าน แล้วเลือกคูปองที่ต้องการใช้ได้ทันที</p>
-                </>
-              ) : (
-                <>
-                  <div className="eyebrow">YOUR NEXT GOOD THING</div>
-                  <h2>
-                    เริ่มต้นความพิเศษ
-                    <br />
-                    ด้วยการเป็น<span>สมาชิก.</span>
-                  </h2>
-                  <p>
-                    ใช้เวลาเพียงนิดเดียว แล้วมาพบกัน
-                    <br />
-                    ที่โต๊ะหมูกระทะตัวโปรดของคุณ
-                  </p>
-                  <div className="steps">
-                    <div>
-                      <b>01</b>
-                      <span>กรอกเบอร์โทร ชื่อ นามสกุล และวันเกิด</span>
-                    </div>
-                    <div>
-                      <b>02</b>
-                      <span>ตั้งรหัสผ่านและยืนยันการสมัคร</span>
-                    </div>
-                    <div>
-                      <b>03</b>
-                      <span>พร้อมรับความพิเศษจาก 8 เซียน</span>
-                    </div>
-                  </div>
-                  <div className="privacy-note">
-                    <ShieldCheck size={22} />
-                    <span>
-                      ข้อมูลของคุณจะถูกเก็บอย่างปลอดภัย
+          <section
+            id="register"
+            className={`registration auth-route${authMode === 'register' ? ' register-simple' : ''}`}
+          >
+            {authMode !== 'register' && (
+              <div className="register-copy">
+                {authMode === 'login' ? (
+                  <>
+                    <div className="eyebrow">8 SIAN MEMBER CLUB</div>
+                    <h2>
+                      เข้าสู่ระบบ
                       <br />
-                      ใช้เพื่อดูแลสมาชิกและสิทธิประโยชน์ของคุณ
-                    </span>
-                  </div>
-                </>
-              )}
-            </div>
+                      เพื่อใช้คูปองของคุณ
+                    </h2>
+                    <p>
+                      เข้าสู่ระบบด้วยเบอร์โทรศัพท์และรหัสผ่าน แล้วเลือกคูปองที่ต้องการใช้ได้ทันที
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <div className="eyebrow">YOUR NEXT GOOD THING</div>
+                    <h2>
+                      เริ่มต้นความพิเศษ
+                      <br />
+                      ด้วยการเป็น<span>สมาชิก.</span>
+                    </h2>
+                    <p>
+                      ใช้เวลาเพียงนิดเดียว แล้วมาพบกัน
+                      <br />
+                      ที่โต๊ะหมูกระทะตัวโปรดของคุณ
+                    </p>
+                    <div className="steps">
+                      <div>
+                        <b>01</b>
+                        <span>กรอกเบอร์โทร ชื่อ นามสกุล และวันเกิด</span>
+                      </div>
+                      <div>
+                        <b>02</b>
+                        <span>ตั้งรหัสผ่านและยืนยันการสมัคร</span>
+                      </div>
+                      <div>
+                        <b>03</b>
+                        <span>พร้อมรับความพิเศษจาก 8 เซียน</span>
+                      </div>
+                    </div>
+                    <div className="privacy-note">
+                      <ShieldCheck size={22} />
+                      <span>
+                        ข้อมูลของคุณจะถูกเก็บอย่างปลอดภัย
+                        <br />
+                        ใช้เพื่อดูแลสมาชิกและสิทธิประโยชน์ของคุณ
+                      </span>
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
             <MemberForm
               onPolicy={() => setPolicy(true)}
               onAuthenticated={onAuthenticated}
