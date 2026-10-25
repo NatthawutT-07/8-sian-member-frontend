@@ -195,7 +195,7 @@ export default function useMemberDashboard({ member, onSignedOut }) {
     setError('');
     try {
       await request('/api/auth/logout', { method: 'POST', body: '{}' });
-      onSignedOut();
+      onSignedOut('logout');
     } catch (e) {
       setError(e.message);
     } finally {

@@ -32,8 +32,8 @@ export default function App() {
     return (
       <MemberDashboard
         member={member}
-        onSignedOut={() => {
-          window.location.replace('/login?next=/coupons');
+        onSignedOut={(reason) => {
+          window.location.replace(reason === 'logout' ? '/' : '/login?next=/coupons');
         }}
       />
     );
