@@ -64,7 +64,7 @@ export default function MemberForm({
     if (member && onAuthenticated) onAuthenticated(member);
   }, [member, onAuthenticated]);
   useEffect(() => {
-    if (ready) firstInput.current?.focus();
+    if (ready && !window.matchMedia('(pointer: coarse)').matches) firstInput.current?.focus();
   }, [step, mode, ready]);
   useEffect(() => {
     if (authShortcut) {
@@ -74,7 +74,8 @@ export default function MemberForm({
   }, [authShortcut]);
   function field(e) {
     const { name, type, checked, value } = e.target;
-    setForm((old) => ({ ...old, [name]: type === 'checkbox' ? checked : value }));
+    const nextValue = name === 'phone' ? value.replace(/[^0-9]/g, '').slice(0, 10) : value;
+    setForm((old) => ({ ...old, [name]: type === 'checkbox' ? checked : nextValue }));
   }
   function changeMode(value) {
     if (submitLock.current) return;
@@ -89,7 +90,38 @@ export default function MemberForm({
     if (submitLock.current || busy || retrySeconds > 0) return;
     setError('');
     if (mode === 'register' && step === 1) {
+      for (const name of [form.firstName.trim(), form.lastName.trim()]) {
+        if (
+          name.length < 1 ||
+          name.length > 80 ||
+          !/^[\p{L}\p{M} .’'-]+$/u.test(name) ||
+          !/\p{L}/u.test(name)
+        ) {
+          setError(
+            'ชื่อและนามสกุลต้องเป็นตัวอักษร ไม่เกินช่องละ 80 ตัว ห้ามใส่ตัวเลขหรือสัญลักษณ์พิเศษ',
+          );
+          return;
+        }
+      }
+      const birth = new Date(`${form.birthDate}T00:00:00.000Z`);
+      if (
+        !/^\d{4}-\d{2}-\d{2}$/.test(form.birthDate) ||
+        Number.isNaN(birth.getTime()) ||
+        birth.toISOString().slice(0, 10) !== form.birthDate ||
+        form.birthDate < '1900-01-01' ||
+        form.birthDate > today
+      ) {
+        setError('กรุณาเลือกวันเกิดที่มีอยู่จริง ตั้งแต่ปี 1900 ถึงวันนี้');
+        return;
+      }
       setStep(2);
+      return;
+    }
+    if (
+      mode === 'register' &&
+      (form.password.length < 8 || form.password.length > 128 || !form.password.trim())
+    ) {
+      setError('รหัสผ่านต้องมี 8–128 ตัวอักษร และห้ามเป็นช่องว่างทั้งหมด');
       return;
     }
     if (mode === 'register' && form.password !== form.confirmPassword) {
@@ -99,7 +131,11 @@ export default function MemberForm({
     submitLock.current = true;
     setBusy(true);
     try {
-      const { confirmPassword, ...payload } = form;
+      const { confirmPassword, ...payload } = {
+        ...form,
+        firstName: form.firstName.trim(),
+        lastName: form.lastName.trim(),
+      };
       const body = mode === 'login' ? { phone: form.phone, password: form.password } : payload;
       const [outcome] = await Promise.allSettled([
         request(`/api/auth/${mode}`, { method: 'POST', body: JSON.stringify(body) }),
@@ -241,6 +277,8 @@ export default function MemberForm({
                         name="phone"
                         type="tel"
                         autoComplete={mode === 'login' ? 'username' : 'tel'}
+                        autoCapitalize="none"
+                        spellCheck={false}
                         inputMode="numeric"
                         pattern="0[689][0-9]{8}"
                         maxLength={10}
@@ -254,13 +292,14 @@ export default function MemberForm({
                   {mode === 'register' && step === 1 && (
                     <>
                       <p className="input-note">
-                        ใช้เป็นชื่อบัญชีสำหรับเข้าสู่ระบบ กรุณากรอกเบอร์ที่ใช้งานจริง
+                        กรอกเบอร์มือถือ 10 หลัก ขึ้นต้นด้วย 06, 08 หรือ 09
                       </p>
                       <div className="name-grid">
                         <label>
                           ชื่อ <em>*</em>
                           <input
                             name="firstName"
+                            spellCheck={false}
                             autoComplete="given-name"
                             placeholder="ชื่อจริง"
                             maxLength={80}
@@ -274,6 +313,7 @@ export default function MemberForm({
                           นามสกุล <em>*</em>
                           <input
                             name="lastName"
+                            spellCheck={false}
                             autoComplete="family-name"
                             placeholder="นามสกุล"
                             maxLength={80}
@@ -344,7 +384,10 @@ export default function MemberForm({
                           onChange={field}
                         />
                       </label>
-                      <p className="input-note">แนะนำให้ใช้รหัสผ่านยาวและไม่ซ้ำกับบัญชีอื่น</p>
+                      <p className="input-note">
+                        รหัสผ่าน 8–128 ตัวอักษร ห้ามเป็นช่องว่างทั้งหมด
+                        แนะนำให้ใช้รหัสผ่านยาวและไม่ซ้ำกับบัญชีอื่น
+                      </p>
                       <label className="checkbox">
                         <input
                           name="privacyConsent"

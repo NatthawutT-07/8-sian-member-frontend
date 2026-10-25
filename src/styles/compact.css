@@ -521,6 +521,137 @@ footer {
   gap: 20px;
   padding: 24px;
 }
+/* Keep dialogs reachable with a mobile keyboard or in landscape orientation. */
+.modal-backdrop {
+  overflow-y: auto;
+  padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right))
+    max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+}
+.modal {
+  min-width: 0;
+  width: 100%;
+  max-height: calc(100dvh - 24px);
+  overflow-wrap: anywhere;
+  overscroll-behavior: contain;
+}
+@media (max-width: 800px) {
+  .form-card,
+  .home-member-card,
+  .coupon-details,
+  .admin-content {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  .admin-app input:not([type='checkbox']),
+  .admin-login-page input:not([type='checkbox']),
+  .admin-grant select,
+  input:not([type='checkbox']),
+  select,
+  textarea {
+    font-size: 16px;
+    min-height: 44px;
+    max-width: 100%;
+  }
+  .form-card label {
+    font-size: 14px;
+  }
+  .form-card .input-note,
+  .form-card .form-subtitle,
+  .form-card .checkbox,
+  .form-card .recovery,
+  .form-card .form-foot {
+    font-size: 12px;
+  }
+  .form-card .error {
+    font-size: 14px;
+  }
+  .auth-tabs button,
+  .button,
+  .member-logout,
+  .login-shortcut,
+  .nav-cta,
+  .member-tabs-refresh {
+    min-height: 44px;
+  }
+  .login-shortcut {
+    display: inline-flex;
+    align-items: center;
+  }
+  .auth-tabs button {
+    font-size: 14px;
+  }
+  .form-card .text-button {
+    min-height: 32px;
+  }
+  .form-card input {
+    scroll-margin-block: 90px;
+  }
+  .form-card .checkbox input {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+  .member-coupon-tabs {
+    min-width: 0;
+  }
+  .member-coupon-tabs button {
+    white-space: normal;
+  }
+  .member-main .coupon-details > p,
+  .member-main .coupon-expiry {
+    font-size: 12px;
+  }
+  .member-main .coupon-details .submit {
+    min-height: 44px;
+    font-size: 13px;
+  }
+  .home-member-card h2 {
+    overflow-wrap: anywhere;
+  }
+  .modal {
+    padding: 20px 16px;
+  }
+  .modal .button {
+    white-space: normal;
+  }
+}
+@media (max-width: 380px) {
+  .header {
+    height: auto;
+    min-height: 74px;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-block: 8px;
+  }
+  .name-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .form-heading {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .form-heading h3 {
+    margin-bottom: 0;
+  }
+  .hero-links {
+    flex-wrap: wrap;
+  }
+  .member-card {
+    width: 255px;
+  }
+  .member-header-label {
+    display: none;
+  }
+  .registration-progress {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
 @media (max-width: 760px) {
   .auth-route {
     display: flex;
