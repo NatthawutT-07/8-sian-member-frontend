@@ -38,10 +38,13 @@ button:disabled {
   opacity: 0.65;
 }
 button:focus-visible,
-a:focus-visible,
-input:focus-visible {
+a:focus-visible {
   outline: 3px solid #b69763;
   outline-offset: 4px;
+}
+input:focus-visible {
+  outline: 2px solid #b69763;
+  outline-offset: -2px;
 }
 .header,
 main,
