@@ -119,9 +119,9 @@ export default function MemberForm({
     }
     if (
       mode === 'register' &&
-      (form.password.length < 8 || form.password.length > 128 || !form.password.trim())
+      (form.password.length < 6 || form.password.length > 128 || !form.password.trim())
     ) {
-      setError('รหัสผ่านต้องมี 8–128 ตัวอักษร และห้ามเป็นช่องว่างทั้งหมด');
+      setError('รหัสผ่านต้องมี 6–128 ตัวอักษร ใช้ตัวเลขล้วนได้ และห้ามเป็นช่องว่างทั้งหมด');
       return;
     }
     if (mode === 'register' && form.password !== form.confirmPassword) {
@@ -282,7 +282,7 @@ export default function MemberForm({
                         inputMode="numeric"
                         pattern="0[689][0-9]{8}"
                         maxLength={10}
-                        placeholder="08X XXX XXXX"
+                        placeholder=""
                         required
                         value={form.phone}
                         onChange={field}
@@ -292,7 +292,7 @@ export default function MemberForm({
                   {mode === 'register' && step === 1 && (
                     <>
                       <p className="input-note">
-                        กรอกเบอร์มือถือ 10 หลัก ขึ้นต้นด้วย 06, 08 หรือ 09
+                        กรอกเบอร์มือถือ 10 หลัก
                       </p>
                       <div className="name-grid">
                         <label>
@@ -359,8 +359,8 @@ export default function MemberForm({
                         type="password"
                         name="password"
                         autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
-                        placeholder={mode === 'register' ? 'อย่างน้อย 8 ตัวอักษร' : 'กรอกรหัสผ่าน'}
-                        minLength={mode === 'register' ? 8 : 1}
+                        placeholder={mode === 'register' ? 'อย่างน้อย 6 ตัวอักษร' : 'กรอกรหัสผ่าน'}
+                        minLength={mode === 'register' ? 6 : 1}
                         maxLength={128}
                         required
                         value={form.password}
@@ -377,7 +377,7 @@ export default function MemberForm({
                           name="confirmPassword"
                           autoComplete="new-password"
                           placeholder="กรอกรหัสผ่านอีกครั้ง"
-                          minLength={8}
+                          minLength={6}
                           maxLength={128}
                           required
                           value={form.confirmPassword}
@@ -385,8 +385,7 @@ export default function MemberForm({
                         />
                       </label>
                       <p className="input-note">
-                        รหัสผ่าน 8–128 ตัวอักษร ห้ามเป็นช่องว่างทั้งหมด
-                        แนะนำให้ใช้รหัสผ่านยาวและไม่ซ้ำกับบัญชีอื่น
+                        
                       </p>
                       <label className="checkbox">
                         <input
