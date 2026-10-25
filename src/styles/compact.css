@@ -1,0 +1,507 @@
+/* Compact spacing, shared by the landing page, forms and member dashboard. */
+.brand-logo {
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.brand-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.brand-logo img[hidden] {
+  display: none;
+}
+.brand-logo:has(img:not([hidden])) {
+  background: transparent;
+  border-radius: 0;
+}
+.header {
+  height: 84px;
+}
+.header nav {
+  gap: 24px;
+}
+.hero {
+  gap: 32px;
+  padding: 38px 0 30px;
+}
+.hero h1 {
+  font-size: 50px;
+  margin: 16px 0;
+  line-height: 1.25;
+}
+.intro {
+  line-height: 1.7;
+  margin: 12px 0;
+}
+.hero-links {
+  margin-top: 20px;
+  gap: 16px;
+}
+.hero-note {
+  margin-top: 22px;
+}
+.card-scene {
+  height: 340px;
+}
+.card-sticker {
+  bottom: 30px;
+}
+.promise-strip {
+  padding: 15px 0;
+  gap: 40px;
+}
+.benefits {
+  padding: 36px 0 32px;
+}
+h2 {
+  margin: 9px 0;
+}
+.benefit-grid {
+  gap: 16px;
+  margin-top: 20px;
+}
+.benefit-grid article {
+  padding: 20px;
+}
+.benefit-grid h3 {
+  margin: 16px 0 7px;
+}
+.benefit-grid p {
+  line-height: 1.65;
+}
+.benefit-disclaimer {
+  margin-top: 10px;
+}
+.registration {
+  padding: 30px 34px;
+  gap: 34px;
+}
+.register-copy h2 {
+  font-size: 32px;
+  margin: 12px 0;
+  line-height: 1.35;
+}
+.register-copy > p {
+  line-height: 1.65;
+  margin: 10px 0;
+}
+.steps {
+  gap: 12px;
+  margin-top: 20px;
+}
+.steps > div {
+  gap: 12px;
+}
+.privacy-note {
+  margin-top: 22px;
+  line-height: 1.65;
+}
+.form-card {
+  padding: 22px;
+}
+.form-subtitle {
+  margin: 5px 0 14px;
+}
+.auth-tabs {
+  margin-bottom: 16px;
+}
+.registration-progress {
+  margin: 13px 0 17px;
+}
+.name-grid {
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.input-note {
+  margin: 5px 0 12px;
+  line-height: 1.6;
+}
+.password-field {
+  margin-top: 12px;
+}
+.registration-summary {
+  padding: 11px 14px;
+}
+.checkbox {
+  margin-top: 8px;
+  line-height: 1.65;
+}
+.form-actions {
+  margin-top: 16px;
+}
+.form-foot {
+  margin-top: 9px;
+}
+.recovery {
+  margin-top: 12px;
+}
+.faq {
+  gap: 40px;
+  padding: 38px 0;
+}
+.faq-item button {
+  padding: 15px 0;
+}
+.faq-item p {
+  line-height: 1.7;
+  margin-bottom: 12px;
+}
+footer {
+  padding: 22px 0;
+}
+.member-header {
+  height: 80px;
+}
+.member-welcome {
+  padding: 32px 0 26px;
+  gap: 30px;
+}
+.member-welcome h1 {
+  margin: 12px 0;
+  line-height: 1.3;
+}
+.member-welcome p {
+  margin: 10px 0;
+  line-height: 1.65;
+}
+.home-member-card {
+  padding: 22px 25px;
+}
+.home-member-card > small {
+  margin-top: 16px;
+}
+.home-member-card h2 {
+  margin: 5px 0 10px;
+}
+.card-smallprint {
+  margin-top: 17px;
+}
+.member-stats {
+  padding: 16px 0;
+}
+.coupon-section {
+  padding: 30px 0;
+}
+.coupon-section-heading {
+  margin-bottom: 20px;
+}
+.coupon-grid {
+  gap: 18px;
+}
+.seafood-coupon {
+  min-height: 280px;
+}
+.coupon-details {
+  padding: 21px 20px;
+}
+.coupon-details h3 {
+  margin: 11px 0 7px;
+}
+.coupon-details > p {
+  line-height: 1.65;
+  margin-bottom: 14px;
+}
+.coupon-details .submit {
+  margin-top: 15px;
+}
+.coupon-empty {
+  padding: 32px 20px;
+}
+.coupon-empty p {
+  line-height: 1.65;
+}
+.coupon-howto {
+  padding: 24px 0 30px;
+  gap: 20px;
+}
+.coupon-howto li {
+  line-height: 1.65;
+}
+.member-footer {
+  padding: 20px 0;
+}
+@media (max-width: 800px) {
+  .header,
+  main,
+  footer {
+    margin-left: 18px;
+    margin-right: 18px;
+  }
+  .header {
+    height: 74px;
+  }
+  .hero {
+    padding: 26px 0 22px;
+    gap: 22px;
+  }
+  .hero h1 {
+    font-size: 40px;
+    margin: 12px 0;
+  }
+  .hero-note {
+    margin-top: 16px;
+  }
+  .card-scene {
+    height: 270px;
+  }
+  .card-sticker {
+    bottom: 16px;
+    padding: 10px 13px;
+  }
+  .scene-caption {
+    top: 16px;
+    left: 18px;
+  }
+  .scene-index {
+    bottom: 12px;
+    left: 18px;
+  }
+  .promise-strip {
+    padding: 13px 0;
+    gap: 8px;
+  }
+  .promise-strip span {
+    gap: 4px;
+  }
+  .benefits {
+    padding: 27px 0 24px;
+  }
+  .benefit-grid {
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .benefit-grid article {
+    padding: 16px;
+  }
+  .benefit-top span {
+    top: 16px;
+    right: 16px;
+  }
+  .benefit-grid h3 {
+    margin: 11px 0 5px;
+  }
+  .registration {
+    padding: 22px 16px;
+    gap: 22px;
+  }
+  .register-copy h2 {
+    font-size: 28px;
+    margin: 10px 0;
+  }
+  .steps {
+    gap: 9px;
+    margin-top: 14px;
+  }
+  .privacy-note {
+    margin-top: 16px;
+  }
+  .form-card {
+    padding: 19px 16px;
+  }
+  .faq {
+    padding: 28px 0;
+    gap: 14px;
+  }
+  footer {
+    padding: 20px 0;
+    gap: 16px;
+  }
+}
+@media (max-width: 700px) {
+  .member-header,
+  .member-main,
+  .member-footer {
+    margin-left: 18px;
+    margin-right: 18px;
+  }
+  .member-header {
+    height: 72px;
+  }
+  .member-welcome {
+    padding: 24px 0 22px;
+    gap: 16px;
+  }
+  .member-welcome h1 {
+    font-size: 27px;
+    margin: 10px 0;
+  }
+  .member-welcome h1 > span {
+    font-size: 20px;
+  }
+  .home-member-card {
+    padding: 18px 22px;
+  }
+  .home-member-card > small {
+    margin-top: 14px;
+  }
+  .member-stats {
+    padding: 14px 0;
+  }
+  .coupon-section {
+    padding: 25px 0;
+  }
+  .coupon-section-heading {
+    margin-bottom: 17px;
+  }
+  .seafood-coupon {
+    min-height: 265px;
+  }
+  .coupon-details {
+    padding: 18px 13px;
+  }
+  .coupon-details h3 {
+    margin: 9px 0 6px;
+  }
+  .coupon-details > p {
+    margin-bottom: 11px;
+  }
+  .coupon-details .submit {
+    margin-top: 13px;
+  }
+  .seafood-symbol {
+    margin-top: 16px;
+    margin-bottom: 8px;
+  }
+  .coupon-howto {
+    padding: 22px 0 26px;
+    gap: 15px;
+  }
+  .coupon-howto ol {
+    gap: 12px;
+    margin-bottom: 0;
+  }
+  .member-footer {
+    padding: 18px 0;
+  }
+}
+/* Keep coupon tickets compact while giving the conditions more horizontal room. */
+.member-main .seafood-coupon {
+  grid-template-columns: 30% minmax(0, 1fr);
+  min-height: 215px;
+  border-radius: 8px;
+}
+.member-main .coupon-art {
+  padding: 16px 9px;
+}
+.member-main .coupon-badge {
+  position: static;
+  font-size: 6px;
+  letter-spacing: 1px;
+  padding: 4px 7px;
+  margin-bottom: 7px;
+}
+.member-main .seafood-symbol {
+  width: 48px;
+  height: 48px;
+  margin: 5px 0 9px;
+}
+.member-main .seafood-symbol svg {
+  width: 29px;
+  height: 29px;
+}
+.member-main .coupon-price > span {
+  font-size: 11px;
+}
+.member-main .coupon-price strong {
+  font-size: 32px;
+  letter-spacing: -1px;
+}
+.member-main .coupon-price small {
+  font-size: 9px;
+  margin-left: 3px;
+}
+.member-main .coupon-art-note {
+  font-size: 5px;
+  letter-spacing: 0.5px;
+  margin-top: 10px;
+  text-align: center;
+}
+.member-main .coupon-details {
+  min-width: 0;
+  padding: 16px 18px;
+}
+.member-main .coupon-details h3 {
+  font-size: 17px;
+  line-height: 1.45;
+  margin: 8px 0 6px;
+  overflow-wrap: anywhere;
+}
+.member-main .coupon-details > p {
+  font-size: 11px;
+  line-height: 1.55;
+  margin: 0 0 11px;
+  overflow-wrap: anywhere;
+}
+.member-main .coupon-expiry {
+  font-size: 9px;
+  line-height: 1.6;
+  gap: 5px;
+}
+.member-main .coupon-expiry small {
+  font-size: 8px;
+}
+.member-main .coupon-details .submit {
+  min-height: 40px;
+  padding: 9px 13px;
+  margin-top: 12px;
+  font-size: 11px;
+}
+@media (max-width: 1250px) {
+  .member-main .coupon-grid {
+    max-width: 600px;
+  }
+}
+@media (max-width: 700px) {
+  .member-main .coupon-section {
+    padding: 20px 0;
+  }
+  .member-main .coupon-section-heading {
+    margin-bottom: 13px;
+  }
+  .member-main .coupon-section-heading h2 {
+    font-size: 21px;
+    margin: 8px 0 5px;
+  }
+  .member-main .seafood-coupon {
+    min-height: 200px;
+  }
+  .member-main .coupon-art {
+    padding: 13px 7px;
+  }
+  .member-main .coupon-badge {
+    font-size: 5px;
+    letter-spacing: 0.6px;
+    padding: 4px 5px;
+  }
+  .member-main .seafood-symbol {
+    width: 42px;
+    height: 42px;
+    margin: 5px 0 7px;
+  }
+  .member-main .seafood-symbol svg {
+    width: 26px;
+    height: 26px;
+  }
+  .member-main .coupon-price strong {
+    font-size: 29px;
+  }
+  .member-main .coupon-art-note {
+    display: none;
+  }
+  .member-main .coupon-details {
+    padding: 14px 12px;
+  }
+  .member-main .coupon-details h3 {
+    font-size: 15px;
+    margin: 7px 0 5px;
+  }
+  .member-main .coupon-details > p {
+    font-size: 10px;
+    margin-bottom: 9px;
+  }
+  .member-main .coupon-details .submit {
+    margin-top: 10px;
+  }
+}
