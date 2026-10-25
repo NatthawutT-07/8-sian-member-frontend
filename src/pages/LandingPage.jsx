@@ -287,7 +287,7 @@ export default function LandingPage({ onAuthenticated, authMode = null }) {
               เว้นแต่ต้องเก็บตามกฎหมาย
               ผู้ให้บริการโฮสต์และฐานข้อมูลอาจประมวลผลข้อมูลเพื่อให้ระบบทำงาน
             </p>
-            <small>เวอร์ชัน 25 ตุลาคม 2569</small>
+            <small>เวอร์ชั้น 1 พฤศจิกายน 2569</small>
             <button autoFocus className="button dark" onClick={() => setPolicy(false)}>
               รับทราบและปิด
             </button>
