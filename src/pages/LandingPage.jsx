@@ -45,11 +45,11 @@ export default function LandingPage({ onAuthenticated, authMode = null }) {
                 <div className="eyebrow">
                   <span /> THE 8 SIAN MEMBER CLUB
                 </div>
-                <h1>
+                {/* <h1>
                   ทุกมื้อที่อร่อย
                   <br />
                   พิเศษขึ้น<span className="serif">ได้อีก.</span>
-                </h1>
+                </h1> */}
                 <p className="intro">
                   เพราะคุณคือคนพิเศษของ 8 เซียน
                   <br />
