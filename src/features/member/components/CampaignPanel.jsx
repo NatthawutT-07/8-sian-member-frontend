@@ -1,4 +1,4 @@
-import { Gift, LoaderCircle, Plus } from 'lucide-react';
+import { Gift, LoaderCircle, Plus, LockKeyhole } from 'lucide-react';
 
 export default function CampaignPanel({ activeTab, busy, campaigns, claim, claiming, loading }) {
   return (
@@ -32,11 +32,26 @@ export default function CampaignPanel({ activeTab, busy, campaigns, claim, claim
                   {c.extraPrice > 0 ? `ค่าเพิ่ม ${c.extraPrice} บาท` : 'ไม่มีค่าใช้จ่ายเพิ่ม'} ·
                   ใช้ได้ {c.validityDays} วันหลังรับ
                 </small>
+                {c.prerequisiteCampaign && (
+                  <p className="coupon-prerequisite" id={`campaign-condition-${c.id}`}>
+                    {c.locked ? 'ต้องใช้' : 'ผ่านเงื่อนไขแล้ว: ใช้'} “{c.prerequisiteCampaign.title}
+                    ” {c.locked ? 'และให้ระบบยืนยันสำเร็จก่อน' : 'สำเร็จแล้ว'}
+                  </p>
+                )}
               </div>
-              <button className="button dark" disabled={busy} onClick={() => claim(c)}>
+              <button
+                className="button dark"
+                disabled={busy || c.locked}
+                aria-describedby={c.prerequisiteCampaign ? `campaign-condition-${c.id}` : undefined}
+                onClick={() => claim(c)}
+              >
                 {claiming === c.id ? (
                   <>
                     <LoaderCircle size={15} className="spin" /> กำลังรับ…
+                  </>
+                ) : c.locked ? (
+                  <>
+                    <LockKeyhole size={15} /> ยังไม่ปลดล็อก
                   </>
                 ) : (
                   <>

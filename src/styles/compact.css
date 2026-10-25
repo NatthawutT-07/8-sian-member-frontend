@@ -507,6 +507,23 @@ footer {
 }
 
 /* Direct membership routes */
+.coupon-prerequisite {
+  color: #873b30;
+  background: #f3ecdf;
+  border-radius: 5px;
+  padding: 10px;
+  overflow-wrap: anywhere;
+}
+.admin-form-grid select {
+  width: 100%;
+  min-height: 44px;
+  margin-top: 7px;
+  padding: 10px;
+  font: inherit;
+  background: #fffefb;
+  border: 1px solid #e2e0d7;
+  border-radius: 4px;
+}
 .auth-route {
   min-height: calc(100svh - 160px);
   align-items: start;

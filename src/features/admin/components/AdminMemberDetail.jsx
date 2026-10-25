@@ -4,6 +4,7 @@ const statusText = {
   USED: 'ใช้แล้ว',
   EXPIRED: 'หมดอายุ',
   AVAILABLE: 'พร้อมใช้',
+  LOCKED: 'ยังไม่ปลดล็อก',
 };
 const date = (value) =>
   value
@@ -148,10 +149,20 @@ export default function AdminMemberDetail({
                   <option
                     key={c.id}
                     value={c.id}
-                    disabled={detail.coupons.some((item) => item.campaignId === c.id)}
+                    disabled={
+                      detail.coupons.some((item) => item.campaignId === c.id) ||
+                      Boolean(
+                        c.prerequisiteCampaignId &&
+                        !(detail.usedCampaignIds || []).includes(c.prerequisiteCampaignId),
+                      )
+                    }
                   >
                     {c.title} · {c.validityDays} วัน
                     {detail.coupons.some((item) => item.campaignId === c.id) ? ' (รับแล้ว)' : ''}
+                    {c.prerequisiteCampaignId &&
+                    !(detail.usedCampaignIds || []).includes(c.prerequisiteCampaignId)
+                      ? ` (ต้องใช้ ${c.prerequisite?.title || 'คูปองก่อนหน้า'} ก่อน)`
+                      : ''}
                   </option>
                 ))}
             </select>

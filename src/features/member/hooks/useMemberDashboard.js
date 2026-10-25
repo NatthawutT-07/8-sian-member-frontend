@@ -119,6 +119,7 @@ export default function useMemberDashboard({ member, onSignedOut }) {
           });
           setSelected(null);
           setBarcode(null);
+          await load();
           return;
         }
         if (result.status === 'EXPIRED') {

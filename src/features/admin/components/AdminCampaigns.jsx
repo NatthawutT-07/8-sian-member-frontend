@@ -74,6 +74,26 @@ export default function AdminCampaigns({
                   }
                 />
               </label>
+              <label>
+                ต้องใช้คูปองแคมเปญใดก่อน
+                <select
+                  value={campaignForm.prerequisiteCampaignId || ''}
+                  onChange={(e) =>
+                    setCampaignForm({
+                      ...campaignForm,
+                      prerequisiteCampaignId: e.target.value || null,
+                    })
+                  }
+                >
+                  <option value="">ไม่มีเงื่อนไข (คูปองแรก)</option>
+                  {campaigns.map((campaign) => (
+                    <option key={campaign.id} value={campaign.id}>
+                      {campaign.title}
+                      {campaign.active ? '' : ' (ปิดแจก)'}
+                    </option>
+                  ))}
+                </select>
+              </label>
             </div>
             <button className="admin-primary" disabled={busy}>
               <Plus size={16} /> สร้างแคมเปญ
@@ -101,6 +121,11 @@ export default function AdminCampaigns({
                   <td>
                     <strong>{c.title}</strong>
                     <small>{c.description}</small>
+                    <small>
+                      {c.prerequisite
+                        ? `ปลดล็อกเมื่อใช้: ${c.prerequisite.title}`
+                        : 'รับได้โดยไม่ต้องใช้คูปองก่อนหน้า'}
+                    </small>
                   </td>
                   <td>{c.extraPrice} บาท</td>
                   <td>{c.validityDays} วัน</td>

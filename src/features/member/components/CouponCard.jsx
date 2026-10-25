@@ -1,4 +1,4 @@
-import { UtensilsCrossed, Gift, Clock, ArrowRight } from 'lucide-react';
+import { UtensilsCrossed, Gift, Clock, ArrowRight, LockKeyhole } from 'lucide-react';
 const formatDate = (value) =>
   new Intl.DateTimeFormat('th-TH', {
     dateStyle: 'medium',
@@ -43,8 +43,27 @@ export default function CouponCard({ busy, coupon, now, showBarcode }) {
             </small>
           </span>
         </div>
-        <button className="button submit" disabled={busy} onClick={() => showBarcode(coupon)}>
-          ใช้คูปองนี้ <ArrowRight size={17} />
+        {coupon.locked && (
+          <p className="coupon-prerequisite" id={`coupon-condition-${coupon.id}`}>
+            ต้องใช้ “{coupon.prerequisiteCampaign?.title || 'คูปองก่อนหน้า'}”
+            และให้ระบบยืนยันสำเร็จก่อน
+          </p>
+        )}
+        <button
+          className="button submit"
+          disabled={busy || coupon.locked}
+          aria-describedby={coupon.locked ? `coupon-condition-${coupon.id}` : undefined}
+          onClick={() => showBarcode(coupon)}
+        >
+          {coupon.locked ? (
+            <>
+              <LockKeyhole size={17} /> ยังไม่ปลดล็อก
+            </>
+          ) : (
+            <>
+              ใช้คูปองนี้ <ArrowRight size={17} />
+            </>
+          )}
         </button>
       </div>
     </article>

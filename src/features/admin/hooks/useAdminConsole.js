@@ -5,6 +5,7 @@ const freshCampaign = {
   description: '',
   extraPrice: 79,
   validityDays: 30,
+  prerequisiteCampaignId: null,
 };
 export default function useAdminConsole() {
   const [admin, setAdmin] = useState(null),
