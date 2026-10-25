@@ -4,7 +4,7 @@ import { LogOut } from 'lucide-react';
 export default function MemberHeader({ busy, logout }) {
   return (
     <header className="member-header">
-      <a className="brand" href="#member">
+      <a className="brand" href="/">
         <BrandLogo />
         <span>
           8 เซียน<span className="brand-sub">ราชาหมูกระทะ</span>

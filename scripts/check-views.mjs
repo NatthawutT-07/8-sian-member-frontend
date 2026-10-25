@@ -44,6 +44,21 @@ async function check(module, props, expected) {
   assert.ok(html.includes(expected), `${module} should render ${expected}`);
 }
 try {
+  const { default: LandingPage } = await server.ssrLoadModule('/src/pages/LandingPage.jsx');
+  const home = renderToStaticMarkup(createElement(LandingPage, {}));
+  assert.ok(home.includes('class="hero"'));
+  assert.ok(
+    !home.includes('class="form-card"'),
+    'Home should link to the separate registration page',
+  );
+  assert.ok(home.includes('href="/register"') && home.includes('href="/coupons"'));
+  for (const mode of ['register', 'login']) {
+    const html = renderToStaticMarkup(createElement(LandingPage, { authMode: mode }));
+    assert.ok(!html.includes('class="hero"'), 'Auth shortcuts should skip the landing content');
+    assert.ok(html.includes('class="form-card"'));
+    assert.ok(html.includes(mode === 'login' ? 'ยินดีต้อนรับกลับมา' : 'เริ่มต้นเป็นสมาชิก'));
+  }
+  console.log('PASS: home, register and login render separate shortcut pages');
   await check('features/member/MemberDashboard.jsx', { member, onSignedOut: noop }, 'คูปองของฉัน');
   await check(
     'features/member/components/CouponCard.jsx',

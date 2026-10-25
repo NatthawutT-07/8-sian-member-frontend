@@ -19,8 +19,14 @@ const today = new Intl.DateTimeFormat('en-CA', {
   month: '2-digit',
   day: '2-digit',
 }).format(new Date());
-export default function MemberForm({ onPolicy, onAuthenticated, authShortcut }) {
-  const [mode, setMode] = useState('register'),
+export default function MemberForm({
+  onPolicy,
+  onAuthenticated,
+  authShortcut,
+  initialMode = 'register',
+  onModeChange,
+}) {
+  const [mode, setMode] = useState(initialMode),
     [step, setStep] = useState(1),
     [member, setMember] = useState(null),
     [form, setForm] = useState(emptyForm),
@@ -157,7 +163,7 @@ export default function MemberForm({ onPolicy, onAuthenticated, authShortcut }) 
               <button
                 type="button"
                 className={mode === 'register' ? 'active' : ''}
-                onClick={() => changeMode('register')}
+                onClick={() => (onModeChange ? onModeChange('register') : changeMode('register'))}
                 disabled={busy}
               >
                 สมัครสมาชิก
@@ -165,7 +171,7 @@ export default function MemberForm({ onPolicy, onAuthenticated, authShortcut }) 
               <button
                 type="button"
                 className={mode === 'login' ? 'active' : ''}
-                onClick={() => changeMode('login')}
+                onClick={() => (onModeChange ? onModeChange('login') : changeMode('login'))}
                 disabled={busy}
               >
                 เข้าสู่ระบบ

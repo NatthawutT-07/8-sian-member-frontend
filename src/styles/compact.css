@@ -505,3 +505,34 @@ footer {
     margin-top: 10px;
   }
 }
+
+/* Direct membership routes */
+.auth-route {
+  min-height: calc(100svh - 160px);
+  align-items: start;
+  padding-top: 32px;
+}
+.route-status {
+  min-height: 70svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 24px;
+}
+@media (max-width: 760px) {
+  .auth-route {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-top: 20px;
+  }
+  .auth-route .register-copy {
+    display: none;
+  }
+  .auth-route .form-card {
+    width: 100%;
+    margin: 0;
+  }
+}
