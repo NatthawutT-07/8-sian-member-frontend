@@ -1,5 +1,4 @@
 import { Plus } from 'lucide-react';
-
 export default function AdminCampaigns({
   api,
   busy,
@@ -27,7 +26,12 @@ export default function AdminCampaigns({
                   maxLength={100}
                   required
                   value={campaignForm.title}
-                  onChange={(e) => setCampaignForm({ ...campaignForm, title: e.target.value })}
+                  onChange={(e) =>
+                    setCampaignForm({
+                      ...campaignForm,
+                      title: e.target.value,
+                    })
+                  }
                 />
               </label>
               <label>
@@ -38,7 +42,10 @@ export default function AdminCampaigns({
                   required
                   value={campaignForm.description}
                   onChange={(e) =>
-                    setCampaignForm({ ...campaignForm, description: e.target.value })
+                    setCampaignForm({
+                      ...campaignForm,
+                      description: e.target.value,
+                    })
                   }
                 />
               </label>
@@ -104,21 +111,21 @@ export default function AdminCampaigns({
       <section className="admin-panel">
         <h2>แคมเปญทั้งหมด</h2>
         <div className="admin-table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>คูปอง / รายละเอียด</th>
-                <th>ค่าเพิ่ม</th>
-                <th>อายุ</th>
-                <th>แจกแล้ว</th>
-                <th>สถานะ</th>
-                <th />
+          <table className="admin-responsive-table" role="table">
+            <thead role="rowgroup">
+              <tr role="row">
+                <th role="columnheader">คูปอง / รายละเอียด</th>
+                <th role="columnheader">ค่าเพิ่ม</th>
+                <th role="columnheader">อายุ</th>
+                <th role="columnheader">แจกแล้ว</th>
+                <th role="columnheader">สถานะ</th>
+                <th role="columnheader" />
               </tr>
             </thead>
-            <tbody>
+            <tbody role="rowgroup">
               {campaigns.map((c) => (
-                <tr key={c.id}>
-                  <td>
+                <tr key={c.id} role="row">
+                  <td role="cell" data-label="คูปอง / รายละเอียด">
                     <strong>{c.title}</strong>
                     <small>{c.description}</small>
                     <small>
@@ -127,15 +134,21 @@ export default function AdminCampaigns({
                         : 'รับได้โดยไม่ต้องใช้คูปองก่อนหน้า'}
                     </small>
                   </td>
-                  <td>{c.extraPrice} บาท</td>
-                  <td>{c.validityDays} วัน</td>
-                  <td>{c._count.coupons}</td>
-                  <td>
+                  <td role="cell" data-label="ค่าเพิ่ม">
+                    {c.extraPrice} บาท
+                  </td>
+                  <td role="cell" data-label="อายุ">
+                    {c.validityDays} วัน
+                  </td>
+                  <td role="cell" data-label="แจกแล้ว">
+                    {c._count.coupons}
+                  </td>
+                  <td role="cell" data-label="สถานะ">
                     <span className={`admin-badge ${c.active ? 'available' : 'expired'}`}>
                       {c.active ? 'เปิดแจก' : 'ปิดแจก'}
                     </span>
                   </td>
-                  <td>
+                  <td role="cell" data-label="" className="admin-cell-action">
                     <button
                       className="admin-link"
                       disabled={busy}
@@ -143,7 +156,9 @@ export default function AdminCampaigns({
                         run(async () => {
                           await api(`/campaigns/${c.id}`, {
                             method: 'PATCH',
-                            body: JSON.stringify({ active: !c.active }),
+                            body: JSON.stringify({
+                              active: !c.active,
+                            }),
                           });
                           await loadCommon();
                         })

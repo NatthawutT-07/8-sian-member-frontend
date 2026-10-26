@@ -1,11 +1,42 @@
-# Mobile layout and input checks
+# Frontend สำหรับโทรศัพท์
 
-Verified using headless Edge (Chromium), touch/mobile emulation, with mocked API responses. No production database or real member records were used.
+รอบปรับปรุง: 26 ตุลาคม 2569 ครอบคลุม /, /register, /login, /coupons และ path หลังบ้านแอดมิน
 
-- Viewports: 320×740, 360×740, 390×844, 430×932, 768×1024 and landscape 740×360.
-- Registration: numeric phone input limited to 10 digits; rejects invalid names; checks real birth dates; rejects all-space passwords; two-step form and privacy dialog remain reachable.
-- Coupon shortcut: unauthenticated requests redirect to login; successful login returns to coupons; long member names and coupon descriptions fit; barcode dialog stays within the viewport and scrolls; logout returns home.
-- 24 document-width checks passed across registration, wallet, barcode and home. Login throttling (429) disables submit and shows the retry countdown. Admin login was checked at 320×740, 390×844 and 740×360.
-- Inputs use at least 16px text on mobile, focus outlines remain inside fields, and primary controls have a minimum 44px height. Initial focus is skipped for touch devices to avoid opening the keyboard automatically.
+## โครงสร้าง responsive
 
-These checks cover browser emulation; physical iOS/Android keyboards, autofill overlays and scanning a barcode with the shop's actual reader still need device checks. Barcodes are visualized with fixture data, not valid redemption codes.
+`src/styles/mobile.css` โหลดหลัง global.css และ compact.css ใช้เป็นกฎมือถือร่วมทุกหน้า ส่วนรูปแบบเฉพาะฟีเจอร์ยังอยู่ข้างฟีเจอร์เดิม เลี่ยงการเพิ่ม !important หรือใช้ overflow-x: hidden ที่ body เพื่อซ่อนต้นเหตุของเนื้อหาล้น
+
+จอเป้าหมาย: 320, 360, 375, 390, 414 และ 768px รวมถึงแนวนอนที่มีความสูงน้อย ตัวเลขเหล่านี้เป็นเป้าหมายการออกแบบ ไม่ใช่ผลทดสอบจากอุปกรณ์จริง
+
+## สิ่งที่ปรับ
+
+- Header ย่อและเรียงใหม่ได้ เมนูหลักเลื่อนเฉพาะแถบเมนูบนจอแคบ และเผื่อขอบ safe area
+- ฟอร์มสมัคร/login ย่อเข้าจอ ช่องกรอก 16px และสูงอย่างน้อย 46px ช่องวันเกิดคง min-width: 0 ไว้
+- ชื่อ/นามสกุลเรียงแนวตั้งเมื่อจอไม่เกิน 560px ปุ่มส่งและปุ่มย้อนกลับยังอยู่ในฟอร์ม
+- แท็บคูปองตัดข้อความได้ การ์ดแคมเปญไม่มี min-width ที่บีบจอ ปุ่มรับเต็มพื้นที่ฝั่งข้อความ
+- หน้าคูปองรองรับชื่อยาว ราคา และเงื่อนไขหลายบรรทัด โดยยังมีพื้นที่กดปุ่มชัดเจน
+- Dialog คูปอง/นโยบายใช้ component ร่วม ปิดด้วย Escape ได้เมื่อไม่กำลังทำรายการ ล็อก scroll ด้านหลัง กัก focus และคืน focus เมื่อปิด
+- Dialog เลื่อนภายในได้ เผื่อ safe area และปรับตามความสูง viewport บาร์โค้ดคงสีดำบนพื้นขาวและเป็น SVG
+- หลังบ้านแปลงตารางสมาชิก แคมเปญ และประวัติคูปองเป็นรายการแนวตั้งพร้อม data-label บนมือถือ โดยเก็บ role ของตารางและหัวคอลัมน์ไว้
+- ฟอร์มหลังบ้านเรียงช่องเดียว ปุ่มจัดการ/แบ่งหน้า/login/ค้นหามีพื้นที่กดอย่างน้อย 44px
+
+## การตรวจอัตโนมัติ
+
+```powershell
+# จาก root
+npm.cmd run build
+npm.cmd run check:views
+npm.cmd run check:barcode
+```
+
+check:views ตรวจการ render หน้าและส่วนประกอบ รวมชื่อยาว ป้ายข้อมูลตาราง เงื่อนไขคูปองที่ล็อก และบาร์โค้ดหมดอายุ เป็นการตรวจ markup และข้อมูล ไม่ใช่การวัดขนาด layout จริง
+
+## ยังต้องทดสอบบนเครื่องจริง
+
+- Safari บน iPhone และ Chrome บน Android: เลือกวันเกิด เปิดคีย์บอร์ด เปลี่ยนแนวเครื่อง และขยายข้อความ
+- ตรวจว่าไม่มี page scroll แนวนอน เมนูที่ตั้งใจให้เลื่อนยังเลื่อนได้ และปุ่มไม่ถูกบังจากขอบจอ
+- สมัคร 2 ขั้นตอน ย้อนแก้ไข login ผิด/ถูก และสถานะรอเมื่อทำรายการถี่
+- รับคูปองที่ยังไม่รับ เปิดบาร์โค้ด ปิด/เปิดใหม่ และสแกนด้วยเครื่องอ่านจริง
+- หลังบ้าน: ค้นหา แจกคูปอง และตั้งรหัสผ่านเมื่อคีย์บอร์ดเปิดอยู่
+
+ยังไม่มี browser session หรือมือถือจริงให้ตรวจในรอบนี้ จึงไม่ยืนยันผล pixel layout หรือการสแกนจริง การปรับรอบนี้ไม่เปลี่ยนราคา เงื่อนไขสิทธิ์ API หรือฐานข้อมูล

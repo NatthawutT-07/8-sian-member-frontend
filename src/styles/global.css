@@ -6,6 +6,9 @@
   font-weight: 400;
   --red: #8b342c;
   --muted: #85857b;
+  --content-width: 1080px;
+  --section-space: 28px;
+  --panel-radius: 8px;
 }
 * {
   box-sizing: border-box;

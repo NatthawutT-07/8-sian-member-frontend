@@ -684,3 +684,34 @@ footer {
     margin: 0;
   }
 }
+/* Align all customer-facing pages to the same content edges. */
+@media (min-width: 801px) {
+  .header,
+  #root > main,
+  .member-header,
+  .member-main,
+  .site-footer {
+    width: calc(100% - 64px);
+    max-width: var(--content-width);
+    margin-inline: auto;
+  }
+}
+@media (min-width: 801px) and (max-width: 1050px) {
+  .header {
+    height: auto;
+    min-height: 76px;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    padding-block: 12px;
+  }
+  .header nav {
+    order: 3;
+    flex-basis: 100%;
+    justify-content: center;
+    gap: 22px;
+    border-top: 1px solid #e5dfd3;
+  }
+  .header nav a {
+    padding-block: 10px;
+  }
+}

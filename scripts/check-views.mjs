@@ -42,11 +42,13 @@ async function check(module, props, expected) {
   const loaded = await server.ssrLoadModule('/src/' + module);
   const html = renderToStaticMarkup(createElement(loaded.default, props));
   assert.ok(html.includes(expected), `${module} should render ${expected}`);
+  return html;
 }
 try {
   const { default: LandingPage } = await server.ssrLoadModule('/src/pages/LandingPage.jsx');
   const home = renderToStaticMarkup(createElement(LandingPage, {}));
-  assert.ok(home.includes('class="hero"'));
+  assert.ok(home.includes('landing-hero'));
+  assert.ok(home.includes('<h1>'), 'Home should have a clear main heading');
   assert.ok(
     !home.includes('class="form-card"'),
     'Home should link to the separate registration page',
@@ -54,7 +56,7 @@ try {
   assert.ok(home.includes('href="/register"') && home.includes('href="/coupons"'));
   for (const mode of ['register', 'login']) {
     const html = renderToStaticMarkup(createElement(LandingPage, { authMode: mode }));
-    assert.ok(!html.includes('class="hero"'), 'Auth shortcuts should skip the landing content');
+    assert.ok(!html.includes('landing-hero'), 'Auth shortcuts should skip the landing content');
     assert.ok(html.includes('class="form-card"'));
     assert.ok(html.includes(mode === 'login' ? 'ยินดีต้อนรับกลับมา' : 'เริ่มต้นเป็นสมาชิก'));
   }
@@ -151,7 +153,96 @@ try {
     },
     'สร้างแคมเปญคูปอง',
   );
-  console.log('PASS: 9 extracted member/admin views render without missing bindings or props');
+  await check(
+    'features/promotions/components/PromotionList.jsx',
+    {
+      promotions: [
+        { ...campaign, prerequisite: null },
+        {
+          ...campaign,
+          id: 'locked-public',
+          title: 'สิทธิ์ครั้งถัดไป',
+          prerequisite: { title: 'คูปองก่อนหน้า' },
+        },
+      ],
+    },
+    'เข้าสู่ระบบรับคูปอง',
+  );
+  const longTitle = 'โปรโมชั่นสำหรับสมาชิกที่มีรายละเอียดมากขึ้นและชื่อยาวเป็นพิเศษ';
+  const mobileMemberList = await check(
+    'features/admin/components/AdminMemberList.jsx',
+    {
+      busy: false,
+      loadMembers: noop,
+      members: {
+        members: [{ ...member, firstName: 'สมชาย'.repeat(12), lastName: 'ใจดี'.repeat(12) }],
+        total: 1,
+        page: 1,
+        pages: 1,
+      },
+      query: '',
+      run: noop,
+      setQuery: noop,
+      setSearch: noop,
+      showMember: noop,
+    },
+    'ดูแลสมาชิก',
+  );
+  assert.ok(mobileMemberList.includes('data-label="เลขสมาชิก"'));
+  assert.ok(mobileMemberList.includes('data-label="เบอร์โทร"'));
+  assert.ok(mobileMemberList.includes('role="columnheader"'));
+  const mobileCampaignList = await check(
+    'features/admin/components/AdminCampaigns.jsx',
+    {
+      api: noop,
+      busy: false,
+      campaignForm: { ...campaign, title: longTitle },
+      campaigns: [{ ...campaign, title: longTitle, description: 'รายละเอียดเงื่อนไข'.repeat(30) }],
+      createCampaign: noop,
+      loadCommon: noop,
+      run: noop,
+      setCampaignForm: noop,
+    },
+    longTitle,
+  );
+  assert.ok(mobileCampaignList.includes('data-label="ค่าเพิ่ม"'));
+  await check(
+    'features/member/components/CampaignPanel.jsx',
+    {
+      activeTab: 'campaigns',
+      busy: false,
+      campaigns: [
+        { ...campaign, title: longTitle, locked: true, prerequisiteCampaign: { title: longTitle } },
+      ],
+      claim: noop,
+      claiming: null,
+      loading: false,
+    },
+    'ยังไม่ปลดล็อก',
+  );
+  await check(
+    'features/member/components/CouponBarcodeDialog.jsx',
+    {
+      selected: { ...coupon, title: longTitle },
+      now,
+      barcode: {
+        code: '88012345678901234567890123456789',
+        expiresAt: new Date(now - 1000).toISOString(),
+      },
+      barcodeError: '',
+      busy: false,
+      cancelButton: { current: null },
+      closeBarcode: noop,
+      showBarcode: noop,
+    },
+    'สร้างบาร์โค้ดใหม่',
+  );
+  console.log(
+    'PASS: mobile-view markup handles long content, readable table labels, locked campaigns and expired barcodes',
+  );
+  console.log(
+    'PASS: extracted views and public promotion list render without missing bindings or props',
+  );
 } finally {
   await server.close();
 }

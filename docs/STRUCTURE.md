@@ -11,7 +11,8 @@ frontend/
 │   ├── lib/api.js                # HTTP client, cookie, error และ retry time
 │   ├── styles/
 │   │   ├── global.css            # สี ฟอนต์ layout และรูปแบบพื้นฐาน
-│   │   └── compact.css           # ระยะห่างและขนาดแบบกระชับ ใช้หลัง CSS อื่น
+│   │   ├── compact.css           # ระยะห่างและขนาดแบบกระชับ
+│   │   └── mobile.css            # กฎมือถือร่วม โหลดเป็นไฟล์สุดท้าย
 │   └── features/
 │       ├── auth/
 │       │   ├── MemberForm.jsx    # สมัคร 2 ขั้นตอนและ login
@@ -40,6 +41,8 @@ frontend/
 
 ## จะปรับอะไร ให้เริ่มที่ไหน
 
+โปรโมชั่นหน้าแรกอยู่ที่ `src/features/promotions/PublicPromotions.jsx` (โหลดรายการ), `components/PromotionList.jsx` (แสดงรายการ) และ `promotions.css` แยกจากฟีเจอร์รับคูปองของสมาชิก หน้าแรกแสดงรายการที่เปิดแจกโดยไม่ต้อง login และใช้ปุ่มไป /login เพื่อรับสิทธิ์ต่อ
+
 | งาน | ไฟล์หลัก |
 |---|---|
 | ข้อความหน้าแรก ปุ่มลัด login FAQ | src/pages/LandingPage.jsx |
@@ -61,6 +64,8 @@ frontend/
 | คำสั่ง API/session หลังบ้าน | src/features/admin/hooks/useAdminConsole.js |
 | สีและรูปแบบพื้นฐาน | src/styles/global.css |
 | ลด/เพิ่มระยะห่างและขนาดร่วมทุกหน้า | src/styles/compact.css |
+| ปรับหน้าจอโทรศัพท์และตารางหลังบ้าน | src/styles/mobile.css |
+| การเปิด/ปิดและ focus ของ dialog | src/components/Dialog.jsx |
 | เปลี่ยนรูปโลโก้ | public/images/logo.png |
 | เปลี่ยน path รูปโลโก้ | src/components/BrandLogo.jsx |
 | เปลี่ยน URL หลังบ้าน | .env ตัวแปร VITE_ADMIN_PATH |
@@ -73,7 +78,7 @@ Component ที่ใช้เฉพาะฟีเจอร์ให้วา�
 
 เรียก backend ผ่าน lib/api.js เพื่อใช้ cookie, timeout และ error format เดียวกัน ไม่ใส่กฎคำนวณราคาหรือสิทธิ์สำคัญไว้เฉพาะ frontend
 
-ลำดับ CSS ใน main.jsx มีผลต่อหน้าตาปัจจุบัน global.css มาก่อน compact.css ซึ่งใช้ปรับขนาด/ระยะห่าง อย่าสลับลำดับโดยไม่ตรวจผล
+ลำดับ CSS ใน main.jsx มีผลต่อหน้าตาปัจจุบัน: global.css → compact.css → mobile.css อย่าสลับลำดับโดยไม่ตรวจผล ดูรายการปรับและข้อจำกัดการทดสอบใน [Mobile QA](MOBILE-QA.md)
 
 ## คำสั่งจากโฟลเดอร์ frontend
 

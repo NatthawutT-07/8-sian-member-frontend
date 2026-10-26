@@ -291,17 +291,15 @@ export default function MemberForm({
                   )}
                   {mode === 'register' && step === 1 && (
                     <>
-                      <p className="input-note">
-                        กรอกเบอร์มือถือ 10 หลัก
-                      </p>
+                      <p className="input-note">กรอกเบอร์มือถือ 10 หลัก</p>
                       <div className="name-grid">
                         <label>
-                          ชื่อ <em>*</em>
+                          ชื่อจริง <em>*</em>
                           <input
                             name="firstName"
                             spellCheck={false}
                             autoComplete="given-name"
-                            placeholder="ชื่อจริง"
+                            placeholder=""
                             maxLength={80}
                             required
                             pattern=".*\S.*"
@@ -315,7 +313,7 @@ export default function MemberForm({
                             name="lastName"
                             spellCheck={false}
                             autoComplete="family-name"
-                            placeholder="นามสกุล"
+                            placeholder=""
                             maxLength={80}
                             required
                             pattern=".*\S.*"
@@ -324,18 +322,21 @@ export default function MemberForm({
                           />
                         </label>
                       </div>
-                      <label>
+                      <label className="birth-date-field">
                         วัน เดือน ปีเกิด <em>*</em>
-                        <input
-                          type="date"
-                          name="birthDate"
-                          autoComplete="bday"
-                          min="1900-01-01"
-                          max={today}
-                          required
-                          value={form.birthDate}
-                          onChange={field}
-                        />
+                        <span className="birth-date-control">
+                          <input
+                            className="birth-date-input"
+                            type="date"
+                            name="birthDate"
+                            autoComplete="bday"
+                            min="1900-01-01"
+                            max={today}
+                            required
+                            value={form.birthDate}
+                            onChange={field}
+                          />
+                        </span>
                       </label>
                       <p className="input-note">
                         เลือกวันเกิดตามปฏิทิน เพื่อดูแลข้อมูลสมาชิกของคุณ
@@ -359,7 +360,7 @@ export default function MemberForm({
                         type="password"
                         name="password"
                         autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
-                        placeholder={mode === 'register' ? 'อย่างน้อย 6 ตัวอักษร' : 'กรอกรหัสผ่าน'}
+                        placeholder={mode === 'register' ? 'อย่างน้อย 6 ตัวอักษร' : ''}
                         minLength={mode === 'register' ? 6 : 1}
                         maxLength={128}
                         required
@@ -384,9 +385,7 @@ export default function MemberForm({
                           onChange={field}
                         />
                       </label>
-                      <p className="input-note">
-                        
-                      </p>
+                      <p className="input-note"></p>
                       <label className="checkbox">
                         <input
                           name="privacyConsent"

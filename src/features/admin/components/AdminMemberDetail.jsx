@@ -80,7 +80,12 @@ export default function AdminMemberDetail({
                     autoComplete="new-password"
                     required
                     value={reset.newPassword}
-                    onChange={(e) => setReset({ ...reset, newPassword: e.target.value })}
+                    onChange={(e) =>
+                      setReset({
+                        ...reset,
+                        newPassword: e.target.value,
+                      })
+                    }
                   />
                 </label>
                 <label>
@@ -92,7 +97,12 @@ export default function AdminMemberDetail({
                     autoComplete="new-password"
                     required
                     value={reset.confirm}
-                    onChange={(e) => setReset({ ...reset, confirm: e.target.value })}
+                    onChange={(e) =>
+                      setReset({
+                        ...reset,
+                        confirm: e.target.value,
+                      })
+                    }
                   />
                 </label>
                 <label>
@@ -103,7 +113,12 @@ export default function AdminMemberDetail({
                     maxLength={128}
                     required
                     value={reset.adminPassword}
-                    onChange={(e) => setReset({ ...reset, adminPassword: e.target.value })}
+                    onChange={(e) =>
+                      setReset({
+                        ...reset,
+                        adminPassword: e.target.value,
+                      })
+                    }
                   />
                 </label>
                 <label>
@@ -114,7 +129,12 @@ export default function AdminMemberDetail({
                     placeholder="ห้ามใส่รหัสผ่านในช่องนี้"
                     required
                     value={reset.reason}
-                    onChange={(e) => setReset({ ...reset, reason: e.target.value })}
+                    onChange={(e) =>
+                      setReset({
+                        ...reset,
+                        reason: e.target.value,
+                      })
+                    }
                   />
                 </label>
               </div>
@@ -181,28 +201,36 @@ export default function AdminMemberDetail({
         </form>
         <h3>ประวัติคูปองของสมาชิก</h3>
         <div className="admin-table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>คูปอง</th>
-                <th>สถานะ</th>
-                <th>วันที่ได้รับ</th>
-                <th>หมดอายุ</th>
-                <th>วันที่ใช้</th>
+          <table className="admin-responsive-table" role="table">
+            <thead role="rowgroup">
+              <tr role="row">
+                <th role="columnheader">คูปอง</th>
+                <th role="columnheader">สถานะ</th>
+                <th role="columnheader">วันที่ได้รับ</th>
+                <th role="columnheader">หมดอายุ</th>
+                <th role="columnheader">วันที่ใช้</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody role="rowgroup">
               {detail.coupons.map((c) => (
-                <tr key={c.id}>
-                  <td>{c.title}</td>
-                  <td>
+                <tr key={c.id} role="row">
+                  <td role="cell" data-label="คูปอง">
+                    {c.title}
+                  </td>
+                  <td role="cell" data-label="สถานะ">
                     <span className={`admin-badge ${c.status.toLowerCase()}`}>
                       {statusText[c.status]}
                     </span>
                   </td>
-                  <td>{date(c.issuedAt)}</td>
-                  <td>{date(c.expiresAt)}</td>
-                  <td>{date(c.usedAt)}</td>
+                  <td role="cell" data-label="วันที่ได้รับ">
+                    {date(c.issuedAt)}
+                  </td>
+                  <td role="cell" data-label="หมดอายุ">
+                    {date(c.expiresAt)}
+                  </td>
+                  <td role="cell" data-label="วันที่ใช้">
+                    {date(c.usedAt)}
+                  </td>
                 </tr>
               ))}
             </tbody>

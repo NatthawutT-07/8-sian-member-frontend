@@ -10,6 +10,9 @@ export default function BrandLogo() {
         <img
           src="/images/logo.png"
           alt=""
+          width={128}
+          height={128}
+          decoding="async"
           hidden={!loaded}
           onLoad={() => setLoaded(true)}
           onError={() => setFailed(true)}

@@ -1,0 +1,809 @@
+/* Phone layout is applied last. Desktop styling stays with its owning feature. */
+:root {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+@media (max-width: 800px) {
+  body,
+  #root {
+    min-width: 0;
+  }
+  .header,
+  .member-header,
+  .member-main,
+  .member-footer,
+  body > #root > main,
+  #root > header + main,
+  #root > footer {
+    min-width: 0;
+    margin-left: max(14px, env(safe-area-inset-left));
+    margin-right: max(14px, env(safe-area-inset-right));
+  }
+  .header {
+    height: auto;
+    min-height: 70px;
+    padding-top: max(10px, env(safe-area-inset-top));
+    padding-bottom: 0;
+    flex-wrap: wrap;
+    gap: 6px 8px;
+  }
+  .header .brand {
+    font-size: 17px;
+    gap: 8px;
+    min-width: 0;
+  }
+  .header .brand-icon {
+    width: 40px;
+    height: 40px;
+  }
+  .header .brand-sub {
+    font-size: 10px;
+    letter-spacing: 0;
+  }
+  .header-auth-actions {
+    gap: 8px;
+    flex-shrink: 0;
+    max-width: 100%;
+    flex-wrap: wrap;
+    margin-left: auto;
+  }
+  .header-auth-actions .login-shortcut,
+  .header-auth-actions .nav-cta {
+    min-height: 44px;
+    font-size: 12px;
+  }
+  .header-auth-actions .nav-cta {
+    padding: 9px 10px;
+    gap: 6px;
+  }
+  .header nav {
+    display: flex;
+    order: 3;
+    flex: 0 0 100%;
+    min-width: 0;
+    gap: 19px;
+    white-space: nowrap;
+    overflow-x: auto;
+    border-top: 1px solid #e6dfd2;
+    font-size: 12px;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+  }
+  .header nav a {
+    flex-shrink: 0;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    padding-block: 10px;
+  }
+  .hero.landing-hero {
+    padding: 23px 0;
+  }
+  .hero-links {
+    flex-wrap: wrap;
+    gap: 8px 18px;
+  }
+  .promise-strip {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 8px 15px;
+  }
+  .promise-strip span {
+    font-size: 11px;
+    line-height: 1.6;
+  }
+  .promise-strip i {
+    display: none;
+  }
+  .public-promotions h2,
+  .membership-guide h2,
+  .faq h2 {
+    font-size: 21px;
+    line-height: 1.5;
+  }
+  .public-promotion,
+  .public-promotion-content,
+  .public-promotion-top {
+    min-width: 0;
+  }
+  .public-promotion-top {
+    flex-wrap: wrap;
+    row-gap: 10px;
+  }
+  .public-promotion:only-child {
+    max-width: none;
+  }
+  .public-promotion-price {
+    margin-left: auto;
+    max-width: 100%;
+  }
+  .public-promotion-price strong {
+    font-size: 25px;
+    overflow-wrap: anywhere;
+  }
+  .public-promotion .public-promotion-cta {
+    min-height: 44px;
+    font-size: 12px;
+    padding: 10px 12px;
+  }
+  .public-promotion-bottom {
+    flex-wrap: wrap;
+    row-gap: 10px;
+  }
+  .public-promotion-duration {
+    font-size: 12px;
+  }
+  .public-promotion-duration small {
+    font-size: 11px;
+  }
+  .public-promotion-content .public-promotion-condition {
+    font-size: 12px;
+  }
+  .faq .faq-item button {
+    min-height: 48px;
+    font-size: 14px;
+    line-height: 1.6;
+    gap: 12px;
+  }
+  .faq-item button svg {
+    flex-shrink: 0;
+  }
+  .faq-item p {
+    font-size: 13px;
+  }
+  .auth-route {
+    display: block;
+    padding: 20px 0;
+    border: 0;
+    background: transparent;
+    min-height: 0;
+  }
+  .auth-route .register-copy {
+    display: none;
+  }
+  .auth-route .form-card {
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 21px 16px;
+  }
+  .form-card form,
+  .form-card fieldset,
+  .form-card label,
+  .name-grid > * {
+    min-width: 0;
+    max-width: 100%;
+  }
+  .form-card input:not([type='checkbox']),
+  .admin-app input:not([type='checkbox']),
+  .admin-login-page input:not([type='checkbox']),
+  .admin-app select,
+  .admin-app textarea {
+    font-size: 16px;
+    min-height: 46px;
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+  .form-heading {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .form-heading h3 {
+    font-size: 21px;
+    line-height: 1.5;
+  }
+  .form-card label {
+    font-size: 14px;
+  }
+  .form-card .checkbox {
+    font-size: 12px;
+    line-height: 1.7;
+    gap: 9px;
+  }
+  .form-card .checkbox > span {
+    min-width: 0;
+  }
+  .form-card .checkbox input {
+    flex: 0 0 20px;
+    width: 20px;
+    height: 20px;
+    margin-top: 1px;
+  }
+  .registration-progress {
+    flex-wrap: wrap;
+    gap: 9px 17px;
+  }
+  .registration-progress li {
+    font-size: 12px;
+  }
+  .form-actions {
+    gap: 8px;
+  }
+  .form-actions .submit {
+    min-width: 0;
+    min-height: 46px;
+    font-size: 14px;
+    gap: 10px;
+    padding: 12px;
+  }
+  .form-actions .back-button {
+    min-height: 46px;
+    padding: 10px;
+    gap: 5px;
+  }
+  .form-foot {
+    flex-wrap: wrap;
+    text-align: center;
+  }
+  .form-card .recovery .text-button,
+  .public-promotion-status .refresh-coupons {
+    min-height: 44px;
+    font-size: 13px;
+  }
+  .member-header {
+    height: auto;
+    min-height: 70px;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: max(10px, env(safe-area-inset-top));
+    padding-bottom: 10px;
+  }
+  .member-header .brand {
+    font-size: 17px;
+    gap: 8px;
+  }
+  .member-header .brand-icon {
+    width: 40px;
+    height: 40px;
+  }
+  .member-header-label {
+    display: none;
+  }
+  .member-logout {
+    min-height: 44px;
+    padding: 10px;
+    font-size: 12px;
+  }
+  .member-welcome.member-welcome--compact {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 13px;
+  }
+  .home-member-card {
+    width: 100%;
+    max-width: 420px;
+    min-width: 0;
+    padding: 18px 20px;
+  }
+  .member-welcome.member-welcome--compact {
+    padding-block: 20px;
+  }
+  .home-member-card h2 {
+    overflow-wrap: anywhere;
+    font-size: 18px;
+  }
+  .member-tabbar {
+    gap: 5px;
+    padding-block: 12px;
+  }
+  .member-coupon-tabs {
+    min-width: 0;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 6px;
+  }
+  .member-coupon-tabs button {
+    min-width: 0;
+    min-height: 48px;
+    padding: 10px 8px;
+    font-size: 13px;
+    line-height: 1.5;
+    gap: 6px;
+    white-space: normal;
+  }
+  .member-coupon-tabs button > span {
+    min-width: 0;
+  }
+  .member-coupon-tabs b {
+    flex-shrink: 0;
+  }
+  .member-tabbar .member-tabs-refresh {
+    min-width: 36px;
+    min-height: 48px;
+    padding: 8px;
+  }
+  .member-main .coupon-section-heading p {
+    max-width: none;
+    font-size: 12px;
+    line-height: 1.7;
+  }
+  .member-main .coupon-section-heading h2 {
+    font-size: 21px;
+  }
+  .coupon-grid,
+  .campaign-offer-grid {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 100%;
+  }
+  .campaign-offer {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 11px;
+    padding: 16px 13px;
+  }
+  .campaign-offer-icon {
+    width: 34px;
+    height: 34px;
+    align-self: start;
+  }
+  .campaign-offer-info {
+    min-width: 0;
+  }
+  .campaign-offer-info h3 {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .campaign-offer-info p {
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .campaign-offer-info small {
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .campaign-offer .button {
+    grid-column: 2;
+    width: 100%;
+    min-height: 44px;
+    margin: 0;
+    font-size: 13px;
+    white-space: normal;
+  }
+  .member-main .seafood-coupon {
+    min-width: 0;
+    grid-template-columns: minmax(76px, 27%) minmax(0, 1fr);
+    min-height: 0;
+  }
+  .member-main .coupon-art {
+    min-width: 0;
+    padding: 14px 7px;
+  }
+  .member-main .coupon-price strong {
+    font-size: 25px;
+    overflow-wrap: anywhere;
+  }
+  .member-main .coupon-price > span,
+  .member-main .coupon-price small {
+    font-size: 11px;
+  }
+  .member-main .coupon-details {
+    min-width: 0;
+    padding: 15px 12px;
+  }
+  .member-main .coupon-details h3 {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .member-main .coupon-details > p,
+  .member-main .coupon-expiry {
+    font-size: 12px;
+    line-height: 1.65;
+  }
+  .member-main .coupon-expiry small {
+    font-size: 11px;
+  }
+  .member-main .coupon-details .submit {
+    min-height: 46px;
+    font-size: 13px;
+    gap: 8px;
+    padding: 11px;
+  }
+  .coupon-howto ol {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 13px;
+  }
+  .member-main .coupon-section,
+  .member-campaigns {
+    padding-top: 22px;
+  }
+  .member-main .coupon-section-heading {
+    margin-bottom: 16px;
+  }
+  .coupon-howto li {
+    font-size: 13px;
+  }
+  .coupon-empty p,
+  .campaign-loading,
+  .campaign-notice,
+  .member-home .error {
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .modal-backdrop {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    overflow-y: auto;
+    padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right))
+      max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+  }
+  .modal {
+    min-width: 0;
+    max-width: 100%;
+    width: 100%;
+    margin-block: auto;
+    padding: 22px 16px;
+    max-height: calc(100vh - 24px);
+    max-height: calc(
+      100dvh - max(12px, env(safe-area-inset-top)) - max(12px, env(safe-area-inset-bottom))
+    );
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .coupon-modal {
+    max-width: 430px;
+  }
+  .barcode-modal {
+    max-width: 470px;
+  }
+  .modal h2 {
+    font-size: 21px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+  .modal p {
+    font-size: 14px;
+    line-height: 1.75;
+  }
+  .modal .button,
+  .cancel-redeem {
+    min-height: 46px;
+    font-size: 14px;
+    white-space: normal;
+  }
+  .barcode-coupon-summary strong {
+    font-size: 18px;
+    overflow-wrap: anywhere;
+  }
+  .barcode-coupon-summary span,
+  .barcode-coupon-summary small {
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .coupon-barcode-image {
+    min-width: 0;
+    background: #fff;
+    padding: 2px;
+  }
+  .coupon-barcode-image svg {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+  }
+  .barcode-modal .barcode-countdown,
+  .barcode-awaiting {
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .barcode-awaiting {
+    white-space: normal;
+  }
+  .barcode-modal .barcode-note {
+    font-size: 11px;
+  }
+  .coupon-receipt strong {
+    font-size: 20px;
+    overflow-wrap: anywhere;
+  }
+  .coupon-receipt small {
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .auth-page-loading {
+    min-height: 100dvh;
+    padding: max(20px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom));
+  }
+  .admin-header {
+    padding: max(12px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) 12px
+      max(14px, env(safe-area-inset-left));
+    min-height: 70px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .admin-header > div {
+    min-width: 0;
+    gap: 8px;
+  }
+  .admin-header .admin-role {
+    display: none;
+  }
+  .admin-app .admin-main {
+    max-width: none;
+    margin: 0;
+    padding: 20px max(14px, env(safe-area-inset-right)) 24px max(14px, env(safe-area-inset-left));
+  }
+  .admin-page-title h1 {
+    font-size: 25px;
+  }
+  .admin-page-title p {
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .admin-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .admin-stats > div {
+    min-width: 0;
+    padding: 12px 10px;
+  }
+  .admin-stats span {
+    font-size: 11px;
+    line-height: 1.5;
+  }
+  .admin-stats strong {
+    font-size: 23px;
+  }
+  .admin-tabs {
+    min-width: 0;
+    overflow-x: auto;
+    gap: 5px;
+    overscroll-behavior-x: contain;
+  }
+  .admin-tabs button {
+    flex-shrink: 0;
+    min-height: 46px;
+    font-size: 13px;
+    padding: 11px 9px;
+    gap: 6px;
+  }
+  .admin-primary,
+  .admin-secondary,
+  .admin-link,
+  .admin-back {
+    min-height: 44px;
+    font-size: 13px;
+    white-space: normal;
+  }
+  .admin-panel {
+    padding: 18px 14px;
+    min-width: 0;
+  }
+  .admin-panel-heading {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .admin-panel-heading h2 {
+    font-size: 20px;
+    overflow-wrap: anywhere;
+  }
+  .admin-panel-heading p,
+  .admin-panel-heading > span,
+  .admin-help,
+  .admin-grant p,
+  .admin-reset p {
+    font-size: 12px;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+  }
+  .admin-panel h3 {
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .admin-form-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 15px;
+  }
+  .admin-form-grid label,
+  .admin-login-card label {
+    font-size: 14px;
+    min-width: 0;
+  }
+  .admin-search {
+    min-width: 0;
+    gap: 8px;
+  }
+  .admin-search input {
+    flex: 1;
+    min-width: 0;
+  }
+  .admin-search .admin-primary {
+    flex-shrink: 0;
+  }
+  .admin-grant-fields {
+    flex-direction: column;
+    min-width: 0;
+  }
+  .admin-grant .admin-primary,
+  .admin-reset .admin-primary {
+    width: 100%;
+  }
+  .admin-grant select,
+  .admin-form-grid select {
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+    text-overflow: ellipsis;
+  }
+  .admin-grant-confirm {
+    font-size: 13px;
+    overflow-wrap: anywhere;
+  }
+  .admin-table-wrap {
+    min-width: 0;
+    max-width: 100%;
+  }
+  .admin-responsive-table,
+  .admin-responsive-table tbody {
+    display: block;
+    width: 100%;
+  }
+  .admin-responsive-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+  .admin-responsive-table tbody tr {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+    padding: 14px 0;
+    border-bottom: 1px solid #e5ddcf;
+  }
+  .admin-app .admin-responsive-table td {
+    display: grid;
+    grid-template-columns: 6.5em minmax(0, 1fr);
+    align-items: start;
+    gap: 10px;
+    padding: 3px 0;
+    min-width: 0;
+    border: 0;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .admin-responsive-table td::before {
+    content: attr(data-label);
+    font-size: 12px;
+    color: #8c7a5d;
+  }
+  .admin-app .admin-responsive-table td.admin-cell-action {
+    display: block;
+    padding-top: 7px;
+  }
+  .admin-cell-action::before {
+    display: none;
+  }
+  .admin-cell-action button {
+    width: 100%;
+    border: 1px solid #dfd4c0;
+    border-radius: 5px;
+    padding: 10px;
+  }
+  .admin-app .admin-responsive-table td small {
+    font-size: 12px;
+    line-height: 1.6;
+    max-width: none;
+  }
+  .admin-app .admin-responsive-table td > strong + small {
+    grid-column: 2;
+  }
+  .admin-badge {
+    justify-self: start;
+    font-size: 11px;
+  }
+  .admin-pagination {
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .admin-audits article {
+    min-width: 0;
+  }
+  .admin-audits article > div {
+    min-width: 0;
+  }
+  .admin-audits strong {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .admin-audits small,
+  .admin-audits p {
+    font-size: 12px;
+    line-height: 1.7;
+  }
+  .admin-login-page {
+    min-height: 100svh;
+    justify-content: flex-start;
+    padding: max(26px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
+    gap: 20px;
+  }
+  .admin-login-card {
+    padding: 24px 18px;
+  }
+  .admin-login-card h1 {
+    font-size: 24px;
+    line-height: 1.4;
+  }
+  .admin-login-card .admin-back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .admin-error,
+  .admin-notice {
+    font-size: 13px;
+    overflow-wrap: anywhere;
+  }
+  footer,
+  .member-footer {
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+  }
+  button > svg,
+  a.button > svg {
+    flex-shrink: 0;
+  }
+}
+@media (max-width: 560px) {
+  .form-card .name-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 360px) {
+  .header .nav-cta > svg {
+    display: none;
+  }
+  .header-auth-actions .nav-cta {
+    padding-inline: 8px;
+  }
+  .header-auth-actions .login-shortcut {
+    font-size: 11px;
+  }
+  .member-coupon-tabs button {
+    font-size: 12px;
+    padding-inline: 6px;
+    gap: 4px;
+  }
+  .member-coupon-tabs button svg {
+    width: 15px;
+  }
+  .member-main .seafood-coupon {
+    grid-template-columns: 76px minmax(0, 1fr);
+  }
+  .member-main .coupon-details {
+    padding: 14px 10px;
+  }
+  .member-main .coupon-price strong {
+    font-size: 23px;
+  }
+  .public-promotion .public-promotion-cta {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .admin-search {
+    flex-direction: column;
+  }
+  .admin-app .admin-responsive-table td {
+    grid-template-columns: 6em minmax(0, 1fr);
+    gap: 7px;
+  }
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  .modal {
+    margin-block: 0;
+  }
+  .barcode-modal .barcode-coupon-summary {
+    margin-block: 10px;
+  }
+  .barcode-modal .barcode-instructions {
+    margin-block: 10px;
+  }
+  .admin-login-page {
+    padding-top: 16px;
+  }
+}

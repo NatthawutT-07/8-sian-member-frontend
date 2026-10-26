@@ -1,4 +1,5 @@
 import useMemberDashboard from './hooks/useMemberDashboard.js';
+import SiteFooter from '../../components/SiteFooter.jsx';
 import CouponReceiptDialog from './components/CouponReceiptDialog.jsx';
 import CouponBarcodeDialog from './components/CouponBarcodeDialog.jsx';
 import CouponHowTo from './components/CouponHowTo.jsx';
@@ -85,10 +86,7 @@ export default function MemberDashboard({ member, onSignedOut }) {
         />
         <CouponHowTo activeTab={activeTab} />
       </main>
-      <footer className="member-footer">
-        <span>8 เซียนราชาหมูกระทะ</span>
-        <small>อิ่มอร่อย อบอุ่น เป็นกันเอง</small>
-      </footer>
+      <SiteFooter className="member-footer" />
       {selected && (
         <CouponBarcodeDialog
           barcode={barcode}

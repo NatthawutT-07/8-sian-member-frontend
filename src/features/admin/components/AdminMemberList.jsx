@@ -45,26 +45,32 @@ export default function AdminMemberList({
         </button>
       </form>
       <div className="admin-table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>เลขสมาชิก</th>
-              <th>ชื่อสมาชิก</th>
-              <th>เบอร์โทร</th>
-              <th>วันที่สมัคร</th>
-              <th />
+        <table className="admin-responsive-table" role="table">
+          <thead role="rowgroup">
+            <tr role="row">
+              <th role="columnheader">เลขสมาชิก</th>
+              <th role="columnheader">ชื่อสมาชิก</th>
+              <th role="columnheader">เบอร์โทร</th>
+              <th role="columnheader">วันที่สมัคร</th>
+              <th role="columnheader" />
             </tr>
           </thead>
-          <tbody>
+          <tbody role="rowgroup">
             {members.members.map((m) => (
-              <tr key={m.id}>
-                <td>{m.memberNumber}</td>
-                <td>
+              <tr key={m.id} role="row">
+                <td role="cell" data-label="เลขสมาชิก">
+                  {m.memberNumber}
+                </td>
+                <td role="cell" data-label="ชื่อสมาชิก">
                   {m.firstName} {m.lastName}
                 </td>
-                <td>{m.phone}</td>
-                <td>{date(m.createdAt)}</td>
-                <td>
+                <td role="cell" data-label="เบอร์โทร">
+                  {m.phone}
+                </td>
+                <td role="cell" data-label="วันที่สมัคร">
+                  {date(m.createdAt)}
+                </td>
+                <td role="cell" data-label="" className="admin-cell-action">
                   <button className="admin-link" onClick={() => showMember(m.id)} disabled={busy}>
                     ดูแลสมาชิก →
                   </button>

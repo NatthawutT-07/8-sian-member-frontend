@@ -9,7 +9,6 @@ export default function CouponCard({ busy, coupon, now, showBarcode }) {
   return (
     <article className="seafood-coupon" key={coupon.id}>
       <div className="coupon-art">
-        <span className="coupon-badge">MEMBER EXCLUSIVE</span>
         <div className="seafood-symbol">
           <UtensilsCrossed size={52} strokeWidth={1} />
         </div>
@@ -20,7 +19,6 @@ export default function CouponCard({ busy, coupon, now, showBarcode }) {
             {coupon.extraPrice > 0 && <small>บาท</small>}
           </strong>
         </div>
-        <span className="coupon-art-note">8 SIAN • MEMBER BENEFITS</span>
       </div>
       <div className="coupon-details">
         <div className="coupon-type">
@@ -39,7 +37,6 @@ export default function CouponCard({ busy, coupon, now, showBarcode }) {
             <small>
               เหลือ{' '}
               {Math.max(1, Math.ceil((new Date(coupon.expiresAt).getTime() - now) / 86400000))} วัน
-              • อายุคูปอง {coupon.validityDays} วันนับจากวันที่ได้รับ
             </small>
           </span>
         </div>

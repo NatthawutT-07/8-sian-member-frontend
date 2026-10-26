@@ -23,6 +23,48 @@
 .password-field {
   margin-top: 17px;
 }
+/* Native date inputs can otherwise impose an intrinsic minimum width on iOS. */
+.form-card,
+.form-card form,
+.form-card fieldset,
+.form-card label {
+  min-width: 0;
+}
+.form-card .birth-date-field {
+  width: 100%;
+  max-width: 100%;
+}
+.form-card .birth-date-control {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+.form-card input[type='date'].birth-date-input {
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  inline-size: 100%;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}
+.birth-date-input::-webkit-date-and-time-value {
+  min-width: 0;
+  min-height: 1.4em;
+  text-align: left;
+}
+.birth-date-input::-webkit-datetime-edit {
+  min-width: 0;
+  padding: 0;
+}
+.birth-date-input::-webkit-calendar-picker-indicator {
+  flex-shrink: 0;
+  margin-left: auto;
+}
 .auth-loading {
   font-size: 12px;
   color: #848070;
@@ -200,4 +242,22 @@ fieldset:disabled {
 .auth-loading-panel > span {
   font-size: 12px;
   color: #8a8477;
+}
+.form-card .input-note,
+.form-card .form-subtitle,
+.form-card .form-foot,
+.form-card .checkbox {
+  font-size: 12px;
+  line-height: 1.65;
+  color: #7c715f;
+}
+.form-card label {
+  font-size: 12px;
+}
+.form-card .form-heading > span {
+  letter-spacing: 1px;
+  font-size: 9px;
+}
+.form-card .form-foot {
+  color: #8c7f69;
 }

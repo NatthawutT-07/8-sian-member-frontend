@@ -1,0 +1,175 @@
+/* Storefront-specific hierarchy; keep the promotion catalog close to the top. */
+.hero.landing-hero {
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 390px);
+  gap: 32px;
+  padding: var(--section-space) 0;
+}
+.landing-kicker {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: #8b342c;
+  font-weight: 500;
+}
+.hero.landing-hero h1 {
+  font-size: clamp(28px, 3.1vw, 36px);
+  font-weight: 600;
+  letter-spacing: -0.6px;
+  line-height: 1.35;
+  margin: 0 0 14px;
+}
+.landing-hero h1 > span {
+  font-weight: 400;
+  color: #6b6151;
+}
+.hero.landing-hero .intro {
+  font-size: 14px;
+  color: #736958;
+  line-height: 1.75;
+  margin: 0;
+}
+.landing-hero .landing-primary {
+  background: #8b342c;
+  color: #fffaf0;
+  min-height: 44px;
+  padding: 12px 19px;
+  gap: 20px;
+}
+.landing-secondary {
+  font-size: 13px;
+  color: #6e5942;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  text-underline-offset: 4px;
+}
+.landing-secondary:hover {
+  text-decoration: underline;
+}
+.landing-hero .card-scene {
+  height: 220px;
+  background: #efebe2;
+  border: 1px solid #e4ddcf;
+}
+.landing-hero .scene-caption {
+  top: 17px;
+  left: 22px;
+  font-size: 11px;
+  letter-spacing: 0;
+  color: #8b7c66;
+}
+.landing-hero .member-card {
+  transform: none;
+  width: 295px;
+  height: 167px;
+  padding: 20px 23px;
+  margin-top: 22px;
+  border-radius: 9px;
+  background: #82382f;
+  box-shadow: 0 8px 14px #5a372d12;
+}
+.landing-hero .member-card::after {
+  display: none;
+}
+.landing-hero .card-brand {
+  font-size: 20px;
+}
+.landing-hero .card-middle {
+  margin-top: 13px;
+  font-size: 20px;
+  letter-spacing: 3px;
+}
+.landing-hero .card-middle span {
+  font-size: 9px;
+  letter-spacing: 0;
+}
+.landing-hero .card-bottom {
+  margin-top: 14px;
+  font-size: 9px;
+  letter-spacing: 0;
+}
+.membership-guide {
+  padding: var(--section-space) 0;
+  border-top: 1px solid #e4ded2;
+  border-bottom: 1px solid #e4ded2;
+}
+.membership-guide h2 {
+  margin: 0 0 20px;
+  font-size: 23px;
+  font-weight: 500;
+}
+.membership-guide ol {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  counter-reset: guide;
+}
+.membership-guide li {
+  counter-increment: guide;
+  position: relative;
+  padding-left: 30px;
+}
+.membership-guide li::before {
+  content: counter(guide) '.';
+  position: absolute;
+  left: 0;
+  top: 1px;
+  font-size: 14px;
+  color: #997d58;
+}
+.membership-guide strong {
+  font-size: 14px;
+  font-weight: 500;
+  color: #4f473c;
+}
+.membership-guide p {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: #7d715e;
+  line-height: 1.7;
+}
+.header nav a {
+  padding-block: 12px;
+}
+.header nav a:hover {
+  color: #8b342c;
+}
+.faq .faq-item button {
+  min-height: 48px;
+}
+@media (max-width: 800px) {
+  .hero.landing-hero {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 24px 0;
+    gap: 0;
+  }
+  .hero.landing-hero h1 {
+    font-size: 29px;
+  }
+  .landing-hero .card-scene {
+    display: none;
+  }
+  .hero.landing-hero .intro {
+    font-size: 13px;
+  }
+  .landing-kicker {
+    font-size: 12px;
+    margin-bottom: 9px;
+  }
+  .membership-guide {
+    padding: 23px 0;
+  }
+  .membership-guide h2 {
+    font-size: 21px;
+    margin-bottom: 18px;
+  }
+  .membership-guide ol {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+  }
+  .membership-guide p {
+    margin-top: 4px;
+  }
+}
