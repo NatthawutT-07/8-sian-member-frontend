@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { createServer } from 'vite';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
+import jsQR from 'jsqr';
 
 const server = await createServer({
   root: fileURLToPath(new URL('..', import.meta.url)),
@@ -63,7 +64,98 @@ try {
     assert.ok(html.includes('เข้าสู่ระบบด้วย LINE'));
   }
   console.log('PASS: home, register and login render separate shortcut pages');
+  for (const value of [
+    '88012345678901234567890123456789',
+    '00012345678901234567890123456789',
+    `8SM-${'a'.repeat(64)}`,
+  ]) {
+    const qrHtml = await check(
+      'features/member/components/CouponQrCode.jsx',
+      { value },
+      'QR Code คูปอง',
+    );
+    const size = Number(qrHtml.match(/viewBox="0 0 (\d+) \d+"/)[1]);
+    const scale = 6,
+      width = size * scale;
+    const pixels = new Uint8ClampedArray(width * width * 4).fill(255);
+    for (const match of qrHtml.matchAll(/M(\d+) (\d+)h1v1h-1z/g)) {
+      const x = Number(match[1]),
+        y = Number(match[2]);
+      assert.ok(
+        x >= 4 && y >= 4 && x < size - 4 && y < size - 4,
+        'QR needs a four-module quiet zone',
+      );
+      for (let dy = 0; dy < scale; dy++)
+        for (let dx = 0; dx < scale; dx++) {
+          const i = ((y * scale + dy) * width + x * scale + dx) * 4;
+          pixels[i] = pixels[i + 1] = pixels[i + 2] = 0;
+        }
+    }
+    assert.equal(
+      jsQR(pixels, width, width)?.data,
+      value,
+      'Rendered QR must decode to the exact coupon payload',
+    );
+  }
+  console.log('PASS: rendered QR decodes to the original coupon code, including leading zeros');
+  for (const extraPrice of [-20, 79, 0]) {
+    const title = extraPrice < 0 ? 'ส่วนลด' : 'สิทธิพิเศษ';
+    const amount = extraPrice < 0 ? '-20' : extraPrice > 0 ? '+79' : 'ฟรี';
+    const text =
+      extraPrice < 0 ? 'ส่วนลด 20 บาท' : extraPrice > 0 ? 'เพิ่ม 79 บาท' : 'ไม่มีค่าเพิ่ม';
+    await check(
+      'features/member/components/CouponCard.jsx',
+      { coupon: { ...coupon, title, extraPrice }, now, busy: false, showBarcode: noop },
+      amount,
+    );
+    await check(
+      'features/member/components/CampaignPanel.jsx',
+      {
+        activeTab: 'campaigns',
+        campaigns: [{ ...campaign, extraPrice }],
+        loading: false,
+        busy: false,
+        claim: noop,
+      },
+      text,
+    );
+    await check(
+      'features/member/components/CouponBarcodeDialog.jsx',
+      {
+        selected: { ...coupon, extraPrice },
+        now,
+        barcode: { code: '88012345678901234567890123456789', expiresAt: coupon.expiresAt },
+        busy: false,
+        cancelButton: { current: null },
+        closeBarcode: noop,
+        showBarcode: noop,
+      },
+      text,
+    );
+    const adminHtml = await check(
+      'features/admin/components/AdminCampaigns.jsx',
+      {
+        busy: false,
+        campaignForm: { title, description: 'สิทธิ์ทดสอบ', extraPrice, validityDays: 30 },
+        campaigns: [{ ...campaign, extraPrice }],
+        createCampaign: noop,
+        setCampaignForm: noop,
+      },
+      text,
+    );
+    assert.ok(adminHtml.includes('min="-100000"') && adminHtml.includes('step="1"'));
+    await check(
+      'features/promotions/components/PromotionList.jsx',
+      { promotions: [{ ...campaign, extraPrice }] },
+      extraPrice === 0 ? 'ไม่มีค่าเพิ่ม' : amount,
+    );
+  }
+  console.log(
+    'PASS: discounts, surcharges and zero prices render correctly across admin and member views',
+  );
   await check('features/member/MemberDashboard.jsx', { member, onSignedOut: noop }, 'คูปองของคุณ');
+  await check('features/member/components/MemberWelcome.jsx', { member }, 'สะสมครั้ง');
+  await check('features/admin/components/AdminLoyalty.jsx', { api: noop }, 'สแกน QR สมาชิก');
   await check(
     'features/member/components/CouponCard.jsx',
     { coupon, now, busy: false, showBarcode: noop },
@@ -93,7 +185,7 @@ try {
       closeBarcode: noop,
       showBarcode: noop,
     },
-    'บาร์โค้ดใช้คูปอง',
+    'รูปแบบรหัสคูปอง',
   );
   await check(
     'features/member/components/CouponReceiptDialog.jsx',
@@ -207,7 +299,7 @@ try {
     },
     longTitle,
   );
-  assert.ok(mobileCampaignList.includes('data-label="ค่าเพิ่ม"'));
+  assert.ok(mobileCampaignList.includes('data-label="ส่วนลด / ค่าเพิ่ม"'));
   await check(
     'features/member/components/CampaignPanel.jsx',
     {
@@ -237,7 +329,7 @@ try {
       closeBarcode: noop,
       showBarcode: noop,
     },
-    'สร้างบาร์โค้ดใหม่',
+    'สร้างรหัสใหม่',
   );
   console.log(
     'PASS: mobile-view markup handles long content, readable table labels, locked campaigns and expired barcodes',

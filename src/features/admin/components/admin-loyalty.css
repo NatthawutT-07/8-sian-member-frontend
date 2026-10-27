@@ -1,0 +1,96 @@
+.admin-loyalty > h2 {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.loyalty-lookup-form {
+  display: grid;
+  gap: 8px;
+  max-width: 680px;
+  margin-top: 20px;
+}
+.loyalty-lookup-form > label {
+  font-size: 13px;
+}
+.loyalty-lookup-form > div {
+  display: flex;
+  gap: 10px;
+}
+.loyalty-lookup-form input {
+  flex: 1;
+  min-width: 0;
+}
+.loyalty-member-result {
+  margin-top: 24px;
+  border-top: 1px solid #e5ddcf;
+  padding-top: 20px;
+}
+.loyalty-member-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.loyalty-member-summary h3 {
+  margin: 0;
+}
+.loyalty-member-summary > strong {
+  color: #82382f;
+  font-size: 32px;
+}
+.loyalty-member-summary > strong small {
+  font-size: 14px;
+}
+.loyalty-receipt-form {
+  display: grid;
+  gap: 16px;
+  max-width: 580px;
+  padding: 20px 0 30px;
+}
+.loyalty-receipt-form label {
+  display: grid;
+  gap: 8px;
+  font-size: 14px;
+}
+.loyalty-receipt-form .loyalty-confirm {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.loyalty-receipt-form .loyalty-confirm input {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+.loyalty-receipt-form small {
+  color: #7c705f;
+}
+.loyalty-visit-list {
+  list-style: none;
+  padding: 0;
+}
+.loyalty-visit-list li {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid #e5ddcf;
+  font-size: 13px;
+  flex-wrap: wrap;
+}
+.loyalty-visit-list li > span {
+  flex: 1;
+  overflow-wrap: anywhere;
+}
+.loyalty-visit-list time {
+  color: #807663;
+}
+.loyalty-visit-list b {
+  color: #47744e;
+}
+@media (max-width: 480px) {
+  .loyalty-lookup-form > div {
+    flex-direction: column;
+  }
+}

@@ -115,7 +115,7 @@ export default function useAdminConsole() {
     await run(async () => {
       if (next === 'audit') setAudit(await api('/audits'));
       else if (next === 'campaigns') await loadCommon();
-      else await loadMembers();
+      else if (next === 'members') await loadMembers();
     });
   }
   async function issue(e) {

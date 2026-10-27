@@ -68,9 +68,7 @@ export default function LandingPage({ onAuthenticated, authMode = null }) {
                   <div className="card-middle">
                     MEMBER<span>รับคูปองและดูสิทธิ์ผ่านบัญชีสมาชิก</span>
                   </div>
-                  <div className="card-bottom">
-                    <span>8 เซียนราชาหมูกระทะ</span>
-                  </div>
+                  <span className="card-watermark" aria-hidden="true">8</span>
                 </div>
               </div>
             </section>
@@ -100,8 +98,8 @@ export default function LandingPage({ onAuthenticated, authMode = null }) {
                   <p>อ่านเงื่อนไขก่อนรับ คูปองจะเก็บไว้ในบัญชีของคุณ</p>
                 </li>
                 <li>
-                  <strong>แสดงบาร์โค้ดที่ร้าน</strong>
-                  <p>เปิดคูปองที่ต้องการใช้ แล้วแสดงบาร์โค้ดให้พนักงาน</p>
+                  <strong>แสดงรหัสที่ร้าน</strong>
+                  <p>เลือก QR Code หรือบาร์โค้ดให้พนักงานสแกน</p>
                 </li>
               </ol>
             </section>

@@ -1,4 +1,5 @@
 import { UtensilsCrossed, Gift, Clock, ArrowRight, LockKeyhole } from 'lucide-react';
+import { campaignPriceAmount } from '../../../lib/campaign-price.js';
 const formatDate = (value) =>
   new Intl.DateTimeFormat('th-TH', {
     dateStyle: 'medium',
@@ -13,10 +14,10 @@ export default function CouponCard({ busy, coupon, now, showBarcode }) {
           <UtensilsCrossed size={52} strokeWidth={1} />
         </div>
         <div className="coupon-price">
-          <span>สิทธิพิเศษ</span>
+          <span>{coupon.extraPrice < 0 ? 'ส่วนลด' : 'สิทธิพิเศษ'}</span>
           <strong>
-            {coupon.extraPrice > 0 ? `+${coupon.extraPrice}` : 'ฟรี'}
-            {coupon.extraPrice > 0 && <small>บาท</small>}
+            {campaignPriceAmount(coupon.extraPrice)}
+            {coupon.extraPrice !== 0 && <small>บาท</small>}
           </strong>
         </div>
       </div>

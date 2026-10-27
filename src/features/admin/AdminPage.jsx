@@ -5,7 +5,8 @@ import AdminMemberDetail from './components/AdminMemberDetail.jsx';
 import AdminMemberList from './components/AdminMemberList.jsx';
 import AdminSummary from './components/AdminSummary.jsx';
 import AdminLogin from './components/AdminLogin.jsx';
-import { LogOut, Users, Ticket, History, LoaderCircle, Check } from 'lucide-react';
+import AdminLoyalty from './components/AdminLoyalty.jsx';
+import { LogOut, Users, Ticket, History, LoaderCircle, Check, QrCode } from 'lucide-react';
 import BrandLogo from '../../components/BrandLogo.jsx';
 import './admin.css';
 export default function AdminPage() {
@@ -109,6 +110,7 @@ export default function AdminPage() {
           {[
             ['members', 'สมาชิก', Users],
             ['campaigns', 'แคมเปญคูปอง', Ticket],
+            ['loyalty', 'สะสมครั้ง', QrCode],
             ['audit', 'ประวัติระบบ', History],
           ].map(([key, label, Icon]) => (
             <button
@@ -168,6 +170,7 @@ export default function AdminPage() {
         {tab === 'audit' && (
           <AdminAuditPanel api={api} audit={audit} busy={busy} run={run} setAudit={setAudit} />
         )}
+        {tab === 'loyalty' && <AdminLoyalty api={api} />}
       </main>
     </div>
   );

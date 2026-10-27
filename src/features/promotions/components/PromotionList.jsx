@@ -1,4 +1,5 @@
 import { ArrowUpRight, Clock, Gift, LockKeyhole } from 'lucide-react';
+import { campaignPriceAmount } from '../../../lib/campaign-price.js';
 
 export default function PromotionList({ promotions }) {
   return (
@@ -13,12 +14,18 @@ export default function PromotionList({ promotions }) {
               <span>สิทธิพิเศษสมาชิก</span>
             </div>
             <div className="public-promotion-price">
-              <span>{promotion.extraPrice > 0 ? 'ค่าเพิ่ม' : 'สิทธิ์นี้'}</span>
+              <span>
+                {promotion.extraPrice < 0
+                  ? 'ส่วนลด'
+                  : promotion.extraPrice > 0
+                    ? 'ค่าเพิ่ม'
+                    : 'สิทธิ์นี้'}
+              </span>
               <strong>
-                {promotion.extraPrice > 0
-                  ? `+${promotion.extraPrice.toLocaleString('th-TH')}`
-                  : 'ไม่มีค่าเพิ่ม'}
-                {promotion.extraPrice > 0 && <small>บาท</small>}
+                {promotion.extraPrice === 0
+                  ? 'ไม่มีค่าเพิ่ม'
+                  : campaignPriceAmount(promotion.extraPrice)}
+                {promotion.extraPrice !== 0 && <small>บาท</small>}
               </strong>
             </div>
           </div>

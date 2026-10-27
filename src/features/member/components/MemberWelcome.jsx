@@ -1,11 +1,12 @@
 import { UtensilsCrossed } from 'lucide-react';
+import MemberLoyalty from './MemberLoyalty.jsx';
 
 export default function MemberWelcome({ member }) {
   return (
     <section className="member-welcome member-welcome--compact">
       <div>
         <h1>คูปองของคุณ</h1>
-        <p>เลือกรับโปรโมชั่น หรือเปิดคูปองเพื่อแสดงบาร์โค้ดที่ร้าน</p>
+        <p>เลือกรับโปรโมชั่น หรือเปิดรหัสคูปองที่ร้าน</p>
       </div>
       <div className="home-member-card">
         <div>
@@ -17,6 +18,10 @@ export default function MemberWelcome({ member }) {
           {member.firstName} {member.lastName}
         </h2>
         <strong>{member.memberNumber}</strong>
+        <MemberLoyalty member={member} />
+        <span className="member-card-watermark" aria-hidden="true">
+          8
+        </span>
       </div>
     </section>
   );

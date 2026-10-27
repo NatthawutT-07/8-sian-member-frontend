@@ -1,0 +1,87 @@
+.member-loyalty {
+  margin-top: 18px;
+  border-top: 1px solid #f1dfbd30;
+  padding-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 13px;
+}
+.member-loyalty b {
+  font-size: 20px;
+  font-weight: 600;
+}
+.member-loyalty button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 9px 12px;
+  background: #fff7e6;
+  color: #71392f;
+  border: 0;
+  border-radius: 7px;
+  font: inherit;
+  cursor: pointer;
+}
+.member-loyalty button:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+.member-loyalty > small {
+  flex-basis: 100%;
+  line-height: 1.6;
+}
+.member-loyalty-dialog {
+  max-width: 420px;
+  text-align: center;
+}
+.member-loyalty-dialog .loyalty-total {
+  margin: 10px 0 0;
+  color: #82382f;
+  font-size: 38px;
+}
+.loyalty-total small {
+  display: inline;
+  font-size: 15px;
+}
+.loyalty-phone {
+  font-size: 20px;
+  letter-spacing: 1px;
+  margin: 8px 0 16px;
+}
+.loyalty-phone-form {
+  display: grid;
+  gap: 16px;
+  text-align: left;
+}
+.loyalty-phone-form label {
+  display: grid;
+  gap: 8px;
+  font-size: 14px;
+}
+.loyalty-phone-form input {
+  width: 100%;
+  padding: 12px;
+  min-height: 46px;
+  box-sizing: border-box;
+  border: 1px solid #cfc8bd;
+  border-radius: 8px;
+  background: #fff;
+  font: inherit;
+  font-size: 16px;
+}
+.loyalty-phone-form small {
+  line-height: 1.7;
+}
+.member-loyalty-dialog .loyalty-note {
+  font-size: 12px;
+  color: #786e60;
+}
+.member-loyalty-dialog .button {
+  justify-content: center;
+  width: 100%;
+}

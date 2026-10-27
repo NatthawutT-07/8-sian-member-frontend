@@ -82,10 +82,26 @@
   font-size: 9px;
   letter-spacing: 0;
 }
-.landing-hero .card-bottom {
-  margin-top: 14px;
-  font-size: 9px;
-  letter-spacing: 0;
+.landing-hero .card-watermark {
+  position: absolute;
+  right: 6px;
+  bottom: -62px;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 250px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1;
+  color: rgb(240 221 186 / 12%);
+  -webkit-text-stroke: 1px rgb(240 221 186 / 16%);
+  transform: rotate(-14deg);
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+.landing-hero .card-top,
+.landing-hero .card-middle {
+  position: relative;
+  z-index: 1;
 }
 .membership-guide {
   padding: var(--section-space) 0;

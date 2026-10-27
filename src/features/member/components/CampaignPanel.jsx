@@ -1,4 +1,5 @@
 import { Gift, LoaderCircle, Plus, LockKeyhole } from 'lucide-react';
+import { campaignPriceText } from '../../../lib/campaign-price.js';
 
 export default function CampaignPanel({ activeTab, busy, campaigns, claim, claiming, loading }) {
   return (
@@ -29,8 +30,7 @@ export default function CampaignPanel({ activeTab, busy, campaigns, claim, claim
                 <h3>{c.title}</h3>
                 <p>{c.description}</p>
                 <small>
-                  {c.extraPrice > 0 ? `ค่าเพิ่ม ${c.extraPrice} บาท` : 'ไม่มีค่าใช้จ่ายเพิ่ม'} ·
-                  ใช้ได้ {c.validityDays} วันหลังรับ
+                  {campaignPriceText(c.extraPrice)} · ใช้ได้ {c.validityDays} วันหลังรับ
                 </small>
                 {c.prerequisiteCampaign && (
                   <p className="coupon-prerequisite" id={`campaign-condition-${c.id}`}>

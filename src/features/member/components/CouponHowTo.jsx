@@ -13,7 +13,7 @@ export default function CouponHowTo({ activeTab }) {
         <li>
           <b>02</b>
           <span>
-            เปิดบาร์โค้ดให้พนักงาน
+            เปิด QR หรือบาร์โค้ด
             <br />
             สแกนผ่าน POS
           </span>

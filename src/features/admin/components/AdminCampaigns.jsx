@@ -1,4 +1,5 @@
 import { Plus } from 'lucide-react';
+import { campaignPriceText } from '../../../lib/campaign-price.js';
 export default function AdminCampaigns({
   api,
   busy,
@@ -50,11 +51,13 @@ export default function AdminCampaigns({
                 />
               </label>
               <label>
-                ค่าใช้จ่ายเพิ่ม (บาท / 0 = ไม่มีค่าเพิ่ม)
+                ส่วนลด / ค่าเพิ่ม (บาท)
                 <input
                   type="number"
-                  min={0}
+                  min={-100000}
                   max={100000}
+                  step={1}
+                  aria-describedby="campaign-price-help"
                   required
                   value={campaignForm.extraPrice}
                   onChange={(e) =>
@@ -64,6 +67,9 @@ export default function AdminCampaigns({
                     })
                   }
                 />
+                <small id="campaign-price-help">
+                  -20 = ลด 20 · 79 = เพิ่ม 79 · 0 = ไม่มีค่าเพิ่ม
+                </small>
               </label>
               <label>
                 อายุคูปองหลังแจก (วัน)
@@ -115,7 +121,7 @@ export default function AdminCampaigns({
             <thead role="rowgroup">
               <tr role="row">
                 <th role="columnheader">คูปอง / รายละเอียด</th>
-                <th role="columnheader">ค่าเพิ่ม</th>
+                <th role="columnheader">ส่วนลด / ค่าเพิ่ม</th>
                 <th role="columnheader">อายุ</th>
                 <th role="columnheader">แจกแล้ว</th>
                 <th role="columnheader">สถานะ</th>
@@ -134,8 +140,8 @@ export default function AdminCampaigns({
                         : 'รับได้โดยไม่ต้องใช้คูปองก่อนหน้า'}
                     </small>
                   </td>
-                  <td role="cell" data-label="ค่าเพิ่ม">
-                    {c.extraPrice} บาท
+                  <td role="cell" data-label="ส่วนลด / ค่าเพิ่ม">
+                    {campaignPriceText(c.extraPrice)}
                   </td>
                   <td role="cell" data-label="อายุ">
                     {c.validityDays} วัน
