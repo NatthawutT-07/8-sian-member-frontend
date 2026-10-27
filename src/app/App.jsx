@@ -4,6 +4,8 @@ import MemberDashboard from '../features/member/MemberDashboard.jsx';
 import AdminPage from '../features/admin/AdminPage.jsx';
 import { ADMIN_PATH } from '../config/routes.js';
 import { request } from '../lib/api.js';
+import { LineComplete } from '../features/auth/LineAuth.jsx';
+import PrivacyPage from '../pages/PrivacyPage.jsx';
 
 export default function App() {
   const [member, setMember] = useState(null);
@@ -28,6 +30,8 @@ export default function App() {
     };
   }, [path, attempt]);
   if (window.location.pathname.replace(/\/$/, '') === ADMIN_PATH) return <AdminPage />;
+  if (path === '/line/complete') return <LineComplete />;
+  if (path === '/privacy') return <PrivacyPage />;
   if (path === '/coupons' && member)
     return (
       <MemberDashboard
@@ -55,7 +59,7 @@ export default function App() {
         <a href="/">กลับหน้าหลัก</a>
       </main>
     );
-  const authMode = path === '/login' ? 'login' : path === '/register' ? 'register' : null;
+  const authMode = path === '/login' || path === '/register' ? 'login' : null;
   return (
     <LandingPage authMode={authMode} onAuthenticated={() => window.location.replace('/coupons')} />
   );

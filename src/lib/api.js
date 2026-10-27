@@ -1,4 +1,5 @@
 const API = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
+export const lineLoginUrl = `${API}/api/auth/line`;
 export async function request(path, options = {}) {
   let response;
   try {

@@ -47,7 +47,7 @@ export default function AdminMemberDetail({
               {detail.member.firstName} {detail.member.lastName}
             </h2>
             <p>
-              เบอร์ {detail.member.phone} · วันเกิด{' '}
+              เบอร์ {detail.member.phone || 'ไม่ได้ระบุ (สมาชิก LINE)'} · วันเกิด{' '}
               {detail.member.birthDate
                 ? new Date(detail.member.birthDate).toLocaleDateString('th-TH', {
                     timeZone: 'UTC',
@@ -194,8 +194,8 @@ export default function AdminMemberDetail({
           {grantConfirm && (
             <div className="admin-grant-confirm" role="status">
               ยืนยันแจก “{campaigns.find((c) => c.id === grant)?.title}” ให้คุณ
-              {detail.member.firstName} {detail.member.lastName} ({detail.member.phone})
-              กรุณาตรวจสอบก่อนกดยืนยัน
+              {detail.member.firstName} {detail.member.lastName} (
+              {detail.member.phone || 'สมาชิก LINE'}) กรุณาตรวจสอบก่อนกดยืนยัน
             </div>
           )}
         </form>

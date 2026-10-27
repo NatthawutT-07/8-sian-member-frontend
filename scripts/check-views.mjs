@@ -57,11 +57,13 @@ try {
   for (const mode of ['register', 'login']) {
     const html = renderToStaticMarkup(createElement(LandingPage, { authMode: mode }));
     assert.ok(!html.includes('landing-hero'), 'Auth shortcuts should skip the landing content');
-    assert.ok(html.includes('class="form-card"'));
-    assert.ok(html.includes(mode === 'login' ? 'ยินดีต้อนรับกลับมา' : 'เริ่มต้นเป็นสมาชิก'));
+    assert.ok(html.includes('line-auth-card'));
+    assert.ok(!html.includes('<input'), 'LINE entry must not render registration fields');
+    assert.ok(!html.includes('name="birthDate"'));
+    assert.ok(html.includes('เข้าสู่ระบบด้วย LINE'));
   }
   console.log('PASS: home, register and login render separate shortcut pages');
-  await check('features/member/MemberDashboard.jsx', { member, onSignedOut: noop }, 'คูปองของฉัน');
+  await check('features/member/MemberDashboard.jsx', { member, onSignedOut: noop }, 'คูปองของคุณ');
   await check(
     'features/member/components/CouponCard.jsx',
     { coupon, now, busy: false, showBarcode: noop },

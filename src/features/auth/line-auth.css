@@ -1,0 +1,121 @@
+.line-auth-stack {
+  min-width: 0;
+  width: 100%;
+}
+.line-auth-card {
+  background: #fff;
+  border: 1px solid #e6dfd6;
+  border-radius: 22px;
+  padding: clamp(24px, 4vw, 40px);
+  box-shadow: 0 14px 40px #2d22100a;
+}
+.line-auth-card h1,
+.line-auth-card h2 {
+  margin: 12px 0;
+  line-height: 1.35;
+}
+.line-auth-card p {
+  line-height: 1.8;
+  margin: 14px 0;
+  color: #5d574f;
+}
+.line-auth-kicker {
+  color: #856c3d;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+.line-auth-card .line-login-button {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  background: #06c755;
+  color: #fff;
+  border: 0;
+  border-radius: 10px;
+  padding: 16px 20px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+.line-auth-card .line-login-button:hover {
+  background: #05a847;
+}
+.line-auth-card .line-auth-note {
+  font-size: 13px;
+}
+.line-text-button {
+  background: transparent;
+  border: 0;
+  text-decoration: underline;
+  color: #514a3f;
+  cursor: pointer;
+  padding: 10px 0;
+  font: inherit;
+}
+.line-policy-link {
+  display: block;
+  margin-top: 16px;
+  color: #65563d;
+  font-size: 13px;
+}
+.line-complete-page {
+  min-height: 100vh;
+  background: #f8f6f1;
+  padding: 40px 16px;
+}
+.line-complete-page > section {
+  max-width: 560px;
+  margin: 0 auto;
+}
+.line-account-options {
+  display: grid;
+  gap: 12px;
+}
+.line-profile-form fieldset {
+  border: 0;
+  padding: 0;
+  margin-top: 24px;
+  min-width: 0;
+}
+.line-profile-form legend {
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+.line-profile-form label {
+  display: grid;
+  gap: 7px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+.line-profile-form input:not([type='checkbox']) {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  border: 1px solid #cfc8bd;
+  border-radius: 8px;
+  background: white;
+  font: inherit;
+  min-width: 0;
+}
+.line-profile-form .line-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  line-height: 1.7;
+}
+.line-checkbox input {
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+.line-auth-stack > .form-card {
+  margin-top: 20px;
+}
+.line-auth-card .error {
+  color: #b42318;
+}
+.line-auth-card :focus-visible {
+  outline: 3px solid #177248;
+  outline-offset: 3px;
+}

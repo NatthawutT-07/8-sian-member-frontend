@@ -36,7 +36,8 @@ export default function SiteFooter({ className = '' }) {
         </nav>
       </section>
       <small className="site-footer-copy">
-        © {new Date().getFullYear()} 8 Sian. All rights reserved.
+        © {new Date().getFullYear()} 8 Sian. All rights reserved.{' '}
+        <a href="/privacy">นโยบายความเป็นส่วนตัว</a>
       </small>
     </footer>
   );

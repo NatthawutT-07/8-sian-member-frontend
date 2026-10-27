@@ -65,7 +65,7 @@ export default function AdminMemberList({
                   {m.firstName} {m.lastName}
                 </td>
                 <td role="cell" data-label="เบอร์โทร">
-                  {m.phone}
+                  {m.phone || 'สมาชิก LINE (ไม่มีเบอร์โทร)'}
                 </td>
                 <td role="cell" data-label="วันที่สมัคร">
                   {date(m.createdAt)}

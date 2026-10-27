@@ -3,7 +3,8 @@ import SiteFooter from '../components/SiteFooter.jsx';
 import Dialog from '../components/Dialog.jsx';
 import { useState } from 'react';
 import { ArrowUpRight, Check, ShieldCheck, UtensilsCrossed, Plus, Minus } from 'lucide-react';
-import MemberForm from '../features/auth/MemberForm.jsx';
+import LineAuth from '../features/auth/LineAuth.jsx';
+import { PrivacyText } from './PrivacyPage.jsx';
 import PublicPromotions from '../features/promotions/PublicPromotions.jsx';
 import './landing.css';
 export default function LandingPage({ onAuthenticated, authMode = null }) {
@@ -29,7 +30,7 @@ export default function LandingPage({ onAuthenticated, authMode = null }) {
             เข้าสู่ระบบ
           </a>
           <a className="nav-cta" href="/register">
-            สมัครสมาชิก <ArrowUpRight size={16} />
+            เข้าใช้ด้วย LINE <ArrowUpRight size={16} />
           </a>
         </div>
       </header>
@@ -54,7 +55,7 @@ export default function LandingPage({ onAuthenticated, authMode = null }) {
                     ดูโปรโมชั่น <ArrowUpRight size={17} />
                   </a>
                   <a className="landing-secondary" href="/register">
-                    สมัครสมาชิกฟรี
+                    เข้าใช้ด้วย LINE
                   </a>
                 </div>
               </div>
@@ -95,7 +96,7 @@ export default function LandingPage({ onAuthenticated, authMode = null }) {
               <ol>
                 <li>
                   <strong>สมัครสมาชิก</strong>
-                  <p>ใช้เบอร์โทรศัพท์และตั้งรหัสผ่าน สมัครฟรี</p>
+                  <p>เข้าใช้ด้วย LINE ระบบสร้างสมาชิกให้โดยอัตโนมัติ</p>
                 </li>
                 <li>
                   <strong>เลือกรับคูปอง</strong>
@@ -120,25 +121,25 @@ export default function LandingPage({ onAuthenticated, authMode = null }) {
                     <br />
                     เพื่อใช้คูปองของคุณ
                   </h2>
-                  <p>เข้าสู่ระบบด้วยเบอร์โทรศัพท์และรหัสผ่าน แล้วเลือกคูปองที่ต้องการใช้ได้ทันที</p>
+                  <p>เข้าสู่ระบบด้วย LINE แล้วเลือกคูปองที่ต้องการใช้ได้ทันที</p>
                 </>
               ) : (
                 <>
                   <div className="eyebrow">บัญชีสมาชิก 8 เซียน</div>
                   <h2>
-                    สมัครสมาชิก
+                    เข้าสู่ระบบด้วย LINE
                     <br />
                     เพื่อเก็บคูปองของร้าน
                   </h2>
-                  <p>กรอกข้อมูลของคุณ แล้วตั้งรหัสผ่านเพื่อใช้เข้าสู่ระบบ</p>
+                  <p>เข้าใช้ด้วย LINE เพื่อรับสิทธิ์สมาชิก ไม่ต้องกรอกข้อมูล</p>
                   <div className="steps">
                     <div>
                       <b>01</b>
-                      <span>กรอกเบอร์โทร ชื่อ นามสกุล และวันเกิด</span>
+                      <span>เข้าสู่ระบบด้วย LINE ของคุณ</span>
                     </div>
                     <div>
                       <b>02</b>
-                      <span>ตั้งรหัสผ่านและยืนยันการสมัคร</span>
+                      <span>ระบบใช้ชื่อ LINE ของคุณเป็นชื่อสมาชิก</span>
                     </div>
                     <div>
                       <b>03</b>
@@ -156,7 +157,7 @@ export default function LandingPage({ onAuthenticated, authMode = null }) {
                 </>
               )}
             </div>
-            <MemberForm
+            <LineAuth
               onPolicy={() => setPolicy(true)}
               onAuthenticated={onAuthenticated}
               initialMode={authMode}
@@ -176,15 +177,15 @@ export default function LandingPage({ onAuthenticated, authMode = null }) {
               {[
                 [
                   'สมัครสมาชิกมีค่าใช้จ่ายไหม?',
-                  'สมัครสมาชิกฟรี ไม่มีค่าธรรมเนียม เพียงกรอกข้อมูลและตั้งรหัสผ่านให้ครบถ้วน',
+                  'เข้าใช้ด้วย LINE ฟรี ระบบสร้างสมาชิกจากชื่อ LINE โดยไม่ต้องกรอกข้อมูล',
                 ],
                 [
                   'ใช้ข้อมูลอะไรในการเข้าสู่ระบบ?',
-                  'ใช้เบอร์โทรศัพท์และรหัสผ่านที่ตั้งไว้ตอนสมัคร ไม่ต้องเชื่อมต่อบัญชีอื่น',
+                  'ใช้บัญชี LINE ได้เลย หากมีคูปองในบัญชีเบอร์โทรเดิม ให้เลือกเชื่อมสมาชิกเดิมก่อนเข้าใช้ครั้งแรก',
                 ],
                 [
                   'กลับมาดูบัตรสมาชิกได้อย่างไร?',
-                  'เปิดเว็บไซต์นี้ เลือกเข้าสู่ระบบ แล้วกรอกเบอร์โทรศัพท์และรหัสผ่าน ระบบจะแสดงบัตรสมาชิกของคุณ',
+                  'เปิดเว็บไซต์นี้ เลือกเข้าสู่ระบบด้วย LINE บัญชีเดิม แล้วไปที่หน้าคูปองของคุณ',
                 ],
               ].map(([q, a], i) => (
                 <div className="faq-item" key={q}>
@@ -203,19 +204,7 @@ export default function LandingPage({ onAuthenticated, authMode = null }) {
       {policy && (
         <Dialog label="นโยบายความเป็นส่วนตัว" onClose={() => setPolicy(false)} dismissOnBackdrop>
           <h2>นโยบายความเป็นส่วนตัว</h2>
-          <p>
-            ร้าน 8 เซียนราชาหมูกระทะ เก็บชื่อ นามสกุล เบอร์โทรศัพท์ วันเกิด และข้อมูลบัญชีสมาชิก
-            เพื่อยืนยันตัวตน จัดการสมาชิก และให้บริการสิทธิประโยชน์
-          </p>
-          <p>
-            หากคุณเลือกยินยอมรับข่าวสาร ร้านจะใช้ข้อมูลเพื่อติดต่อเกี่ยวกับโปรโมชัน
-            คุณสามารถถอนความยินยอม ขอเข้าถึง แก้ไข หรือลบข้อมูลได้โดยติดต่อผู้ดูแลที่ร้าน
-          </p>
-          <p>
-            ข้อมูลจะถูกเก็บในช่วงที่คุณเป็นสมาชิก และลบเมื่อสิ้นสุดความจำเป็นในการให้บริการ
-            เว้นแต่ต้องเก็บตามกฎหมาย ผู้ให้บริการโฮสต์และฐานข้อมูลอาจประมวลผลข้อมูลเพื่อให้ระบบทำงาน
-          </p>
-          <small>เวอร์ชั้น 1 พฤศจิกายน 2569</small>
+          <PrivacyText />
           <button autoFocus className="button dark" onClick={() => setPolicy(false)}>
             รับทราบและปิด
           </button>
