@@ -3,9 +3,9 @@ import { request, lineLoginUrl } from '../../lib/api.js';
 import './line-auth.css';
 
 const errors = {
-  expired: 'หมดเวลาหรือเปิดการเข้าสู่ระบบหลายหน้าต่าง กรุณาลองใหม่',
-  cancelled: 'คุณยกเลิกการเข้าสู่ระบบด้วย LINE สามารถลองใหม่ได้',
-  failed: 'ยังเข้าสู่ระบบด้วย LINE ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง',
+  expired: 'หมดเวลา กรุณาลองใหม่',
+  cancelled: 'ยกเลิกการเข้าสู่ระบบแล้ว',
+  failed: 'เข้าสู่ระบบไม่สำเร็จ กรุณาลองใหม่',
 };
 
 export default function LineAuth() {
@@ -13,10 +13,21 @@ export default function LineAuth() {
   const [error, setError] = useState('');
   async function load() {
     setError('');
+    setEnabled(null);
     try {
+      try {
+        const { member } = await request('/api/members/me');
+        if (member) {
+          window.location.replace('/coupons');
+          return;
+        }
+      } catch (error) {
+        // Only an expired/missing session should return the user to LINE login.
+        if (error.status !== 401) throw error;
+      }
       setEnabled((await request('/api/auth/line/status')).enabled);
     } catch {
-      setError('ตรวจสอบการเข้าสู่ระบบไม่สำเร็จ กรุณาลองอีกครั้ง');
+      setError('เชื่อมต่อไม่สำเร็จ กรุณาลองใหม่');
     }
   }
   useEffect(() => {
@@ -31,16 +42,16 @@ export default function LineAuth() {
   return (
     <div className="line-auth-stack">
       <section className="line-auth-card" aria-labelledby="line-auth-title">
-        <span className="line-auth-kicker">8 SIAN MEMBER CLUB</span>
+        <span className="line-auth-kicker">สมาชิก 8 เซียน</span>
         <h2 id="line-auth-title">เข้าสู่ระบบด้วย LINE</h2>
-        <p>ใช้บัญชีและชื่อ LINE ของคุณ เปิดดูคูปองได้เลย ไม่ต้องกรอกข้อมูลสมัครสมาชิก</p>
+        <p>เข้าใช้ LINE เพื่อดูคูปองของคุณ</p>
         {callbackError && (
           <p className="error" role="alert">
             {callbackError}
           </p>
         )}
         <p className="line-auth-note">
-          เมื่อดำเนินการต่อ ระบบจะใช้ชื่อและรหัสผู้ใช้ LINE เพื่อสร้างหรือเข้าสู่บัญชีสมาชิก ตาม{' '}
+          ใช้ชื่อและรหัสผู้ใช้ LINE ตาม{' '}
           <a href="/privacy">นโยบายความเป็นส่วนตัว</a>
         </p>
         {enabled === true && (
@@ -48,9 +59,9 @@ export default function LineAuth() {
             เข้าสู่ระบบด้วย LINE
           </a>
         )}
-        {enabled === null && !error && <p role="status">กำลังตรวจสอบช่องทางเข้าสู่ระบบ…</p>}
+        {enabled === null && !error && <p role="status">กำลังเชื่อมต่อ…</p>}
         {enabled === false && (
-          <p role="status">LINE Login กำลังเตรียมเปิดให้บริการ กรุณาลองใหม่ภายหลัง</p>
+          <p role="status">LINE ยังไม่พร้อม กรุณาลองภายหลัง</p>
         )}
         {error && (
           <>
@@ -64,7 +75,7 @@ export default function LineAuth() {
         )}
         {enabled === true && (
           <a className="line-policy-link" href={lineLoginUrl + '?intent=link'}>
-            มีคูปองในบัญชีเบอร์โทรเดิม? เชื่อมสมาชิกเดิมก่อนเข้าใช้ครั้งแรก
+            เชื่อมบัญชีเดิมเพื่อใช้คูปองต่อ
           </a>
         )}
       </section>
@@ -111,7 +122,7 @@ export function LineComplete() {
           8 เซียนราชาหมูกระทะ
         </a>
         <h1>เชื่อมสมาชิกเดิม</h1>
-        <p>สำหรับผู้ที่มีบัญชีเบอร์โทรและคูปองเดิม ยืนยันครั้งเดียวเพื่อใช้บัญชีเดิมผ่าน LINE</p>
+        <p>ยืนยันบัญชีเดิมเพื่อเก็บคูปองไว้</p>
         {error && (
           <p className="error" role="alert">
             {error}
@@ -121,9 +132,9 @@ export function LineComplete() {
         {ready && (
           <form className="line-profile-form" onSubmit={submit}>
             <fieldset disabled={busy}>
-              <legend>ยืนยันบัญชีเดิมครั้งเดียว</legend>
+              <legend>บัญชีเดิม</legend>
               <label>
-                เบอร์โทรของสมาชิกเดิม
+                เบอร์โทรเดิม
                 <input
                   name="phone"
                   type="tel"
@@ -148,7 +159,7 @@ export function LineComplete() {
                   required
                 />
               </label>
-              <p>หากลืมรหัสผ่าน กรุณาติดต่อร้านเพื่อยืนยันตัวตนก่อนเชื่อม LINE</p>
+              <p>ลืมรหัสผ่าน? ติดต่อร้าน</p>
               <label className="line-checkbox">
                 <input
                   name="privacyConsent"
@@ -166,13 +177,13 @@ export function LineComplete() {
                 </span>
               </label>
               <button className="button line-login-button" type="submit">
-                {busy ? 'กำลังบันทึก…' : 'ยืนยันเชื่อมสมาชิกเดิม'}
+                {busy ? 'กำลังบันทึก…' : 'เชื่อมบัญชี'}
               </button>
             </fieldset>
           </form>
         )}
         <a className="line-policy-link" href="/login">
-          กลับหน้าเข้าสู่ระบบ
+          กลับไปเข้าสู่ระบบ
         </a>
       </section>
     </main>

@@ -44,7 +44,7 @@
     gap: 8px;
     flex-shrink: 0;
     max-width: 100%;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     margin-left: auto;
   }
   .header-auth-actions .login-shortcut,
@@ -755,6 +755,17 @@
   }
 }
 @media (max-width: 360px) {
+  .header .brand {
+    font-size: 15px;
+    gap: 6px;
+  }
+  .header .brand-icon {
+    width: 34px;
+    height: 34px;
+  }
+  .header-auth-actions {
+    gap: 6px;
+  }
   .header .nav-cta > svg {
     display: none;
   }

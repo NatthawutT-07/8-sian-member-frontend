@@ -26,11 +26,8 @@ export default function LandingPage({ onAuthenticated, authMode = null }) {
           <a href="/coupons">ใช้คูปอง</a>
         </nav>
         <div className="header-auth-actions">
-          <a className="login-shortcut" href="/login">
-            เข้าสู่ระบบ
-          </a>
           <a className="nav-cta" href="/register">
-            เข้าใช้ด้วย LINE <ArrowUpRight size={16} />
+            เข้าใช้ LINE <ArrowUpRight size={16} />
           </a>
         </div>
       </header>
