@@ -16,7 +16,6 @@ export default function CouponWallet({ activeTab, available, busy, loading, now,
           <h2>
             คูปองของฉัน <span>{available.length}</span>
           </h2>
-          <p>กดใช้คูปองเพื่อแสดงบาร์โค้ดให้ POS สแกน</p>
         </div>
       </div>
       {loading ? (

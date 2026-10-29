@@ -42,11 +42,7 @@ export default function LandingPage({ onAuthenticated, authMode = null }) {
                   <br />
                   <span>รับคูปองไว้ใช้ที่ร้าน</span>
                 </h1>
-                <p className="intro">
-                  ดูโปรโมชั่นจากร้าน เลือกรับคูปองที่ต้องการ
-                  <br className="desktop" />
-                  แล้วเปิดใช้จากบัญชีสมาชิกได้เลย
-                </p>
+              
                 <div className="hero-links">
                   <a className="button landing-primary" href="/#promotions">
                     ดูโปรโมชั่น <ArrowUpRight size={17} />

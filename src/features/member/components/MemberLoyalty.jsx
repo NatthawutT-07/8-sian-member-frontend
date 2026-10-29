@@ -96,10 +96,10 @@ export default function MemberLoyalty({ member }) {
     <>
       <div className="member-loyalty">
         <span>
-          มาทานแล้ว <b>{count === null ? '—' : count}</b> ครั้ง
+          สะสม <b>{count === null ? '—' : count}</b> ครั้ง
         </span>
-        <button type="button" onClick={show} disabled={loading}>
-          <QrCode size={17} /> สะสมครั้ง
+        <button type="button" onClick={show} disabled={loading} aria-label="สะสมครั้ง">
+          <QrCode size={17} /> 
         </button>
         {!open && error && (
           <small role="alert">
@@ -120,16 +120,12 @@ export default function MemberLoyalty({ member }) {
         createPortal(
           <Dialog
             className="member-loyalty-dialog"
-            titleId="loyalty-title"
+            label="สะสมครั้งที่มาทาน"
             onClose={() => setOpen(false)}
             busy={busy}
           >
-            <h2 id="loyalty-title">สะสมครั้งที่มาทาน</h2>
             {phone ? (
               <>
-                <p className="loyalty-total">
-                  {count === null ? '—' : count} <small>ครั้ง</small>
-                </p>
                 <p className="loyalty-phone">{phone}</p>
                 {busy ? (
                   <p role="status">
@@ -150,7 +146,6 @@ export default function MemberLoyalty({ member }) {
                     <RefreshCw size={16} /> สร้าง QR ใหม่
                   </button>
                 )}
-                <p className="loyalty-note">เพิ่ม 1 ครั้งหลังออกใบเสร็จ</p>
               </>
             ) : (
               <form className="loyalty-phone-form" onSubmit={savePhone}>

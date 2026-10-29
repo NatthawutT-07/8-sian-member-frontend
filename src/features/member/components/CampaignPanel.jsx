@@ -14,7 +14,6 @@ export default function CampaignPanel({ activeTab, busy, campaigns, claim, claim
         <div>
           <div className="eyebrow">PICK YOUR NEXT GOOD THING</div>
           <h2>แคมเปญรับคูปอง</h2>
-          <p>เลือกสิทธิพิเศษที่ชอบ รับได้บัญชีละ 1 ครั้งต่อแคมเปญ</p>
         </div>
       </div>
       {loading ? (

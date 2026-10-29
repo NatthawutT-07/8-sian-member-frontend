@@ -14,8 +14,7 @@ export default function SiteFooter({ className = '' }) {
           8 เซียน<span className="brand-sub">ราชาหมูกระทะ</span>
         </span>
       </a>
-      <section className="site-footer-contact" aria-labelledby="contact-title">
-        <h2 id="contact-title">ติดต่อเรา</h2>
+      <section className="site-footer-contact" aria-label="ติดต่อเรา">
         <nav className="site-footer-links" aria-label="ช่องทางติดต่อร้าน">
           {CONTACT_LINKS.map(({ label, href, type }) => {
             const Icon = icons[type];

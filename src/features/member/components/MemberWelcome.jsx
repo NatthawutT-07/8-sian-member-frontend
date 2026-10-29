@@ -4,10 +4,7 @@ import MemberLoyalty from './MemberLoyalty.jsx';
 export default function MemberWelcome({ member }) {
   return (
     <section className="member-welcome member-welcome--compact">
-      <div>
-        <h1>คูปองของคุณ</h1>
-        <p>เลือกรับโปรโมชั่น หรือเปิดรหัสคูปองที่ร้าน</p>
-      </div>
+    
       <div className="home-member-card">
         <div>
           <span>8 เซียน</span>

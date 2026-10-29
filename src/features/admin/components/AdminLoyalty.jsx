@@ -64,9 +64,6 @@ export default function AdminLoyalty({ api }) {
   }
   return (
     <section className="admin-panel admin-loyalty">
-      <h2>
-        <QrCode size={22} /> สะสมครั้งที่มาทาน
-      </h2>
       <p className="admin-help">สแกน QR สมาชิก หรือค้นด้วยเบอร์โทร / เลขสมาชิก</p>
       <form className="loyalty-lookup-form" onSubmit={lookup}>
         <label htmlFor="loyalty-member-search">ค้นหาสมาชิก</label>
