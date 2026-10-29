@@ -6,6 +6,7 @@ export async function request(path, options = {}) {
     response = await fetch(`${API}${path}`, {
       ...options,
       credentials: 'include',
+      cache: 'no-store',
       headers: { 'Content-Type': 'application/json' },
       signal: AbortSignal.timeout(15000),
     });
