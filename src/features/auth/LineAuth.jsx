@@ -44,7 +44,6 @@ export default function LineAuth() {
       <section className="line-auth-card" aria-labelledby="line-auth-title">
         <span className="line-auth-kicker">สมาชิก 8 เซียน</span>
         <h2 id="line-auth-title">เข้าสู่ระบบด้วย LINE</h2>
-        <p>เข้าใช้ LINE เพื่อดูคูปองของคุณ</p>
         {callbackError && (
           <p className="error" role="alert">
             {callbackError}

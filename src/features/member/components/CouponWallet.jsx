@@ -39,11 +39,6 @@ export default function CouponWallet({ activeTab, available, busy, loading, now,
         <div className="coupon-empty">
           <Ticket size={40} strokeWidth={1} />
           <h3>ยังไม่มีคูปองพร้อมใช้</h3>
-          <p>
-            คูปองที่ใช้แล้วหรือหมดอายุจะถูกนำออกจากรายการ
-            <br />
-            ขอบคุณที่มาอิ่มอร่อยกับเรา
-          </p>
         </div>
       )}
     </section>
