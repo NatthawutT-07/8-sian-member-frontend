@@ -6,9 +6,14 @@ import Dialog from '../../../components/Dialog.jsx';
 import CouponQrCode from './CouponQrCode.jsx';
 import './member-loyalty.css';
 
+function formatPhone(value) {
+  return value.replace(/\D/g, '').slice(0, 10).replace(/^(\d{3})(\d)/, '$1-$2').replace(/^(\d{3}-\d{3})(\d)/, '$1-$2');
+}
+
 export default function MemberLoyalty({ member }) {
   const [phone, setPhone] = useState(member.phone || '');
   const [input, setInput] = useState('');
+  const [confirmPhone, setConfirmPhone] = useState(false);
   const [count, setCount] = useState(null);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -58,6 +63,7 @@ export default function MemberLoyalty({ member }) {
     setOpen(true);
     setQr(null);
     setError('');
+    setConfirmPhone(false);
     if (!phone) return;
     lock.current = true;
     setBusy(true);
@@ -73,6 +79,11 @@ export default function MemberLoyalty({ member }) {
   async function savePhone(e) {
     e.preventDefault();
     if (lock.current) return;
+    if (!confirmPhone) {
+      setError('');
+      setConfirmPhone(true);
+      return;
+    }
     lock.current = true;
     setBusy(true);
     setError('');
@@ -83,6 +94,7 @@ export default function MemberLoyalty({ member }) {
       });
       setPhone(result.member.phone);
       setInput('');
+      setConfirmPhone(false);
       await createCode();
     } catch (e) {
       setError(e.message);
@@ -126,7 +138,7 @@ export default function MemberLoyalty({ member }) {
           >
             {phone ? (
               <>
-                <p className="loyalty-phone">{phone}</p>
+                <p className="loyalty-phone">{formatPhone(phone)}</p>
                 {busy ? (
                   <p role="status">
                     <LoaderCircle className="spin" size={20} /> กำลังสร้าง QR…
@@ -149,7 +161,7 @@ export default function MemberLoyalty({ member }) {
               </>
             ) : (
               <form className="loyalty-phone-form" onSubmit={savePhone}>
-                <p>เพิ่มเบอร์โทรเพื่อสะสมครั้ง</p>
+                <p>{confirmPhone ? 'กรุณาตรวจสอบเบอร์โทรก่อนยืนยันการบันทึก' : 'เพิ่มเบอร์โทรเพื่อสะสมครั้ง'}</p>
                 <label htmlFor="loyalty-phone">
                   เบอร์โทร
                   <input
@@ -157,10 +169,11 @@ export default function MemberLoyalty({ member }) {
                     type="tel"
                     inputMode="numeric"
                     autoComplete="tel-national"
-                    pattern="0[689][0-9]{8}"
-                    maxLength={10}
-                    value={input}
+                    pattern="0[689][0-9]-[0-9]{3}-[0-9]{4}"
+                    maxLength={12}
+                    value={formatPhone(input)}
                     onChange={(e) => setInput(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                    readOnly={confirmPhone}
                     disabled={busy}
                     required
                   />
@@ -172,8 +185,21 @@ export default function MemberLoyalty({ member }) {
                   </a>
                 </small>
                 <button className="button dark" disabled={busy}>
-                  {busy ? 'กำลังบันทึก…' : 'บันทึกและแสดง QR'}
+                  {busy ? 'กำลังบันทึก…' : confirmPhone ? 'ยืนยันบันทึกและแสดง QR' : 'ตรวจสอบเบอร์โทร'}
                 </button>
+                {confirmPhone && (
+                  <button
+                    className="cancel-redeem"
+                    type="button"
+                    disabled={busy}
+                    onClick={() => {
+                      setConfirmPhone(false);
+                      setError('');
+                    }}
+                  >
+                    แก้ไขเบอร์โทร
+                  </button>
+                )}
               </form>
             )}
             {error && (
