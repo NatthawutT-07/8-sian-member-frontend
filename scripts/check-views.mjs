@@ -153,7 +153,28 @@ try {
   console.log(
     'PASS: discounts, surcharges and zero prices render correctly across admin and member views',
   );
-  await check('features/member/MemberDashboard.jsx', { member, onSignedOut: noop }, 'คูปองของคุณ');
+  const memberHome = await check(
+    'features/member/MemberDashboard.jsx',
+    { member, onSignedOut: noop },
+    'สิทธิ์สมาชิกของคุณ',
+  );
+  const publicPromotion = await check(
+    'features/promotions/PublicPromotions.jsx',
+    {},
+    '1–30 พฤศจิกายน 2569',
+  );
+  for (const html of [home, publicPromotion, memberHome]) {
+    assert.ok(html.includes('โปรโมชั่น หมูกระทะ 199 บาท'));
+    assert.ok(html.includes('<del>100 บาท</del>'));
+    assert.ok(html.includes('<strong>79</strong>'));
+    assert.ok(html.includes('<strong>ฟรี</strong>ตะแกรงย่าง'));
+    assert.ok(html.includes('ยังไม่รวมรีฟิล 39 บาท'));
+    assert.ok(!html.includes('กำลังโหลดโปรโมชั่น'));
+    assert.ok(!html.includes('หลังรับคูปอง'));
+  }
+  assert.ok(memberHome.includes(member.memberNumber));
+  assert.ok(memberHome.includes('แสดงบัตรสมาชิกด้านบนกับพนักงานเพื่อรับสิทธิ์'));
+  assert.ok(!memberHome.includes('รับคูปอง') && !memberHome.includes('wallet-tab'));
   await check('features/member/components/MemberWelcome.jsx', { member }, 'สะสมครั้ง');
   await check('features/admin/components/AdminLoyalty.jsx', { api: noop }, 'สแกน QR สมาชิก');
   await check(
