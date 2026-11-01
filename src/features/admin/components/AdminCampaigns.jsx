@@ -1,5 +1,7 @@
 import { Plus } from 'lucide-react';
 import { campaignPriceText } from '../../../lib/campaign-price.js';
+import { useState } from 'react';
+import AdminRecordDialog, { deleteAction } from './AdminRecordDialog.jsx';
 export default function AdminCampaigns({
   api,
   busy,
@@ -10,6 +12,59 @@ export default function AdminCampaigns({
   run,
   setCampaignForm,
 }) {
+  const [action, setAction] = useState(null),
+    [search, setSearch] = useState('');
+  const edit = (campaign) =>
+    setAction({
+      title: 'แก้ไขแคมเปญ',
+      endpoint: `/campaigns/${campaign.id}`,
+      method: 'PUT',
+      description:
+        'แก้ไขเงื่อนไขได้ก่อนมีการแจกคูปองเท่านั้น เพื่อรักษาสิทธิ์ของสมาชิกที่ได้รับแล้ว',
+      fields: [
+        { name: 'title', label: 'ชื่อคูปอง', value: campaign.title, maxLength: 100 },
+        {
+          name: 'description',
+          label: 'รายละเอียด',
+          value: campaign.description,
+          type: 'textarea',
+          maxLength: 500,
+        },
+        {
+          name: 'extraPrice',
+          label: 'ส่วนลด / ค่าเพิ่ม (บาท)',
+          type: 'number',
+          value: campaign.extraPrice,
+          min: -100000,
+          max: 100000,
+          step: 1,
+        },
+        {
+          name: 'validityDays',
+          label: 'อายุคูปอง (วัน)',
+          type: 'number',
+          value: campaign.validityDays,
+          min: 1,
+          max: 365,
+          step: 1,
+        },
+        {
+          name: 'prerequisiteCampaignId',
+          label: 'ต้องใช้คูปองใดก่อน',
+          type: 'select',
+          value: campaign.prerequisiteCampaignId,
+          required: false,
+          options: [
+            ['', 'ไม่มีเงื่อนไข'],
+            ...campaigns.filter((row) => row.id !== campaign.id).map((row) => [row.id, row.title]),
+          ],
+        },
+      ],
+      transform: (values) => ({
+        ...values,
+        prerequisiteCampaignId: values.prerequisiteCampaignId || null,
+      }),
+    });
   return (
     <>
       <section className="admin-panel">
@@ -116,6 +171,12 @@ export default function AdminCampaigns({
       </section>
       <section className="admin-panel">
         <h2>แคมเปญทั้งหมด</h2>
+        <input
+          aria-label="ค้นหาแคมเปญ"
+          placeholder="ค้นหาชื่อหรือรายละเอียดแคมเปญ"
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+        />
         <div className="admin-table-wrap">
           <table className="admin-responsive-table" role="table">
             <thead role="rowgroup">
@@ -129,52 +190,70 @@ export default function AdminCampaigns({
               </tr>
             </thead>
             <tbody role="rowgroup">
-              {campaigns.map((c) => (
-                <tr key={c.id} role="row">
-                  <td role="cell" data-label="คูปอง / รายละเอียด">
-                    <strong>{c.title}</strong>
-                    <small>{c.description}</small>
-                    <small>
-                      {c.prerequisite
-                        ? `ปลดล็อกเมื่อใช้: ${c.prerequisite.title}`
-                        : 'รับได้โดยไม่ต้องใช้คูปองก่อนหน้า'}
-                    </small>
-                  </td>
-                  <td role="cell" data-label="ส่วนลด / ค่าเพิ่ม">
-                    {campaignPriceText(c.extraPrice)}
-                  </td>
-                  <td role="cell" data-label="อายุ">
-                    {c.validityDays} วัน
-                  </td>
-                  <td role="cell" data-label="แจกแล้ว">
-                    {c._count.coupons}
-                  </td>
-                  <td role="cell" data-label="สถานะ">
-                    <span className={`admin-badge ${c.active ? 'available' : 'expired'}`}>
-                      {c.active ? 'เปิดแจก' : 'ปิดแจก'}
-                    </span>
-                  </td>
-                  <td role="cell" data-label="" className="admin-cell-action">
-                    <button
-                      className="admin-link"
-                      disabled={busy}
-                      onClick={() =>
-                        run(async () => {
-                          await api(`/campaigns/${c.id}`, {
-                            method: 'PATCH',
-                            body: JSON.stringify({
-                              active: !c.active,
-                            }),
-                          });
-                          await loadCommon();
-                        })
-                      }
-                    >
-                      {c.active ? 'ปิดการแจก' : 'เปิดการแจก'}
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {campaigns
+                .filter((row) =>
+                  `${row.title} ${row.description}`.toLowerCase().includes(search.toLowerCase()),
+                )
+                .map((c) => (
+                  <tr key={c.id} role="row">
+                    <td role="cell" data-label="คูปอง / รายละเอียด">
+                      <strong>{c.title}</strong>
+                      <small>{c.description}</small>
+                      <small>
+                        {c.prerequisite
+                          ? `ปลดล็อกเมื่อใช้: ${c.prerequisite.title}`
+                          : 'รับได้โดยไม่ต้องใช้คูปองก่อนหน้า'}
+                      </small>
+                    </td>
+                    <td role="cell" data-label="ส่วนลด / ค่าเพิ่ม">
+                      {campaignPriceText(c.extraPrice)}
+                    </td>
+                    <td role="cell" data-label="อายุ">
+                      {c.validityDays} วัน
+                    </td>
+                    <td role="cell" data-label="แจกแล้ว">
+                      {c._count.coupons}
+                    </td>
+                    <td role="cell" data-label="สถานะ">
+                      <span className={`admin-badge ${c.active ? 'available' : 'expired'}`}>
+                        {c.active ? 'เปิดแจก' : 'ปิดแจก'}
+                      </span>
+                    </td>
+                    <td role="cell" data-label="" className="admin-cell-action">
+                      <button
+                        className="admin-link"
+                        disabled={busy || c._count.coupons > 0}
+                        onClick={() => edit(c)}
+                      >
+                        แก้ไข
+                      </button>
+                      <button
+                        className="admin-link"
+                        disabled={busy}
+                        onClick={() =>
+                          run(async () => {
+                            await api(`/campaigns/${c.id}`, {
+                              method: 'PATCH',
+                              body: JSON.stringify({
+                                active: !c.active,
+                              }),
+                            });
+                            await loadCommon();
+                          })
+                        }
+                      >
+                        {c.active ? 'ปิดการแจก' : 'เปิดการแจก'}
+                      </button>
+                      <button
+                        className="admin-link admin-danger-text"
+                        disabled={busy}
+                        onClick={() => setAction(deleteAction(`/campaigns/${c.id}`, c.title))}
+                      >
+                        ลบ
+                      </button>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
@@ -182,6 +261,14 @@ export default function AdminCampaigns({
           การปิดแจกไม่ยกเลิกคูปองที่สมาชิกได้รับแล้ว เงื่อนไขแคมเปญที่สร้างแล้วไม่แก้ย้อนหลัง
         </p>
       </section>
+      {action && (
+        <AdminRecordDialog
+          action={action}
+          api={api}
+          onClose={() => setAction(null)}
+          onSaved={() => run(loadCommon)}
+        />
+      )}
     </>
   );
 }

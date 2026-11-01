@@ -77,9 +77,187 @@
 }
 .admin-tabs {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   border-bottom: 1px solid #ddd5c4;
   margin-bottom: 22px;
+}
+.admin-toolbar,
+.admin-actions,
+.admin-row-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.admin-toolbar {
+  justify-content: space-between;
+  margin: 0 0 18px;
+}
+.admin-actions {
+  justify-content: flex-end;
+  margin: 12px 0;
+}
+.admin-row-actions {
+  justify-content: flex-end;
+}
+.admin-danger {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 11px 16px;
+  font-size: 12px;
+  border: 1px solid #ac3636;
+  border-radius: 5px;
+  background: #ac3636;
+  color: white;
+}
+.admin-danger-text {
+  color: #a12e2e !important;
+}
+.admin-record-dialog {
+  width: min(760px, calc(100vw - 32px));
+  max-width: calc(100vw - 32px);
+  max-height: 90vh;
+  overflow-y: auto;
+  color: #332e25;
+  background: #fffdf7;
+}
+.admin-record-dialog h2 {
+  margin-top: 0;
+}
+.admin-record-dialog fieldset {
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+.admin-record-dialog label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  min-width: 0;
+}
+.admin-record-dialog input,
+.admin-record-dialog textarea,
+.admin-record-dialog select {
+  width: 100%;
+  max-width: 100%;
+  border: 1px solid #d9d0bd;
+  border-radius: 5px;
+  padding: 10px;
+  font: inherit;
+  background: white;
+  color: #332e25;
+}
+.admin-record-dialog textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+.admin-record-dialog .admin-checkbox-label {
+  flex-direction: row;
+  align-items: center;
+  grid-column: 1 / -1;
+}
+.admin-record-dialog input[type='checkbox'] {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+.admin-record-dialog small {
+  font-size: 11px;
+  color: #776c59;
+}
+.admin-report-filters fieldset {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: end;
+  gap: 12px;
+  border: 0;
+  padding: 0;
+  margin: 0 0 18px;
+  min-width: 0;
+}
+.admin-report-filters label {
+  display: grid;
+  gap: 6px;
+  font-size: 12px;
+  min-width: 0;
+}
+.admin-report-filters input,
+.admin-report-filters select {
+  width: 100%;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid #d9d0bd;
+  border-radius: 5px;
+  background: white;
+  font: inherit;
+}
+.admin-report-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 18px 0;
+}
+.admin-report-stats > div {
+  border: 1px solid #e3ddcd;
+  padding: 14px;
+  border-radius: 6px;
+  background: #f8f4e9;
+  font-size: 12px;
+}
+.admin-report-stats strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 17px;
+  overflow-wrap: anywhere;
+}
+.admin-detail-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.admin-detail-table th,
+.admin-detail-table td {
+  padding: 10px 4px;
+  text-align: left;
+  border-bottom: 1px solid #e3ddcd;
+  overflow-wrap: anywhere;
+}
+.admin-detail-table th:last-child,
+.admin-detail-table td:last-child {
+  text-align: right;
+  white-space: nowrap;
+}
+.admin-detail-table small {
+  display: block;
+}
+.admin-pos input[aria-label^='ค้นหา'] {
+  width: 100%;
+  margin-bottom: 14px;
+}
+@media (max-width: 700px) {
+  .admin-report-filters fieldset {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .admin-report-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .admin-pos-row {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .admin-row-actions {
+    justify-content: flex-start;
+  }
+  .admin-record-dialog .admin-form-grid {
+    grid-template-columns: 1fr;
+  }
+  .admin-toolbar {
+    align-items: stretch;
+  }
 }
 .admin-tabs button {
   display: flex;
@@ -498,4 +676,59 @@ table {
   .admin-login-card {
     padding: 25px;
   }
+}
+.admin-pos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+  gap: 24px;
+}
+.admin-pos-grid > section {
+  background: white;
+  border: 1px solid #dce4db;
+  border-radius: 16px;
+  padding: 20px;
+  min-width: 0;
+}
+.admin-pos fieldset {
+  border: 0;
+  padding: 0;
+  min-width: 0;
+}
+.admin-pos label {
+  display: block;
+  margin: 12px 0;
+}
+.admin-pos input:not([type='checkbox']) {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin-top: 6px;
+  border: 1px solid #cbd6c8;
+  border-radius: 8px;
+  font: inherit;
+}
+.admin-pos-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  border-top: 1px solid #e5eae1;
+  padding: 14px 0;
+  margin-top: 14px;
+  overflow-wrap: anywhere;
+}
+.admin-pos select {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin-top: 6px;
+  border: 1px solid #cbd6c8;
+  border-radius: 8px;
+  font: inherit;
+  background: white;
+}
+.admin-pos-coupon-rule {
+  border-top: 1px solid #e5eae1;
+  padding: 18px 0;
+  margin-top: 16px;
 }

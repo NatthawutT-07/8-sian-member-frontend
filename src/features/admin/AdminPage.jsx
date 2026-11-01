@@ -6,10 +6,19 @@ import AdminMemberList from './components/AdminMemberList.jsx';
 import AdminSummary from './components/AdminSummary.jsx';
 import AdminLogin from './components/AdminLogin.jsx';
 import AdminLoyalty from './components/AdminLoyalty.jsx';
+import AdminPos from './components/AdminPos.jsx';
+import AdminBusinessReports from './components/AdminBusinessReports.jsx';
+import AdminRecordDialog, {
+  memberFields,
+  reasonField,
+  deleteAction,
+} from './components/AdminRecordDialog.jsx';
+import { useState } from 'react';
 import { LogOut, Users, Ticket, History, LoaderCircle, Check, QrCode } from 'lucide-react';
 import BrandLogo from '../../components/BrandLogo.jsx';
 import './admin.css';
 export default function AdminPage() {
+  const [recordAction, setRecordAction] = useState(null);
   const {
     admin,
     api,
@@ -82,7 +91,7 @@ export default function AdminPage() {
         <a className="brand" href="/">
           <BrandLogo />
           <span>
-            8 เซียน<span className="brand-sub">จัดการระบบสมาชิก</span>
+            8 เซียน<span className="brand-sub">จัดการหลังบ้านร้าน</span>
           </span>
         </a>
         <div>
@@ -97,7 +106,7 @@ export default function AdminPage() {
           <div>
             <div className="eyebrow">8 SIAN • OWNER CONSOLE</div>
             <h1>หลังบ้านของร้าน</h1>
-            <p>ข้อมูลสมาชิก คูปอง และประวัติการทำรายการ</p>
+            <p>จัดการสมาชิก คูปอง พนักงาน สินค้า ยอดขาย และกะของร้าน</p>
           </div>
           {busy && (
             <span className="admin-working" role="status">
@@ -111,6 +120,8 @@ export default function AdminPage() {
             ['members', 'สมาชิก', Users],
             ['campaigns', 'แคมเปญคูปอง', Ticket],
             ['loyalty', 'สะสมครั้ง', QrCode],
+            ['pos', 'พนักงานและสินค้า POS', Users],
+            ['business', 'ยอดขายและกะ', History],
             ['audit', 'ประวัติระบบ', History],
           ].map(([key, label, Icon]) => (
             <button
@@ -125,6 +136,44 @@ export default function AdminPage() {
           ))}
         </nav>
         {alerts}
+        {tab === 'members' && !detail && (
+          <div className="admin-toolbar">
+            <button
+              className="admin-primary"
+              disabled={busy}
+              onClick={() =>
+                setRecordAction({
+                  title: 'เพิ่มสมาชิก',
+                  endpoint: '/members',
+                  method: 'POST',
+                  fields: [
+                    ...memberFields,
+                    {
+                      name: 'password',
+                      label: 'รหัสผ่านเริ่มต้น',
+                      type: 'password',
+                      minLength: 6,
+                      maxLength: 128,
+                    },
+                    {
+                      name: 'privacyConsent',
+                      label: 'สมาชิกยอมรับนโยบายความเป็นส่วนตัวแล้ว',
+                      type: 'checkbox',
+                    },
+                    {
+                      name: 'marketingConsent',
+                      label: 'สมาชิกยินยอมรับข่าวสาร',
+                      type: 'checkbox',
+                      required: false,
+                    },
+                  ],
+                })
+              }
+            >
+              เพิ่มสมาชิก
+            </button>
+          </div>
+        )}
         {tab === 'members' && !detail && (
           <AdminMemberList
             busy={busy}
@@ -153,6 +202,41 @@ export default function AdminPage() {
             setGrantConfirm={setGrantConfirm}
             setReset={setReset}
             setResetOpen={setResetOpen}
+            api={api}
+            run={run}
+            reload={() => api(`/members/${detail.member.id}`).then(setDetail)}
+            editMember={() =>
+              setRecordAction({
+                title: 'แก้ไขข้อมูลสมาชิก',
+                endpoint: `/members/${detail.member.id}`,
+                method: 'PUT',
+                fields: [
+                  ...memberFields.map((field) => ({
+                    ...field,
+                    value:
+                      field.name === 'birthDate'
+                        ? detail.member.birthDate?.slice(0, 10)
+                        : detail.member[field.name],
+                    required:
+                      field.name === 'phone' ? !!detail.member.phone : field.name !== 'birthDate',
+                  })),
+                  reasonField,
+                ],
+                transform: (values) => ({
+                  ...values,
+                  phone: values.phone || null,
+                  birthDate: values.birthDate || null,
+                }),
+              })
+            }
+            deleteMember={() =>
+              setRecordAction(
+                deleteAction(
+                  `/members/${detail.member.id}`,
+                  `${detail.member.firstName} ${detail.member.lastName}`,
+                ),
+              )
+            }
           />
         )}
         {tab === 'campaigns' && (
@@ -171,6 +255,23 @@ export default function AdminPage() {
           <AdminAuditPanel api={api} audit={audit} busy={busy} run={run} setAudit={setAudit} />
         )}
         {tab === 'loyalty' && <AdminLoyalty api={api} />}
+        {tab === 'pos' && <AdminPos api={api} />}
+        {tab === 'business' && <AdminBusinessReports api={api} />}
+        {recordAction && (
+          <AdminRecordDialog
+            action={recordAction}
+            api={api}
+            onClose={() => setRecordAction(null)}
+            onSaved={() =>
+              run(async () => {
+                if (recordAction.method === 'DELETE') setDetail(null);
+                else if (detail) setDetail(await api(`/members/${detail.member.id}`));
+                await loadMembers();
+                await loadCommon();
+              })
+            }
+          />
+        )}
       </main>
     </div>
   );

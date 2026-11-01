@@ -1,5 +1,7 @@
 import { ArrowLeft, KeyRound, Gift } from 'lucide-react';
 import AuditRows from './AdminAuditList.jsx';
+import { useState } from 'react';
+import AdminRecordDialog, { reasonField } from './AdminRecordDialog.jsx';
 const statusText = {
   USED: 'ใช้แล้ว',
   EXPIRED: 'หมดอายุ',
@@ -29,7 +31,13 @@ export default function AdminMemberDetail({
   setGrantConfirm,
   setReset,
   setResetOpen,
+  editMember,
+  deleteMember,
+  api,
+  run,
+  reload,
 }) {
+  const [revoke, setRevoke] = useState(null);
   return (
     <>
       <button
@@ -40,6 +48,16 @@ export default function AdminMemberDetail({
         <ArrowLeft size={15} /> กลับรายการสมาชิก
       </button>
       <section className="admin-panel">
+        {editMember && (
+          <div className="admin-actions">
+            <button className="admin-secondary" onClick={editMember} disabled={busy}>
+              แก้ไขสมาชิก
+            </button>
+            <button className="admin-danger" onClick={deleteMember} disabled={busy}>
+              ลบสมาชิก
+            </button>
+          </div>
+        )}
         <div className="admin-panel-heading">
           <div>
             <span className="eyebrow">{detail.member.memberNumber}</span>
@@ -230,6 +248,11 @@ export default function AdminMemberDetail({
                   </td>
                   <td role="cell" data-label="วันที่ใช้">
                     {date(c.usedAt)}
+                    {api && !c.usedAt && !['USED', 'EXPIRED'].includes(c.status) && (
+                      <button className="admin-link" disabled={busy} onClick={() => setRevoke(c)}>
+                        ยกเลิกสิทธิ์คูปอง
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -240,6 +263,22 @@ export default function AdminMemberDetail({
         <h3>ประวัติการดูแลบัญชีล่าสุด</h3>
         <AuditRows rows={detail.audits} />
       </section>
+      {revoke && (
+        <AdminRecordDialog
+          api={api}
+          action={{
+            title: `ยกเลิกคูปอง ${revoke.title}`,
+            description:
+              'ยกเลิกได้เฉพาะคูปองที่ยังไม่ใช้ และไม่อยู่ระหว่างคิดเงิน ประวัติการแจกจะยังคงอยู่',
+            endpoint: `/members/${detail.member.id}/coupons/${revoke.id}/revoke`,
+            method: 'POST',
+            fields: [reasonField],
+            submitLabel: 'ยืนยันยกเลิกสิทธิ์',
+          }}
+          onClose={() => setRevoke(null)}
+          onSaved={() => run(reload)}
+        />
+      )}
     </>
   );
 }
