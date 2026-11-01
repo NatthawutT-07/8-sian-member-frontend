@@ -1,5 +1,6 @@
 const API = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
 export const lineLoginUrl = `${API}/api/auth/line`;
+export const apiAssetUrl = (path) => (path ? `${API}${path}` : '');
 export async function request(path, options = {}) {
   let response;
   try {
@@ -7,7 +8,7 @@ export async function request(path, options = {}) {
       ...options,
       credentials: 'include',
       cache: 'no-store',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...options.headers },
       signal: AbortSignal.timeout(15000),
     });
   } catch {

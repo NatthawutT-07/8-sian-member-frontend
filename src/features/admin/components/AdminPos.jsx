@@ -50,7 +50,7 @@ export default function AdminPos({ api }) {
       await api('/pos/users', { method: 'POST', body: JSON.stringify(data) });
       form.reset();
       await load();
-      setNotice('สร้างบัญชีพนักงาน USER แล้ว ใช้เข้าสู่ POS ได้');
+      setNotice('สร้างบัญชีพนักงานแล้ว ใช้เข้าสู่ POS ได้ตามหน้าที่ที่เลือก');
     });
   }
   async function saveProduct(event) {
@@ -83,8 +83,8 @@ export default function AdminPos({ api }) {
     <section className="admin-pos">
       <h2>จัดการ POS</h2>
       <p>
-        ADMIN ใช้เว็บจัดการพนักงานและสินค้า • พนักงาน USER เปิดร้าน ปิดร้าน คิดเงิน
-        และดูสรุปรายวันใน POS
+        ADMIN จัดการพนักงานและสินค้า • USER ใช้คิดเงินและจัดการโต๊ะ • CHEF
+        เข้าหน้าครัวเพื่อรับออเดอร์ ดูยอดสะสม และพิมพ์ใบอาหาร
       </p>
       {error && (
         <p role="alert" className="admin-error">
@@ -98,7 +98,7 @@ export default function AdminPos({ api }) {
       )}
       <div className="admin-pos-grid">
         <section>
-          <h3>พนักงานคิดเงิน</h3>
+          <h3>พนักงานคิดเงินและพ่อครัว</h3>
           <input
             aria-label="ค้นหาพนักงาน"
             placeholder="ค้นหาชื่อพนักงานหรือชื่อผู้ใช้"
@@ -134,7 +134,14 @@ export default function AdminPos({ api }) {
                   autoComplete="new-password"
                 />
               </label>
-              <button className="admin-primary">สร้างพนักงาน USER</button>
+              <label>
+                หน้าที่
+                <select name="role" defaultValue="USER">
+                  <option value="USER">คิดเงิน (USER)</option>
+                  <option value="CHEF">พ่อครัว (CHEF)</option>
+                </select>
+              </label>
+              <button className="admin-primary">สร้างพนักงาน</button>
             </fieldset>
           </form>
           {users
@@ -148,7 +155,8 @@ export default function AdminPos({ api }) {
                 <span>
                   <strong>{user.displayName}</strong>
                   <br />
-                  {user.username} · USER · {user.active ? 'ใช้งาน' : 'ระงับ'}
+                  {user.username} · {user.role === 'CHEF' ? 'พ่อครัว' : 'คิดเงิน'} ·{' '}
+                  {user.active ? 'ใช้งาน' : 'ระงับ'}
                 </span>
                 <div className="admin-row-actions">
                   <button
@@ -160,6 +168,16 @@ export default function AdminPos({ api }) {
                         endpoint: `/pos/users/${user.id}`,
                         method: 'PUT',
                         fields: [
+                          {
+                            name: 'role',
+                            label: 'หน้าที่',
+                            type: 'select',
+                            value: user.role,
+                            options: [
+                              ['USER', 'คิดเงิน (USER)'],
+                              ['CHEF', 'พ่อครัว (CHEF)'],
+                            ],
+                          },
                           {
                             name: 'displayName',
                             label: 'ชื่อพนักงาน',

@@ -8,6 +8,7 @@ import AdminLogin from './components/AdminLogin.jsx';
 import AdminLoyalty from './components/AdminLoyalty.jsx';
 import AdminPos from './components/AdminPos.jsx';
 import AdminBusinessReports from './components/AdminBusinessReports.jsx';
+import AdminOrdering from './components/AdminOrdering.jsx';
 import AdminRecordDialog, {
   memberFields,
   reasonField,
@@ -121,6 +122,7 @@ export default function AdminPage() {
             ['campaigns', 'แคมเปญคูปอง', Ticket],
             ['loyalty', 'สะสมครั้ง', QrCode],
             ['pos', 'พนักงานและสินค้า POS', Users],
+            ['ordering', 'โต๊ะและเมนูสั่งอาหาร', QrCode],
             ['business', 'ยอดขายและกะ', History],
             ['audit', 'ประวัติระบบ', History],
           ].map(([key, label, Icon]) => (
@@ -258,6 +260,7 @@ export default function AdminPage() {
         )}
         {tab === 'loyalty' && <AdminLoyalty api={api} />}
         {tab === 'pos' && <AdminPos api={api} />}
+        {tab === 'ordering' && <AdminOrdering api={api} />}
         {tab === 'business' && <AdminBusinessReports api={api} />}
         {recordAction && (
           <AdminRecordDialog

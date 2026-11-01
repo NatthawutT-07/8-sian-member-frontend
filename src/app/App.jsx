@@ -6,6 +6,7 @@ import { ADMIN_PATH } from '../config/routes.js';
 import { request } from '../lib/api.js';
 import { LineComplete } from '../features/auth/LineAuth.jsx';
 import PrivacyPage from '../pages/PrivacyPage.jsx';
+import OrderingPage from '../features/ordering/OrderingPage.jsx';
 
 export default function App() {
   const [member, setMember] = useState(null);
@@ -30,6 +31,7 @@ export default function App() {
     };
   }, [path, attempt]);
   if (window.location.pathname.replace(/\/$/, '') === ADMIN_PATH) return <AdminPage />;
+  if (/^\/order\/[^/]+$/.test(path)) return <OrderingPage token={path.split('/')[2]} />;
   if (path === '/line/complete') return <LineComplete />;
   if (path === '/privacy') return <PrivacyPage />;
   if (path === '/coupons' && member)

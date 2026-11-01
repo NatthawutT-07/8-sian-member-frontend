@@ -46,6 +46,12 @@ async function check(module, props, expected) {
   return html;
 }
 try {
+  await check(
+    'features/ordering/OrderingPage.jsx',
+    { token: '00000000-0000-4000-8000-000000000001' },
+    'สั่งอาหารที่โต๊ะ',
+  );
+  await check('features/admin/components/AdminOrdering.jsx', { api: noop }, 'โต๊ะและเมนูสั่งอาหาร');
   const { csvCell } = await server.ssrLoadModule(
     '/src/features/admin/components/AdminBusinessReports.jsx',
   );
