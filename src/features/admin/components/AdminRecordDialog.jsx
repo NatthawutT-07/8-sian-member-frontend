@@ -80,7 +80,7 @@ export default function AdminRecordDialog({ action, api, onClose, onSaved }) {
                   <textarea
                     name={field.name}
                     defaultValue={field.value || ''}
-                    required
+                    required={field.required !== false}
                     minLength={field.minLength}
                     maxLength={field.maxLength || 300}
                   />
@@ -126,10 +126,17 @@ export const reasonField = {
   maxLength: 300,
 };
 export const memberFields = [
-  { name: 'firstName', label: 'ชื่อ', maxLength: 80 },
-  { name: 'lastName', label: 'นามสกุล', maxLength: 80 },
-  { name: 'phone', label: 'เบอร์โทรศัพท์', type: 'tel', minLength: 10, maxLength: 10 },
-  { name: 'birthDate', label: 'วันเกิด', type: 'date' },
+  { name: 'firstName', label: 'ชื่อ (ไม่บังคับ)', maxLength: 80, required: false },
+  { name: 'lastName', label: 'นามสกุล (ไม่บังคับ)', maxLength: 80, required: false },
+  {
+    name: 'phone',
+    label: 'เบอร์โทรศัพท์ (ไม่บังคับ)',
+    type: 'tel',
+    minLength: 10,
+    maxLength: 10,
+    required: false,
+  },
+  { name: 'birthDate', label: 'วันเกิด (ไม่บังคับ)', type: 'date', required: false },
 ];
 export const deleteAction = (endpoint, name) => ({
   title: 'ยืนยันลบข้อมูล',

@@ -144,6 +144,8 @@ export default function AdminPage() {
               onClick={() =>
                 setRecordAction({
                   title: 'เพิ่มสมาชิก',
+                  description:
+                    'กรอกเฉพาะข้อมูลที่มี เช่น เบอร์โทรศัพท์ ชื่อและข้อมูลอื่นเว้นว่างได้ หากไม่ตั้งรหัสผ่าน สมาชิกจะยังเข้าสู่ระบบด้วยเบอร์และรหัสผ่านไม่ได้',
                   endpoint: '/members',
                   method: 'POST',
                   fields: [
@@ -154,11 +156,13 @@ export default function AdminPage() {
                       type: 'password',
                       minLength: 6,
                       maxLength: 128,
+                      required: false,
                     },
                     {
                       name: 'privacyConsent',
                       label: 'สมาชิกยอมรับนโยบายความเป็นส่วนตัวแล้ว',
                       type: 'checkbox',
+                      required: false,
                     },
                     {
                       name: 'marketingConsent',
@@ -217,10 +221,8 @@ export default function AdminPage() {
                       field.name === 'birthDate'
                         ? detail.member.birthDate?.slice(0, 10)
                         : detail.member[field.name],
-                    required:
-                      field.name === 'phone' ? !!detail.member.phone : field.name !== 'birthDate',
                   })),
-                  reasonField,
+                  { ...reasonField, required: false },
                 ],
                 transform: (values) => ({
                   ...values,

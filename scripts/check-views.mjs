@@ -46,12 +46,28 @@ async function check(module, props, expected) {
   return html;
 }
 try {
-  const { csvCell } = await server.ssrLoadModule('/src/features/admin/components/AdminBusinessReports.jsx');
+  const { csvCell } = await server.ssrLoadModule(
+    '/src/features/admin/components/AdminBusinessReports.jsx',
+  );
   assert.equal(csvCell(' =1+1'), '"\' =1+1"');
   assert.equal(csvCell('@SUM(A1)'), '"\'@SUM(A1)"');
   assert.equal(csvCell(-20), '"-20"');
   assert.equal(csvCell('a"b'), '"a""b"');
   console.log('PASS: admin CSV escapes formulas, quotes and numeric amounts safely');
+  const { default: AdminRecordDialog, memberFields } = await server.ssrLoadModule(
+    '/src/features/admin/components/AdminRecordDialog.jsx',
+  );
+  const optionalMemberForm = renderToStaticMarkup(
+    createElement(AdminRecordDialog, {
+      action: { title: 'แก้ไขข้อมูลสมาชิก', fields: memberFields },
+      api: noop,
+      onClose: noop,
+    }),
+  );
+  assert.ok(
+    !optionalMemberForm.includes('required=""'),
+    'Admin member profile fields must permit blanks',
+  );
   const { default: LandingPage } = await server.ssrLoadModule('/src/pages/LandingPage.jsx');
   const home = renderToStaticMarkup(createElement(LandingPage, {}));
   assert.ok(home.includes('landing-hero'));

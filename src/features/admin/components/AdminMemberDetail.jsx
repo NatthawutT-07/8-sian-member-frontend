@@ -65,7 +65,7 @@ export default function AdminMemberDetail({
               {detail.member.firstName} {detail.member.lastName}
             </h2>
             <p>
-              เบอร์ {detail.member.phone || 'ไม่ได้ระบุ (สมาชิก LINE)'} · วันเกิด{' '}
+              เบอร์ {detail.member.phone || 'ไม่ได้ระบุ'} · วันเกิด{' '}
               {detail.member.birthDate
                 ? new Date(detail.member.birthDate).toLocaleDateString('th-TH', {
                     timeZone: 'UTC',
