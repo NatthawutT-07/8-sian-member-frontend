@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { createTableQr } from '../lib/table-qr.js';
+import { createTableQr, createTableQrDownload } from '../lib/table-qr.js';
 import { apiAssetUrl } from '../../../lib/api.js';
 import { prepareMenuImage } from '../lib/menu-image.js';
 import './admin-ordering.css';
@@ -22,10 +22,10 @@ export default function AdminOrdering({ api }) {
     const [tables, menu] = await Promise.all([api('/dining-tables'), api('/ordering-menu')]);
     setTables(
       await Promise.all(
-        tables.map(async (table) => ({
-          ...table,
-          image: await createTableQr(table.url),
-        })),
+        tables.map(async (table) => {
+          const image = await createTableQr(table.url);
+          return { ...table, image, downloadImage: await createTableQrDownload(image, table.number) };
+        }),
       ),
     );
     setMenu(menu);
@@ -142,7 +142,7 @@ export default function AdminOrdering({ api }) {
             <a
               className="admin-secondary"
               download={`table-${table.number}-qr.png`}
-              href={table.image}
+              href={table.downloadImage}
             >
               ดาวน์โหลด QR
             </a>

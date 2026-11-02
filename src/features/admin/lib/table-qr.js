@@ -27,3 +27,26 @@ export async function createTableQr(value, { logoSource = '/images/logo.png' } =
   }
   return canvas.toDataURL('image/png');
 }
+
+export async function createTableQrDownload(qrImage, tableNumber) {
+  const qr = new Image();
+  qr.src = qrImage;
+  await qr.decode();
+  try { await document.fonts?.load('700 76px "Noto Sans Thai"'); } catch { /* Use the local Thai font fallback. */ }
+  const canvas = document.createElement('canvas');
+  canvas.width = qr.naturalWidth;
+  const headingHeight = 100;
+  canvas.height = qr.naturalHeight + headingHeight;
+  const context = canvas.getContext('2d');
+  context.fillStyle = '#fff';
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  context.fillStyle = '#292923';
+  context.font = '700 76px "Noto Sans Thai", Tahoma, sans-serif';
+  context.textAlign = 'center';
+  context.textBaseline = 'alphabetic';
+  const label = `โต๊ะ ${tableNumber}`;
+  const descent = context.measureText(label).actualBoundingBoxDescent || 0;
+  context.fillText(label, canvas.width / 2, headingHeight - 4 - descent, canvas.width - 48);
+  context.drawImage(qr, 0, headingHeight);
+  return canvas.toDataURL('image/png');
+}
