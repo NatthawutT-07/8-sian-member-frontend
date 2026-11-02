@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import QRCode from 'qrcode';
+import { createTableQr } from '../lib/table-qr.js';
 import { apiAssetUrl } from '../../../lib/api.js';
 import { prepareMenuImage } from '../lib/menu-image.js';
 import './admin-ordering.css';
@@ -24,11 +24,7 @@ export default function AdminOrdering({ api }) {
       await Promise.all(
         tables.map(async (table) => ({
           ...table,
-          image: await QRCode.toDataURL(table.url, {
-            width: 600,
-            margin: 4,
-            errorCorrectionLevel: 'M',
-          }),
+          image: await createTableQr(table.url),
         })),
       ),
     );
