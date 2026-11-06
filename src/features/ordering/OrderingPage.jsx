@@ -3,6 +3,7 @@ import { request, apiAssetUrl } from '../../lib/api.js';
 import BrandLogo from '../../components/BrandLogo.jsx';
 import Dialog from '../../components/Dialog.jsx';
 import './ordering.css';
+import { getOrderLocation } from './location.js';
 
 export default function OrderingPage({ token }) {
   const [room, setRoom] = useState(null),
@@ -96,11 +97,12 @@ export default function OrderingPage({ token }) {
           .map(([menuItemId, quantity]) => ({ menuItemId, quantity })),
       };
       if (!data.items.length) return;
+      const location = await getOrderLocation();
       localStorage.setItem(storageKey, JSON.stringify(data));
       setPending(data);
       await request(`/api/ordering/${token}/orders`, {
         method: 'POST',
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, location }),
       });
       localStorage.removeItem(storageKey);
       setPending(null);
@@ -147,6 +149,7 @@ export default function OrderingPage({ token }) {
       )}
       {room && (
         <>
+          <p>ส่งอาหารได้ภายในรัศมี 200 เมตรจากร้าน กรุณาเปิด GPS และอนุญาตตำแหน่งก่อนส่งรายการ</p>
           <nav className="ordering-categories" aria-label="หมวดหมู่อาหาร">
             {categories.map((name) => (
               <button
