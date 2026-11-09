@@ -46,7 +46,9 @@ export default function OrderingPage({ token }) {
       setRoom(data);
       setError('');
       setCategory((old) =>
-        data.menu.some((item) => item.category === old) ? old : data.menu[0]?.category || '',
+        data.menu.some((item) => item.category === old)
+          ? old
+          : data.categories?.[0] || data.menu[0]?.category || '',
       );
     } catch (error) {
       if ([403, 404].includes(error.status)) {
@@ -121,7 +123,9 @@ export default function OrderingPage({ token }) {
       setBusy(false);
     }
   }
-  const categories = [...new Set(room?.menu.map((item) => item.category) || [])];
+  const categories = room?.categories || [
+    ...new Set(room?.menu.map((item) => item.category) || []),
+  ];
   const visibleCategory = categories.includes(category) ? category : categories[0] || '';
   const quantity = Object.values(cart).reduce((sum, value) => sum + value, 0);
   return (
@@ -161,6 +165,18 @@ export default function OrderingPage({ token }) {
               </button>
             ))}
           </nav>
+          {!!categories.length && (
+            <label className="ordering-category-select">
+              หมวดหมู่อาหาร
+              <select value={visibleCategory} onChange={(event) => setCategory(event.target.value)}>
+                {categories.map((name) => (
+                  <option key={name} value={name}>
+                    {name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
           {!room.menu.length && <p>โต๊ะนี้ยังไม่มีรายการอาหารที่สั่งได้ กรุณาติดต่อพนักงาน</p>}
           <section className="ordering-menu" aria-label={visibleCategory}>
             {room.menu

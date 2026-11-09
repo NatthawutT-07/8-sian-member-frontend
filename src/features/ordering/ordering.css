@@ -46,6 +46,9 @@ body > #root > main.ordering-page {
   white-space: nowrap;
   scroll-snap-align: start;
 }
+.ordering-category-select {
+  display: none;
+}
 .ordering-header + .ordering-categories {
   margin-top: 24px;
 }
@@ -222,6 +225,27 @@ body > #root > main.ordering-page {
   min-height: 48px;
 }
 @media (max-width: 600px) {
+  .ordering-page .ordering-categories {
+    display: none;
+  }
+  .ordering-category-select {
+    display: grid;
+    gap: 6px;
+    font-size: 14px;
+    margin: 16px 0;
+  }
+  .ordering-category-select select {
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    padding: 10px 12px;
+    border: 1px solid #d9cfbd;
+    border-radius: 10px;
+    background: #fff;
+    color: #342a20;
+    font: inherit;
+    font-size: 16px;
+  }
   .ordering-header {
     gap: 12px;
     padding-bottom: 16px;
