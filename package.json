@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "check:barcode": "node scripts/check-barcode.mjs",
-    "check:views": "node scripts/check-views.mjs"
+    "check:views": "node scripts/check-views.mjs",
+    "check:ordering": "node --test scripts/check-ordering-client.mjs"
   },
   "dependencies": {
     "jsbarcode": "^3.12.3",

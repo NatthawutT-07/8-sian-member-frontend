@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import AdminRecordDialog, { deleteAction, passwordFields } from './AdminRecordDialog.jsx';
+import PosProductOrder from './PosProductOrder.jsx';
 
 export default function AdminPos({ api }) {
   const [users, setUsers] = useState([]),
@@ -278,6 +279,20 @@ export default function AdminPos({ api }) {
               </button>
             </fieldset>
           </form>
+          <PosProductOrder
+            products={products}
+            busy={busy}
+            onSave={(group, productIds) =>
+              run(async () => {
+                await api('/pos/product-order', {
+                  method: 'PUT',
+                  body: JSON.stringify({ group, productIds }),
+                });
+                await load();
+                setNotice('บันทึกลำดับสินค้าแล้ว ให้ POS โหลดหน้าใหม่เพื่อรับลำดับล่าสุด');
+              })
+            }
+          />
           <input
             aria-label="ค้นหาสินค้า"
             placeholder="ค้นหาชื่อหรือบาร์โค้ดสินค้า"

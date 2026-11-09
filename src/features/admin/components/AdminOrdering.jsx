@@ -1,6 +1,7 @@
 ﻿import { useEffect, useRef, useState } from 'react';
 import OrderingTables from './OrderingTables.jsx';
 import OrderingCategoryOrder from './OrderingCategoryOrder.jsx';
+import OrderingItemOrder from './OrderingItemOrder.jsx';
 import OrderingNameSelect from './OrderingNameSelect.jsx';
 import { apiAssetUrl } from '../../../lib/api.js';
 import { prepareMenuImage } from '../lib/menu-image.js';
@@ -143,6 +144,21 @@ export default function AdminOrdering({ api }) {
             });
             setCategories(saved);
             setNotice('บันทึกลำดับหมวดหมู่แล้ว หน้าสั่งอาหารจะแสดงตามลำดับนี้');
+          })
+        }
+      />
+      <OrderingItemOrder
+        menu={menu}
+        categories={categories}
+        busy={busy}
+        onSave={(category, itemIds) =>
+          run(async () => {
+            await api('/ordering-item-order', {
+              method: 'PUT',
+              body: JSON.stringify({ category, itemIds }),
+            });
+            await load();
+            setNotice('บันทึกลำดับอาหารแล้ว ลูกค้าจะเห็นรายการตามลำดับใหม่โดยไม่มีตัวเลข');
           })
         }
       />

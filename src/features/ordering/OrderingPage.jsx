@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { request, apiAssetUrl } from '../../lib/api.js';
 import BrandLogo from '../../components/BrandLogo.jsx';
 import Dialog from '../../components/Dialog.jsx';
 import './ordering.css';
 import { getOrderLocation } from './location.js';
+import { createMenuClient } from './menu-client.js';
 
 export default function OrderingPage({ token }) {
   const [room, setRoom] = useState(null),
@@ -15,12 +16,20 @@ export default function OrderingPage({ token }) {
     [busy, setBusy] = useState(false),
     [pending, setPending] = useState(null);
   const [reviewOpen, setReviewOpen] = useState(false);
+  const [retryAt, setRetryAt] = useState(0),
+    [retrySeconds, setRetrySeconds] = useState(0);
+  const menuClient = useMemo(() => createMenuClient(token, request), [token]);
+  const activeClient = useRef(menuClient),
+    currentCart = useRef(cart);
+  activeClient.current = menuClient;
+  currentCart.current = cart;
   const session = useRef(null),
     sending = useRef(false);
   const storageKey = `table-order-pending:${token}`;
-  async function load() {
+  async function load(force = false) {
     try {
-      const data = await request(`/api/ordering/${token}`);
+      const data = await menuClient.load(force === true);
+      if (activeClient.current !== menuClient) return;
       let storedPending = null;
       try {
         storedPending = JSON.parse(localStorage.getItem(storageKey) || 'null');
@@ -38,6 +47,12 @@ export default function OrderingPage({ token }) {
         setMessage('โต๊ะเปลี่ยนรอบแล้ว กรุณาเลือกรายการใหม่');
       }
       session.current = data.sessionId;
+      if (
+        Object.keys(currentCart.current).some(
+          (id) => currentCart.current[id] > 0 && !data.menu.some((item) => item.id === id),
+        )
+      )
+        setMessage('บางเมนูปิดให้สั่งแล้ว กรุณาตรวจรายการที่เลือกก่อนส่ง');
       setCart((old) =>
         Object.fromEntries(
           Object.entries(old).filter(([id]) => data.menu.some((item) => item.id === id)),
@@ -51,6 +66,7 @@ export default function OrderingPage({ token }) {
           : data.categories?.[0] || data.menu[0]?.category || '',
       );
     } catch (error) {
+      if (activeClient.current !== menuClient) return;
       if ([403, 404].includes(error.status)) {
         setRoom(null);
         setReviewOpen(false);
@@ -62,30 +78,58 @@ export default function OrderingPage({ token }) {
       }
       setError(error.message);
     } finally {
-      setLoading(false);
+      if (activeClient.current === menuClient) setLoading(false);
     }
   }
   useEffect(() => {
+    session.current = null;
+    setRoom(null);
+    setCart({});
+    setReviewOpen(false);
+    setLoading(true);
+    setPending(null);
+    setRetryAt(0);
     try {
       setPending(JSON.parse(localStorage.getItem(storageKey) || 'null'));
     } catch {
       localStorage.removeItem(storageKey);
     }
     load();
-    const timer = setInterval(() => {
-      if (!sending.current) load();
-    }, 10000);
+    let timer,
+      stopped = false;
+    const schedule = () => {
+      timer = setTimeout(
+        async () => {
+          if (document.visibilityState !== 'hidden' && !sending.current) await load();
+          if (!stopped) schedule();
+        },
+        60000 + Math.floor(Math.random() * 10000),
+      );
+    };
+    schedule();
     const onFocus = () => {
-      if (!sending.current) load();
+      if (document.visibilityState !== 'hidden' && !sending.current) load();
     };
     window.addEventListener('focus', onFocus);
+    window.addEventListener('online', onFocus);
+    document.addEventListener('visibilitychange', onFocus);
     return () => {
-      clearInterval(timer);
+      stopped = true;
+      clearTimeout(timer);
       window.removeEventListener('focus', onFocus);
+      window.removeEventListener('online', onFocus);
+      document.removeEventListener('visibilitychange', onFocus);
     };
-  }, [token]);
+  }, [menuClient]);
+  useEffect(() => {
+    const tick = () => setRetrySeconds(Math.max(0, Math.ceil((retryAt - Date.now()) / 1000)));
+    tick();
+    if (retryAt <= Date.now()) return;
+    const timer = setInterval(tick, 1000);
+    return () => clearInterval(timer);
+  }, [retryAt]);
   async function submit() {
-    if (sending.current || !room) return;
+    if (sending.current || !room || Date.now() < retryAt) return;
     sending.current = true;
     setBusy(true);
     setError('');
@@ -111,13 +155,16 @@ export default function OrderingPage({ token }) {
       setCart({});
       setReviewOpen(false);
       setMessage('ส่งรายการให้พนักงานแล้ว ขอบคุณค่ะ');
+      setRetryAt(Date.now() + 5000);
     } catch (error) {
-      setError(error.message);
+      if (error.status === 429) setRetryAt(Date.now() + (error.retryAfter || 5) * 1000);
+      if (error.status === 409) setRetryAt(Date.now() + 1000);
       if ([400, 403, 404].includes(error.status)) {
         localStorage.removeItem(storageKey);
         setPending(null);
-        await load();
+        await load(true);
       }
+      setError(error.message);
     } finally {
       sending.current = false;
       setBusy(false);
@@ -141,7 +188,7 @@ export default function OrderingPage({ token }) {
       {error && (
         <div className="ordering-alert" role="alert">
           <p>{error}</p>
-          <button onClick={load} disabled={busy}>
+          <button onClick={() => load(true)} disabled={busy}>
             ตรวจสอบอีกครั้ง
           </button>
         </div>
@@ -153,7 +200,6 @@ export default function OrderingPage({ token }) {
       )}
       {room && (
         <>
-          <p>ส่งอาหารได้ภายในรัศมี 200 เมตรจากร้าน กรุณาเปิด GPS และอนุญาตตำแหน่งก่อนส่งรายการ</p>
           <nav className="ordering-categories" aria-label="หมวดหมู่อาหาร">
             {categories.map((name) => (
               <button
@@ -243,8 +289,14 @@ export default function OrderingPage({ token }) {
             >
               {pending ? 'มีรายการรอยืนยันผล' : `ดูรายการที่เลือก (${quantity})`}
             </button>
-            <button disabled={busy || (!quantity && !pending)} onClick={submit}>
-              {busy ? 'กำลังส่ง…' : pending ? 'ตรวจผล / ส่งรายการเดิมอีกครั้ง' : 'ส่งรายการอาหาร'}
+            <button disabled={busy || retrySeconds > 0 || (!quantity && !pending)} onClick={submit}>
+              {busy
+                ? 'กำลังส่ง…'
+                : retrySeconds > 0
+                  ? `รอ ${retrySeconds} วินาที`
+                  : pending
+                    ? 'ตรวจผล / ส่งรายการเดิมอีกครั้ง'
+                    : 'ส่งรายการอาหาร'}
             </button>
           </footer>
           {reviewOpen && (
@@ -283,14 +335,16 @@ export default function OrderingPage({ token }) {
                 </button>
                 <button
                   className="ordering-confirm"
-                  disabled={busy || (!quantity && !pending)}
+                  disabled={busy || retrySeconds > 0 || (!quantity && !pending)}
                   onClick={submit}
                 >
                   {busy
                     ? 'กำลังส่ง…'
-                    : pending
-                      ? 'ตรวจผล / ส่งรายการเดิมอีกครั้ง'
-                      : 'ส่งรายการอาหาร'}
+                    : retrySeconds > 0
+                      ? `รอ ${retrySeconds} วินาที`
+                      : pending
+                        ? 'ตรวจผล / ส่งรายการเดิมอีกครั้ง'
+                        : 'ส่งรายการอาหาร'}
                 </button>
               </div>
             </Dialog>
