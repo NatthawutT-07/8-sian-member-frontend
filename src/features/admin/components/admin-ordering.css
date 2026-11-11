@@ -70,7 +70,7 @@
 }
 .ordering-table-picker {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 190px;
+  grid-template-columns: minmax(0, 1fr);
   gap: 24px;
   align-items: center;
 }
@@ -80,22 +80,6 @@
 .ordering-table-picker p {
   font-size: 13px;
   color: #786c5e;
-}
-.ordering-table-preview {
-  text-align: center;
-  border: 1px solid #e4daca;
-  border-radius: 10px;
-  padding: 12px;
-}
-.ordering-table-preview strong {
-  display: block;
-  font-size: 20px;
-}
-.ordering-table-preview img {
-  display: block;
-  margin: auto;
-  max-width: 100%;
-  height: auto;
 }
 .ordering-add-tables {
   border-top: 1px solid #e4daca;
@@ -275,10 +259,6 @@
   .ordering-editor-fields,
   .ordering-menu-filters {
     grid-template-columns: minmax(0, 1fr);
-  }
-  .ordering-table-preview {
-    max-width: 190px;
-    justify-self: center;
   }
   .ordering-inline-actions {
     gap: 10px;

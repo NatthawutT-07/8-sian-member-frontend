@@ -41,8 +41,7 @@ body > #root > main.ordering-page {
   scrollbar-width: thin;
   scroll-snap-type: x proximity;
 }
-.ordering-categories,
-.ordering-category-select {
+.ordering-categories {
   position: sticky;
   top: 0;
   z-index: 2;
@@ -54,9 +53,6 @@ body > #root > main.ordering-page {
   flex: 0 0 auto;
   white-space: nowrap;
   scroll-snap-align: start;
-}
-.ordering-category-select {
-  display: none;
 }
 .ordering-header + .ordering-categories {
   margin-top: 24px;
@@ -234,28 +230,6 @@ body > #root > main.ordering-page {
   min-height: 48px;
 }
 @media (max-width: 600px) {
-  .ordering-page .ordering-categories {
-    display: none;
-  }
-  .ordering-category-select {
-    display: grid;
-    gap: 6px;
-    font-size: 14px;
-    margin: 16px 0;
-    padding: max(10px, env(safe-area-inset-top)) 0 12px;
-  }
-  .ordering-category-select select {
-    width: 100%;
-    min-width: 0;
-    min-height: 44px;
-    padding: 10px 12px;
-    border: 1px solid #d9cfbd;
-    border-radius: 10px;
-    background: #fff;
-    color: #342a20;
-    font: inherit;
-    font-size: 16px;
-  }
   .ordering-header {
     gap: 12px;
     padding-bottom: 16px;
@@ -283,10 +257,6 @@ body > #root > main.ordering-page {
   }
   .ordering-categories {
     margin-bottom: 16px;
-    scrollbar-width: none;
-  }
-  .ordering-categories::-webkit-scrollbar {
-    display: none;
   }
   .ordering-categories button {
     font-size: 14px;

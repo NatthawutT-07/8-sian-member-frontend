@@ -139,7 +139,7 @@ export default function AdminOrdering({ api }) {
           run(async () => {
             await api('/dining-tables', { method: 'POST', body: JSON.stringify(range) });
             await load();
-            setNotice('เพิ่มโต๊ะแล้ว QR ของโต๊ะเดิมคงเดิม');
+            setNotice('เพิ่มโต๊ะแล้ว เปิดรอบและพิมพ์ QR ได้ใน POS');
           })
         }
       />

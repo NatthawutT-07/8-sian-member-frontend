@@ -211,7 +211,10 @@ export default function OrderingPage({ token }) {
               QR สั่งอาหารใช้ได้ถึง {new Date(room.qrExpiresAt).toLocaleString('th-TH')}
             </p>
           )}
-          <nav className="ordering-categories" aria-label="หมวดหมู่อาหาร">
+          <nav
+            className="ordering-categories"
+            aria-label="หมวดหมู่อาหาร เลื่อนซ้ายขวาเพื่อดูหมวดหมู่"
+          >
             {categories.map((name) => (
               <button
                 key={name}
@@ -222,18 +225,6 @@ export default function OrderingPage({ token }) {
               </button>
             ))}
           </nav>
-          {!!categories.length && (
-            <label className="ordering-category-select">
-              หมวดหมู่อาหาร
-              <select value={visibleCategory} onChange={(event) => setCategory(event.target.value)}>
-                {categories.map((name) => (
-                  <option key={name} value={name}>
-                    {name}
-                  </option>
-                ))}
-              </select>
-            </label>
-          )}
           {!room.menu.length && <p>โต๊ะนี้ยังไม่มีรายการอาหารที่สั่งได้ กรุณาติดต่อพนักงาน</p>}
           <section className="ordering-menu" aria-label={visibleCategory}>
             {room.menu

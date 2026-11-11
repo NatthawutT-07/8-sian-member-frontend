@@ -1,47 +1,19 @@
 import { useEffect, useState } from 'react';
-import { createTableQr, createTableQrDownload } from '../lib/table-qr.js';
 
 export default function OrderingTables({ tables, busy, onAdd, onSaveQrHours }) {
   const [selected, setSelected] = useState('');
   const [range, setRange] = useState({ from: 1, to: 10 });
-  const [qr, setQr] = useState(null);
-  const [error, setError] = useState('');
-  const [hours, setHours] = useState(2),
-    [clock, setClock] = useState(Date.now());
+  const [hours, setHours] = useState(2);
   const table = tables.find((item) => item.id === selected) || tables[0];
-  const validUrl = table?.url && new Date(table.qrExpiresAt).getTime() > clock ? table.url : null;
   useEffect(() => {
     setHours(table?.qrDurationHours || 2);
   }, [table?.id, table?.qrDurationHours]);
-  useEffect(() => {
-    const timer = setInterval(() => setClock(Date.now()), 1000);
-    return () => clearInterval(timer);
-  }, []);
-  useEffect(() => {
-    let cancelled = false;
-    setQr(null);
-    setError('');
-    if (validUrl)
-      (async () => {
-        try {
-          const image = await createTableQr(validUrl);
-          const downloadImage = await createTableQrDownload(image, table.number);
-          if (!cancelled) setQr({ image, downloadImage, url: validUrl });
-        } catch {
-          if (!cancelled)
-            setError('สร้าง QR ไม่สำเร็จ กรุณาเลือกโต๊ะใหม่หรือลองโหลดข้อมูลอีกครั้ง');
-        }
-      })();
-    return () => {
-      cancelled = true;
-    };
-  }, [table?.id, validUrl, table?.number]);
   return (
     <section className="ordering-admin-panel">
       <div className="ordering-panel-heading">
         <div>
-          <h3>โต๊ะ / QR สำหรับรอบปัจจุบัน</h3>
-          <p>เลือกดูและดาวน์โหลดทีละโต๊ะ • ทั้งหมด {tables.length} โต๊ะ</p>
+          <h3>จัดการโต๊ะ</h3>
+          <p>ทั้งหมด {tables.length} โต๊ะ • QR สั่งอาหารพิมพ์จากใบเสร็จใน POS</p>
         </div>
       </div>
       {table ? (
@@ -87,37 +59,8 @@ export default function OrderingTables({ tables, busy, onAdd, onSaveQrHours }) {
               </button>
             </form>
             <p>ค่าเริ่มต้น 2 ชั่วโมง • ค่านี้ใช้กับรอบถัดไป ไม่ต่ออายุ QR เดิม</p>
-            {validUrl && <p>หมดอายุ {new Date(table.qrExpiresAt).toLocaleString('th-TH')}</p>}
-            {qr && validUrl && qr.url === validUrl && (
-              <div className="ordering-inline-actions">
-                <a
-                  className="admin-secondary"
-                  download={`table-${table.number}-qr.png`}
-                  href={qr.downloadImage}
-                >
-                  ดาวน์โหลด QR โต๊ะ {table.number}
-                </a>
-                <a href={table.url} target="_blank" rel="noreferrer">
-                  เปิดหน้าโต๊ะ
-                </a>
-              </div>
-            )}
-          </div>
-          <div className="ordering-table-preview" aria-live="polite">
-            <strong>โต๊ะ {table.number}</strong>
-            {qr && validUrl && qr.url === validUrl ? (
-              <img
-                src={qr.image}
-                alt={`QR สั่งอาหารโต๊ะ ${table.number}`}
-                width="160"
-                height="160"
-              />
-            ) : (
-              <p>
-                {!validUrl
-                  ? 'ไม่มี QR ที่ใช้งานได้ เปิดรอบโต๊ะใน POS เพื่อสร้าง QR ใหม่'
-                  : error || 'กำลังสร้าง QR…'}
-              </p>
+            {table.sessionId && table.qrExpiresAt && (
+              <p>รอบปัจจุบันหมดอายุ {new Date(table.qrExpiresAt).toLocaleString('th-TH')}</p>
             )}
           </div>
         </div>
