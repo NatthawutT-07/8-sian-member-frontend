@@ -123,6 +123,16 @@ export default function AdminOrdering({ api }) {
         </p>
       )}
       <OrderingTables
+        onSaveQrHours={(id, qrHours) =>
+          run(async () => {
+            await api(`/dining-tables/${id}/settings`, {
+              method: 'PUT',
+              body: JSON.stringify({ qrHours }),
+            });
+            await load();
+            setNotice('บันทึกอายุ QR สำหรับรอบถัดไปแล้ว');
+          })
+        }
         tables={tables}
         busy={busy}
         onAdd={(range) =>

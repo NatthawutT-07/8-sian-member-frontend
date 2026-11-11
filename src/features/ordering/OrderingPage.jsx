@@ -3,7 +3,6 @@ import { request, apiAssetUrl } from '../../lib/api.js';
 import BrandLogo from '../../components/BrandLogo.jsx';
 import Dialog from '../../components/Dialog.jsx';
 import './ordering.css';
-import { getOrderLocation } from './location.js';
 import { createMenuClient } from './menu-client.js';
 
 export default function OrderingPage({ token }) {
@@ -128,6 +127,14 @@ export default function OrderingPage({ token }) {
     const timer = setInterval(tick, 1000);
     return () => clearInterval(timer);
   }, [retryAt]);
+  useEffect(() => {
+    if (!room?.qrExpiresAt) return;
+    const timer = setTimeout(
+      () => load(true),
+      Math.max(1000, new Date(room.qrExpiresAt).getTime() - Date.now() + 100),
+    );
+    return () => clearTimeout(timer);
+  }, [room?.qrExpiresAt, menuClient]);
   async function submit() {
     if (sending.current || !room || Date.now() < retryAt) return;
     sending.current = true;
@@ -143,12 +150,11 @@ export default function OrderingPage({ token }) {
           .map(([menuItemId, quantity]) => ({ menuItemId, quantity })),
       };
       if (!data.items.length) return;
-      const location = await getOrderLocation();
       localStorage.setItem(storageKey, JSON.stringify(data));
       setPending(data);
       await request(`/api/ordering/${token}/orders`, {
         method: 'POST',
-        body: JSON.stringify({ ...data, location }),
+        body: JSON.stringify(data),
       });
       localStorage.removeItem(storageKey);
       setPending(null);
@@ -200,6 +206,11 @@ export default function OrderingPage({ token }) {
       )}
       {room && (
         <>
+          {room.qrExpiresAt && (
+            <p className="ordering-qr-expiry">
+              QR สั่งอาหารใช้ได้ถึง {new Date(room.qrExpiresAt).toLocaleString('th-TH')}
+            </p>
+          )}
           <nav className="ordering-categories" aria-label="หมวดหมู่อาหาร">
             {categories.map((name) => (
               <button

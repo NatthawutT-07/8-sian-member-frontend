@@ -1,22 +1,32 @@
 import { useEffect, useState } from 'react';
 import { createTableQr, createTableQrDownload } from '../lib/table-qr.js';
 
-export default function OrderingTables({ tables, busy, onAdd }) {
+export default function OrderingTables({ tables, busy, onAdd, onSaveQrHours }) {
   const [selected, setSelected] = useState('');
   const [range, setRange] = useState({ from: 1, to: 10 });
   const [qr, setQr] = useState(null);
   const [error, setError] = useState('');
+  const [hours, setHours] = useState(2),
+    [clock, setClock] = useState(Date.now());
   const table = tables.find((item) => item.id === selected) || tables[0];
+  const validUrl = table?.url && new Date(table.qrExpiresAt).getTime() > clock ? table.url : null;
+  useEffect(() => {
+    setHours(table?.qrDurationHours || 2);
+  }, [table?.id, table?.qrDurationHours]);
+  useEffect(() => {
+    const timer = setInterval(() => setClock(Date.now()), 1000);
+    return () => clearInterval(timer);
+  }, []);
   useEffect(() => {
     let cancelled = false;
     setQr(null);
     setError('');
-    if (table)
+    if (validUrl)
       (async () => {
         try {
-          const image = await createTableQr(table.url);
+          const image = await createTableQr(validUrl);
           const downloadImage = await createTableQrDownload(image, table.number);
-          if (!cancelled) setQr({ image, downloadImage });
+          if (!cancelled) setQr({ image, downloadImage, url: validUrl });
         } catch {
           if (!cancelled)
             setError('สร้าง QR ไม่สำเร็จ กรุณาเลือกโต๊ะใหม่หรือลองโหลดข้อมูลอีกครั้ง');
@@ -25,12 +35,12 @@ export default function OrderingTables({ tables, busy, onAdd }) {
     return () => {
       cancelled = true;
     };
-  }, [table?.id, table?.url, table?.number]);
+  }, [table?.id, validUrl, table?.number]);
   return (
     <section className="ordering-admin-panel">
       <div className="ordering-panel-heading">
         <div>
-          <h3>โต๊ะ / QR ประจำโต๊ะ</h3>
+          <h3>โต๊ะ / QR สำหรับรอบปัจจุบัน</h3>
           <p>เลือกดูและดาวน์โหลดทีละโต๊ะ • ทั้งหมด {tables.length} โต๊ะ</p>
         </div>
       </div>
@@ -53,7 +63,32 @@ export default function OrderingTables({ tables, busy, onAdd }) {
               </select>
             </label>
             <p>เปิดสั่งอาหารหลังรับชำระสำเร็จและยืนยันโซนใน POS</p>
-            {qr && (
+            <form
+              className="ordering-admin-form"
+              onSubmit={(event) => {
+                event.preventDefault();
+                onSaveQrHours?.(table.id, Number(hours));
+              }}
+            >
+              <label>
+                อายุ QR (ชั่วโมง)
+                <input
+                  type="number"
+                  min="1"
+                  max="168"
+                  required
+                  value={hours}
+                  disabled={busy}
+                  onChange={(event) => setHours(event.target.value)}
+                />
+              </label>
+              <button className="admin-secondary" disabled={busy}>
+                บันทึกค่าเริ่มต้น
+              </button>
+            </form>
+            <p>ค่าเริ่มต้น 2 ชั่วโมง • ค่านี้ใช้กับรอบถัดไป ไม่ต่ออายุ QR เดิม</p>
+            {validUrl && <p>หมดอายุ {new Date(table.qrExpiresAt).toLocaleString('th-TH')}</p>}
+            {qr && validUrl && qr.url === validUrl && (
               <div className="ordering-inline-actions">
                 <a
                   className="admin-secondary"
@@ -70,7 +105,7 @@ export default function OrderingTables({ tables, busy, onAdd }) {
           </div>
           <div className="ordering-table-preview" aria-live="polite">
             <strong>โต๊ะ {table.number}</strong>
-            {qr ? (
+            {qr && validUrl && qr.url === validUrl ? (
               <img
                 src={qr.image}
                 alt={`QR สั่งอาหารโต๊ะ ${table.number}`}
@@ -78,7 +113,11 @@ export default function OrderingTables({ tables, busy, onAdd }) {
                 height="160"
               />
             ) : (
-              <p>{error || 'กำลังสร้าง QR…'}</p>
+              <p>
+                {!validUrl
+                  ? 'ไม่มี QR ที่ใช้งานได้ เปิดรอบโต๊ะใน POS เพื่อสร้าง QR ใหม่'
+                  : error || 'กำลังสร้าง QR…'}
+              </p>
             )}
           </div>
         </div>
@@ -87,7 +126,7 @@ export default function OrderingTables({ tables, busy, onAdd }) {
       )}
       <details className="ordering-add-tables">
         <summary>เพิ่มโต๊ะใหม่</summary>
-        <p>เพิ่มครั้งละไม่เกิน 200 โต๊ะ หมายเลขเดิมจะใช้ QR เดิมเสมอ</p>
+        <p>เพิ่มครั้งละไม่เกิน 200 โต๊ะ QR จะสร้างเมื่อเปิดรอบโต๊ะใน POS เท่านั้น</p>
         <form
           className="ordering-admin-form"
           onSubmit={(event) => {
