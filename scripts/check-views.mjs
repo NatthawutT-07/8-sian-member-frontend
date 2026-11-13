@@ -46,6 +46,7 @@ async function check(module, props, expected) {
   return html;
 }
 try {
+  await check('features/chef/ChefPage.jsx', {}, 'ครัว · ออเดอร์อาหาร');
   await check(
     'features/ordering/OrderingPage.jsx',
     { token: '00000000-0000-4000-8000-000000000001' },
