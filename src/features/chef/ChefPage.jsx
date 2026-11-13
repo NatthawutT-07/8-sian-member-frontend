@@ -117,7 +117,22 @@ export default function ChefPage() {
         <ul>{order.items.map((item) => <li key={item.menuItemId}><span>{item.name}</span><strong>× {item.quantity}</strong><button disabled={busy} aria-label={`ยกเลิก ${item.name} โต๊ะ ${order.table.number}`} onClick={() => run(() => change(order, item, true))}>ยกเลิก</button></li>)}</ul>
         <div className="chef-actions">
           <button disabled={busy} onClick={() => run(() => summary(order.tableId, order.sessionId))}>ยอดอาหารสำเร็จ</button>
-          <button disabled={busy} onClick={() => run(async () => setDetail({ ...await api(`kitchen/orders/${order.id}/ticket`), kind: 'ticket' }))}>พิมพ์ใบอาหาร</button>
+          <button disabled={busy} onClick={() => run(async () => {
+            const ticket = await api(`kitchen/orders/${order.id}/ticket`);
+            if (window.chefWindowsPrint) {
+              const result = await window.chefWindowsPrint(ticket);
+              setPrintNotice(result.warning);
+            } else if (printer.current) {
+              const result = await printer.current(ticket);
+              setPrintNotice(result.warning || 'ส่งใบอาหารแล้ว');
+            } else {
+              const source = document.createElement('section');
+              const heading = document.createElement('h2'); heading.textContent = `โต๊ะ ${ticket.tableNumber}`; source.append(heading);
+              const list = document.createElement('ul');
+              for (const item of ticket.items) { const row = document.createElement('li'); row.textContent = `${item.name} × ${item.quantity}`; list.append(row); }
+              source.append(list); await printSystemTicket(source);
+            }
+          })}>พิมพ์</button>
           <button disabled={busy} onClick={() => run(() => change(order, null, true))}>ยกเลิกทั้งใบ</button>
           <button className="chef-primary" disabled={busy} onClick={() => run(() => change(order))}>สำเร็จแล้ว</button>
         </div>

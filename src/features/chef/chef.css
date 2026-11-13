@@ -40,3 +40,5 @@
   .chef-ticket { position: absolute; top: 0; left: 0; width: 80mm; max-width: 80mm; padding: 4mm; box-sizing: border-box; background: white; color: black; font-size: 12pt; overflow-wrap: anywhere; }
   .chef-system-test { display: block; }
 }
+
+.chef-page{padding:16px;font-size:14px}.chef-header{margin-bottom:12px}.chef-header h1{font-size:23px}.chef-toolbar{padding:10px;margin-bottom:12px;gap:8px}.chef-page button,.chef-page select{min-height:34px;padding:6px 10px;font-size:13px}.chef-board{grid-template-columns:repeat(auto-fill,minmax(min(100%,290px),1fr));gap:12px}.chef-order{padding:12px;border-top-width:3px}.chef-order h2{font-size:22px}.chef-order p{font-size:12px;margin:6px 0}.chef-order ul{margin:6px 0}.chef-order li{padding:5px 0;gap:8px}.chef-order li button{min-height:30px;padding:3px 7px;font-size:12px}.chef-actions{gap:6px}
