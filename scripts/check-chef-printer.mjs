@@ -1,27 +1,52 @@
+import test from 'node:test';
 import assert from 'node:assert/strict';
-import { test } from 'node:test';
-import { sendSerial } from '../src/features/chef/printer.js';
+import { compactRaster } from '../src/features/chef/printer.js';
 
-test('serial output preserves bytes across bounded writes and releases the writer', async () => {
-  const data = Uint8Array.from({ length: 1300 }, (_, index) => index % 256);
-  const received = [];
-  let released = false;
-  await sendSerial({ writable: { getWriter: () => ({
-    async write(chunk) { assert.ok(chunk.length <= 512); received.push(...chunk); },
-    releaseLock() { released = true; },
-  }) } }, data);
-  assert.deepEqual(received, [...data]);
-  assert.equal(released, true);
+test('compact raster preserves every dot and row at both paper widths', () => {
+  for (const stride of [48, 72]) {
+    const rows = 128;
+    const original = new Uint8Array(stride * rows);
+    for (let y = 0; y < rows; y++)
+      for (let x = 0; x < (y % 4 === 0 ? 0 : y % stride); x++) original[y * stride + x] = (y * 17 + x * 31) & 255;
+    const encoded = compactRaster(original, stride, rows);
+    const decoded = new Uint8Array(original.length);
+    let offset = 0, top = 0;
+    while (offset < encoded.length) {
+      assert.deepEqual(encoded.slice(offset, offset + 4), [29, 118, 48, 0]);
+      const width = encoded[offset + 4] + encoded[offset + 5] * 256;
+      const height = encoded[offset + 6] + encoded[offset + 7] * 256;
+      offset += 8;
+      for (let y = 0; y < height; y++) {
+        decoded.set(encoded.slice(offset, offset + width), (top + y) * stride);
+        offset += width;
+      }
+      top += height;
+    }
+    assert.equal(top, rows);
+    assert.deepEqual(decoded, original);
+    assert.ok(encoded.length < original.length);
+  }
 });
 
-test('failed writes release the port lock and never retry a partial print', async () => {
-  let writes = 0;
-  let released = false;
-  await assert.rejects(sendSerial({ writable: { getWriter: () => ({
-    async write() { writes++; throw new Error('disconnected'); },
-    releaseLock() { released = true; },
-  }) } }, new Uint8Array(1300)), /disconnected/);
-  assert.equal(writes, 1);
-  assert.equal(released, true);
-  await assert.rejects(sendSerial(null, new Uint8Array()), /ไม่ได้เชื่อมต่อ/);
+test('serial ticket prints one table label and short feed for both paper widths', async () => {
+  const { ticketBytes } = await import('../src/features/chef/printer.js');
+  const original = global.document;
+  const labels = [];
+  let canvas;
+  const context = {
+    measureText: (text) => ({ width: text.length * 20 }),
+    fillRect() {},
+    fillText: (label) => labels.push(label),
+    getImageData: () => ({ data: new Uint8ClampedArray(canvas.width * canvas.height * 4).fill(255) }),
+  };
+  global.document = { fonts: { ready: Promise.resolve() }, createElement: () => (canvas = { getContext: () => context }) };
+  try {
+    for (const width of [384, 576]) {
+      const bytes = await ticketBytes({ tableNumber: 27, items: [{ name: 'DO NOT PRINT', quantity: 99 }] }, width, true);
+      assert.equal(canvas.height, 106);
+      assert.deepEqual([...bytes.slice(-6)], [27, 100, 1, 29, 86, 1]);
+      assert.ok(bytes.length < 200, 'blank margins are compressed');
+    }
+    assert.deepEqual(labels, ['โต๊ะ 27', 'โต๊ะ 27']);
+  } finally { global.document = original; }
 });

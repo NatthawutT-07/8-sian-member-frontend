@@ -13,7 +13,7 @@ export default function ChefPrinter({ api, onReady }) {
   const [device, setDevice] = useState('');
   const [devices, setDevices] = useState([]);
   const [selected, setSelected] = useState('');
-  const [mode, setMode] = useState('system');
+  const [mode, setMode] = useState(bridge ? 'native' : 'system');
   const [baud, setBaud] = useState(9600);
   const [width, setWidth] = useState(576);
   const [cut, setCut] = useState(true);
@@ -90,6 +90,7 @@ export default function ChefPrinter({ api, onReady }) {
     }); }}>เครื่องพิมพ์</button>
     {open && <Dialog label="เชื่อมต่อเครื่องพิมพ์" className="chef-dialog" busy={busy} onClose={() => setOpen(false)}>
       <h2>เชื่อมต่อเครื่องพิมพ์</h2>
+      <p>ใบพิมพ์แสดงเลขโต๊ะเท่านั้น สำหรับแท็บเล็ต Android ใช้แอป POS และเลือกอุปกรณ์ Bluetooth ของ POS เพื่อพิมพ์ด้วยระบบเดียวกับใบเสร็จ</p>
       <button className="chef-primary" disabled={busy || systemTest} onClick={() => click(async () => {
         if (port.current) {
           await port.current.close();

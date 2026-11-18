@@ -105,7 +105,7 @@ export default function AdminBusinessReports({ api }) {
               row.receiptNumber,
               date(row.createdAt),
               row.cashierDisplayName,
-              row.method === 'CASH' ? 'เงินสด' : 'เงินโอน',
+              row.method === 'MIXED' ? 'เงินสด + เงินโอน' : row.method === 'CASH' ? 'เงินสด' : 'เงินโอน',
               row.totalSatang / 100,
             ]),
           ]
@@ -181,6 +181,7 @@ export default function AdminBusinessReports({ api }) {
               <option value="">ทั้งหมด</option>
               <option value="CASH">เงินสด</option>
               <option value="TRANSFER">เงินโอน</option>
+              <option value="MIXED">เงินสด + เงินโอน</option>
             </select>
           </label>
           <label>
@@ -268,7 +269,7 @@ export default function AdminBusinessReports({ api }) {
                       <small>{date(sale.createdAt)}</small>
                     </td>
                     <td data-label="พนักงาน">{sale.cashierDisplayName || 'ไม่ระบุ'}</td>
-                    <td data-label="การชำระ">{sale.method === 'CASH' ? 'เงินสด' : 'เงินโอน'}</td>
+                    <td data-label="การชำระ">{sale.method === 'MIXED' ? 'เงินสด + เงินโอน' : sale.method === 'CASH' ? 'เงินสด' : 'เงินโอน'}</td>
                     <td data-label="ยอดสุทธิ">{money(sale.totalSatang)}</td>
                     <td>
                       <button
@@ -324,7 +325,7 @@ export default function AdminBusinessReports({ api }) {
           {detail.kind === 'sales' ? (
             <p>
               เวลา {date(value.createdAt)} • พนักงาน {value.cashierDisplayName || 'ไม่ระบุ'} •{' '}
-              {value.method === 'CASH' ? 'เงินสด' : 'เงินโอน'}
+              {value.method === 'MIXED' ? 'เงินสด + เงินโอน' : value.method === 'CASH' ? 'เงินสด' : 'เงินโอน'}
             </p>
           ) : (
             <>

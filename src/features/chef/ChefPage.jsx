@@ -128,9 +128,7 @@ export default function ChefPage() {
             } else {
               const source = document.createElement('section');
               const heading = document.createElement('h2'); heading.textContent = `โต๊ะ ${ticket.tableNumber}`; source.append(heading);
-              const list = document.createElement('ul');
-              for (const item of ticket.items) { const row = document.createElement('li'); row.textContent = `${item.name} × ${item.quantity}`; list.append(row); }
-              source.append(list); await printSystemTicket(source);
+              await printSystemTicket(source);
             }
           })}>พิมพ์</button>
           <button disabled={busy} onClick={() => run(() => change(order, null, true))}>ยกเลิกทั้งใบ</button>
@@ -152,9 +150,11 @@ export default function ChefPage() {
           setPrintNotice(result.warning || 'ส่งใบอาหารเข้าเครื่องพิมพ์แล้ว กรุณาตรวจที่เครื่อง');
           return;
         }
-        setDetail({ ...live, kind: 'ticket' });
-        await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-        await printSystemTicket(document.querySelector('.chef-ticket'));
+        const source = document.createElement('section');
+        const heading = document.createElement('h2');
+        heading.textContent = `โต๊ะ ${live.tableNumber}`;
+        source.append(heading);
+        await printSystemTicket(source);
       })}>พิมพ์</button>}<button disabled={busy} onClick={() => setDetail(null)}>ปิด</button></div>
     </Dialog>}
   </main>;
