@@ -111,7 +111,7 @@ export default function ChefPage() {
         <button disabled={busy || !selected} onClick={() => run(() => summary(...selected.split('/')))}>ยอดอาหารสำเร็จ</button>
       </section>
       {printNotice && <p role="status">{printNotice}</p>}
-      <section className="chef-board" aria-label="ออเดอร์รอทำ">{orders.map((order, index) => <article className="chef-order" key={order.id}>
+      <section className="chef-board" aria-label="ออเดอร์รอทำ เลื่อนแนวนอนเพื่อดูออเดอร์ถัดไป" tabIndex={0}>{orders.map((order, index) => <article className="chef-order" key={order.id}>
         <div className="chef-order-heading"><h2>โต๊ะ {order.table.number}</h2><strong>ลำดับ {index + 1}</strong></div>
         <p>รับเมื่อ {time(order.createdAt)} · #{order.id.slice(-8)}</p>
         <ul>{order.items.map((item) => <li key={item.menuItemId}><span>{item.name}</span><strong>× {item.quantity}</strong><button disabled={busy} aria-label={`ยกเลิก ${item.name} โต๊ะ ${order.table.number}`} onClick={() => run(() => change(order, item, true))}>ยกเลิก</button></li>)}</ul>

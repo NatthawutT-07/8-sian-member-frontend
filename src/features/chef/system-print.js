@@ -13,7 +13,7 @@ export async function printSystemTicket(source) {
   target.write('<!doctype html><html lang="th"><head><meta charset="utf-8"><title>8 เซียน · ใบอาหาร</title></head><body></body></html>');
   target.close();
   const style = target.createElement('style');
-  style.textContent = '@page{size:80mm auto;margin:0}*{box-sizing:border-box}body{width:72mm;margin:0;padding:2mm;color:#000;background:#fff;font-family:Tahoma,sans-serif;print-color-adjust:exact;-webkit-print-color-adjust:exact}h2{font-size:32pt;font-weight:800;line-height:1.2;text-align:center;margin:0;overflow-wrap:anywhere}';
+  style.textContent = '@page{size:80mm 30mm;margin:0}*{box-sizing:border-box}body{width:80mm;height:30mm;display:grid;place-items:center;margin:0;padding:2mm;color:#000;background:#fff;font-family:Tahoma,sans-serif;print-color-adjust:exact;-webkit-print-color-adjust:exact}h2{font-size:32pt;font-weight:800;line-height:1.2;text-align:center;margin:0;overflow-wrap:anywhere}';
   target.head.append(style);
   const copy = source.cloneNode(true);
   copy.removeAttribute('class');

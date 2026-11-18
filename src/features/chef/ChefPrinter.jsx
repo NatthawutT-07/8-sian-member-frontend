@@ -142,11 +142,7 @@ export default function ChefPrinter({ api, onReady }) {
       </fieldset>
       <p role="status">{message}</p><button disabled={busy || systemTest} onClick={() => setOpen(false)}>ปิด</button>
       {systemTest && <div className="chef-ticket chef-system-test">
-        <h2>8 เซียน · ทดสอบพิมพ์</h2>
-        <p>ES-9910UB · Windows / Bluetooth COM3</p>
-        <p>กระดาษกว้าง 80 มม.</p>
-        <p>โต๊ะ 01 · หมูกระทะ × 1</p>
-        <p>ทดสอบภาษาไทย 1234567890</p>
+        <h2>โต๊ะ 3</h2>
       </div>}
     </Dialog>}
   </>;
