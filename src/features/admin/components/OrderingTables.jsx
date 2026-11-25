@@ -6,7 +6,7 @@ export default function OrderingTables({ tables, busy, onAdd, onSaveQrHours }) {
   const [hours, setHours] = useState(2);
   const table = tables.find((item) => item.id === selected) || tables[0];
   useEffect(() => {
-    setHours(table?.qrDurationHours || 2);
+    setHours(table?.qrDurationHours ?? 2);
   }, [table?.id, table?.qrDurationHours]);
   return (
     <section className="ordering-admin-panel">
@@ -49,16 +49,18 @@ export default function OrderingTables({ tables, busy, onAdd, onSaveQrHours }) {
                   min="1"
                   max="168"
                   required
-                  value={hours}
-                  disabled={busy}
+                  value={Number(hours) === 0 ? 2 : hours}
+                  disabled={busy || Number(hours) === 0}
                   onChange={(event) => setHours(event.target.value)}
                 />
               </label>
+              <label><input type="checkbox" checked={Number(hours) === 0} disabled={busy} onChange={(event) => setHours(event.target.checked ? 0 : 2)} />ไม่จำกัดเวลาจนกว่าจะปิดโต๊ะ</label>
               <button className="admin-secondary" disabled={busy}>
                 บันทึกค่าเริ่มต้น
               </button>
             </form>
             <p>ค่าเริ่มต้น 2 ชั่วโมง • ค่านี้ใช้กับรอบถัดไป ไม่ต่ออายุ QR เดิม</p>
+            {table.sessionId && table.qrUnlimited && <p>รอบปัจจุบันไม่จำกัดเวลา ใช้ได้จนกว่าจะปิดโต๊ะ</p>}
             {table.sessionId && table.qrExpiresAt && (
               <p>รอบปัจจุบันหมดอายุ {new Date(table.qrExpiresAt).toLocaleString('th-TH')}</p>
             )}

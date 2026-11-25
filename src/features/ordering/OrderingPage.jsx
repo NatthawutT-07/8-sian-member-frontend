@@ -206,6 +206,7 @@ export default function OrderingPage({ token }) {
       )}
       {room && (
         <>
+          {room.qrUnlimited && <p>สั่งอาหารได้จนกว่าพนักงานจะปิดโต๊ะ</p>}
           {room.qrExpiresAt && (
             <p className="ordering-qr-expiry">
               QR สั่งอาหารใช้ได้ถึง {new Date(room.qrExpiresAt).toLocaleString('th-TH')}
