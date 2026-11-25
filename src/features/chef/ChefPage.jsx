@@ -3,6 +3,7 @@ import { request } from '../../lib/api.js';
 import Dialog from '../../components/Dialog.jsx';
 import ChefPrinter from './ChefPrinter.jsx';
 import { printSystemTicket } from './system-print.js';
+import { createOrderAlert } from './order-alert.js';
 import './chef.css';
 
 const api = (path, body) => request(`/api/pos/${path}`, body === undefined ? {} : {
@@ -25,6 +26,20 @@ export default function ChefPage() {
   const generation = useRef(0);
   const printer = useRef(null);
   const [printNotice, setPrintNotice] = useState('');
+  const sound = useRef(null);
+  const [soundEnabled, setSoundEnabled] = useState(false);
+  const [soundNotice, setSoundNotice] = useState('เปิดเสียงเพื่อแจ้งเตือนออเดอร์ใหม่');
+
+  useEffect(() => {
+    const alert = createOrderAlert(`${import.meta.env.BASE_URL}order-alert.wav`, (enabled, message) => {
+      setSoundEnabled(enabled);
+      setSoundNotice(message);
+    });
+    sound.current = alert;
+    setSoundEnabled(alert.enabled);
+    if (alert.enabled) setSoundNotice('กดทดสอบเสียงเพื่อให้เครื่องพร้อมแจ้งเตือน');
+    return () => { alert.dispose(); sound.current = null; };
+  }, []);
 
   function failed(err) {
     setError(err.message);
@@ -37,6 +52,7 @@ export default function ChefPage() {
   async function refresh(version = generation.current) {
     const [nextOrders, nextTables] = await Promise.all([api('kitchen/orders'), api('kitchen/tables')]);
     if (version !== generation.current) return;
+    sound.current?.observe(nextOrders);
     setOrders(nextOrders); setTables(nextTables); setUpdated(new Date()); setError('');
     setSelected((value) => nextTables.some((table) => `${table.id}/${table.sessionId}` === value) ? value : '');
     setDetail((value) => value && nextTables.some((table) => table.id === value.tableId && table.sessionId === value.sessionId) ? value : null);
@@ -58,6 +74,7 @@ export default function ChefPage() {
   }, []);
 
   useEffect(() => {
+    sound.current?.reset();
     if (!user) return;
     let active = true;
     const version = ++generation.current;
@@ -70,7 +87,7 @@ export default function ChefPage() {
     }
     poll();
     const timer = setInterval(poll, 5000);
-    return () => { active = false; generation.current++; clearInterval(timer); };
+    return () => { active = false; generation.current++; clearInterval(timer); sound.current?.reset(); };
   }, [user]);
 
   async function summary(tableId, sessionId) {
@@ -110,6 +127,17 @@ export default function ChefPage() {
         <select aria-label="เลือกโต๊ะดูยอดอาหารสำเร็จ" value={selected} onChange={(event) => setSelected(event.target.value)}><option value="">เลือกโต๊ะที่ยังมีลูกค้า</option>{tables.map((table) => <option key={table.id} value={`${table.id}/${table.sessionId}`}>โต๊ะ {table.number}</option>)}</select>
         <button disabled={busy || !selected} onClick={() => run(() => summary(...selected.split('/')))}>ยอดอาหารสำเร็จ</button>
       </section>
+      <div className="chef-sound-controls">
+        <button type="button" aria-pressed={soundEnabled} onClick={async () => {
+          try { if (sound.current?.enabled) sound.current.disable(); else await sound.current?.enable(); }
+          catch { setSoundNotice('เปิดเสียงไม่ได้ กรุณาลองอีกครั้งและตรวจระดับเสียงของเครื่อง'); }
+        }}>{soundEnabled ? 'ปิดเสียงออเดอร์' : 'เปิดเสียงออเดอร์'}</button>
+        <button type="button" onClick={async () => {
+          try { await sound.current?.test(); }
+          catch { setSoundNotice('เล่นเสียงไม่ได้ กรุณาลองอีกครั้งและตรวจระดับเสียงของเครื่อง'); }
+        }}>ทดสอบเสียง</button>
+        <span role="status">{soundNotice}</span>
+      </div>
       {printNotice && <p role="status">{printNotice}</p>}
       <section className="chef-board" aria-label="ออเดอร์รอทำ เลื่อนแนวนอนเพื่อดูออเดอร์ถัดไป" tabIndex={0}>{orders.map((order, index) => <article className="chef-order" key={order.id}>
         <div className="chef-order-heading"><h2>โต๊ะ {order.table.number}</h2><strong>ลำดับ {index + 1}</strong></div>

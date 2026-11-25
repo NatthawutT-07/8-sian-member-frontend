@@ -8,6 +8,8 @@ import AdminLogin from './components/AdminLogin.jsx';
 import AdminLoyalty from './components/AdminLoyalty.jsx';
 import AdminPos from './components/AdminPos.jsx';
 import AdminBusinessReports from './components/AdminBusinessReports.jsx';
+import AdminSalesDashboard from './components/AdminSalesDashboard.jsx';
+import AdminSalesBills from './components/AdminSalesBills.jsx';
 import AdminOrdering from './components/AdminOrdering.jsx';
 import AdminRecordDialog, {
   memberFields,
@@ -15,7 +17,7 @@ import AdminRecordDialog, {
   deleteAction,
 } from './components/AdminRecordDialog.jsx';
 import { useState } from 'react';
-import { LogOut, Users, Ticket, History, LoaderCircle, Check, QrCode } from 'lucide-react';
+import { LogOut, Users, Ticket, History, LoaderCircle, Check, QrCode, LayoutDashboard, ReceiptText } from 'lucide-react';
 import BrandLogo from '../../components/BrandLogo.jsx';
 import './admin.css';
 export default function AdminPage() {
@@ -123,6 +125,8 @@ export default function AdminPage() {
             ['loyalty', 'สะสมครั้ง', QrCode],
             ['pos', 'พนักงานและสินค้า POS', Users],
             ['ordering', 'โต๊ะและเมนูสั่งอาหาร', QrCode],
+            ['sales-dashboard', 'แดชบอร์ดยอดขาย', LayoutDashboard],
+            ['sales-bills', 'รายการบิล', ReceiptText],
             ['business', 'ยอดขายและกะ', History],
             ['audit', 'ประวัติระบบ', History],
           ].map(([key, label, Icon]) => (
@@ -262,6 +266,8 @@ export default function AdminPage() {
         {tab === 'pos' && <AdminPos api={api} />}
         {tab === 'ordering' && <AdminOrdering api={api} />}
         {tab === 'business' && <AdminBusinessReports api={api} />}
+        {tab === 'sales-dashboard' && <AdminSalesDashboard api={api} />}
+        {tab === 'sales-bills' && <AdminSalesBills api={api} />}
         {recordAction && (
           <AdminRecordDialog
             action={recordAction}

@@ -46,6 +46,24 @@ async function check(module, props, expected) {
   return html;
 }
 try {
+  await check('features/admin/components/AdminSalesDashboard.jsx', { api: noop }, 'แดชบอร์ดยอดขาย');
+  await check('features/admin/components/AdminSalesBills.jsx', { api: noop }, 'รายการบิลขาย');
+  const { SalesBillsTable } = await server.ssrLoadModule('/src/features/admin/components/AdminSalesBills.jsx');
+  const billsMarkup = renderToStaticMarkup(createElement(SalesBillsTable, { sales: [
+    { id: 'bill-a', receiptNumber: 'TEST-001', createdAt: '2026-11-25T05:00:00Z', method: 'MIXED', totalSatang: 15000, items: [{ name: 'อาหาร', quantity: 2, priceSatang: 7500 }] },
+    { id: 'bill-b', receiptNumber: 'TEST-002', createdAt: '2026-11-25T06:00:00Z', method: 'CASH', totalSatang: 10000, items: [{ name: 'น้ำ', quantity: 1, priceSatang: 10000 }] },
+  ], onOpen: noop, busy: false }));
+  assert.equal((billsMarkup.match(/<tr/g) || []).length, 3, 'one header and one row per bill');
+  assert.ok(!billsMarkup.includes('admin-responsive-table'), 'bills stay rows on mobile');
+  assert.ok(billsMarkup.includes('สด + โอน'));
+  const { SalesDashboardContent } = await server.ssrLoadModule('/src/features/admin/components/AdminSalesDashboard.jsx');
+  const emptyDashboard = renderToStaticMarkup(createElement(SalesDashboardContent, { data: {
+    summary: { totalSatang: 0, billCount: 0, averageBillSatang: 0, soldQuantity: 0, cashSatang: 0, transferSatang: 0, subtotalSatang: 0, discountSatang: 0 },
+    daily: [{ date: '2026-11-25', totalSatang: 0, billCount: 0 }], products: [],
+  } }));
+  assert.ok(emptyDashboard.includes('ยังไม่มีบิลที่ชำระแล้ว'));
+  assert.ok(!emptyDashboard.includes('NaN'));
+  console.log('PASS: sales dashboard empty state and one-line receipt rows');
   await check('features/chef/ChefPage.jsx', {}, 'ครัว · ออเดอร์อาหาร');
   await check(
     'features/ordering/OrderingPage.jsx',
