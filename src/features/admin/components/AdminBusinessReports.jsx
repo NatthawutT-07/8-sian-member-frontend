@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import Dialog from '../../../components/Dialog.jsx';
 import Pager from './AdminPagination.jsx';
 import './shift-reports.css';
+import { loadShiftSummaries } from './shift-summary.js';
 
 const today = () =>
   new Intl.DateTimeFormat('en-CA', {
@@ -63,6 +64,10 @@ export default function AdminBusinessReports({ api }) {
         api(`/pos/${nextView}?${query}`),
       ]);
       if (token !== generation.current) return;
+      if (nextView === 'shifts') {
+        rows.shifts = await loadShiftSummaries(rows.shifts || [], api);
+      }
+      if (token !== generation.current) return;
       setApplied({ ...next });
       setView(nextView);
       setSummary(totals.summary);
@@ -82,6 +87,11 @@ export default function AdminBusinessReports({ api }) {
   }, []);
   async function open(id, kind) {
     if (lock.current) return;
+    const cached = kind === 'shifts' && data.shifts?.find((shift) => shift.id === id)?.report;
+    if (cached) {
+      setDetail({ kind, value: cached });
+      return;
+    }
     lock.current = true;
     setBusy(true);
     setError('');
@@ -114,6 +124,9 @@ export default function AdminBusinessReports({ api }) {
             [
               'รหัสกะ',
               'วันที่กะ',
+              'เงินสด (บาท)',
+              'เงินโอน (บาท)',
+              'รายรับรวม (บาท)',
               'เวลาเปิด',
               'เวลาปิด',
               'เงินตั้งต้น',
@@ -124,6 +137,9 @@ export default function AdminBusinessReports({ api }) {
             ...(data.shifts || []).map((row) => [
               row.id,
               row.businessDate,
+              row.report?.summary ? row.report.summary.cashSatang / 100 : '',
+              row.report?.summary ? row.report.summary.transferSatang / 100 : '',
+              row.report?.summary ? row.report.summary.totalSatang / 100 : '',
               date(row.openedAt),
               date(row.closedAt),
               row.openingCashSatang / 100,
@@ -250,13 +266,15 @@ export default function AdminBusinessReports({ api }) {
         {data.total} รายการ • ยอดสรุปด้านบนรวมการชำระทุกประเภทในช่วงวันที่ที่เลือก
       </p>
       {view === 'shifts' && <p className="shift-report-hint">1 กะต่อ 1 แถว • จำนวนเงินเป็นบาท • เลื่อนตารางซ้าย–ขวาบนจอเล็กเพื่อดูข้อมูลทั้งหมด</p>}
+      {view === 'shifts' && <p className="shift-report-hint">ยอดเงินเป็นยอดของแต่ละกะที่ปิดแล้ว • กะที่ยังเปิดจะแสดง “รอปิดกะ”</p>}
+      {view === 'shifts' && data.shifts?.some((shift) => shift.summaryError) && <p className="admin-error" role="alert">โหลดยอดบางกะไม่สำเร็จ กรุณากดแสดงรายงานเพื่อลองใหม่</p>}
       <div className="admin-table-wrap" tabIndex={view === 'shifts' ? 0 : undefined} role={view === 'shifts' ? 'region' : undefined} aria-label={view === 'shifts' ? 'ตารางกะเปิด–ปิดร้าน เลื่อนแนวนอนได้' : undefined}>
         <table className={view === 'shifts' ? 'shift-report-table' : 'admin-responsive-table'}>
           <thead>
             <tr>
               {(view === 'sales'
                 ? ['เลขบิล / เวลา', 'พนักงาน', 'การชำระ', 'ยอดสุทธิ', 'รายละเอียด']
-                : ['วันที่กะ', 'จำนวนบิล', 'เงินสดขาด–เกิน (บาท)', 'เวลาเปิด', 'เวลาปิด', 'สถานะ', 'รายละเอียด']
+                : ['วันที่กะ', 'เงินสด (บาท)', 'เงินโอน (บาท)', 'รายรับรวม (บาท)', 'จำนวนบิล', 'เงินสดขาด–เกิน (บาท)', 'เวลาเปิด', 'เวลาปิด', 'สถานะ', 'รายละเอียด']
               ).map((label) => (
                 <th key={label} scope="col">{label}</th>
               ))}
@@ -287,6 +305,13 @@ export default function AdminBusinessReports({ api }) {
               : (data.shifts || []).map((shift) => (
                   <tr key={shift.id}>
                     <th scope="row">{shift.businessDate}</th>
+                    {['cashSatang', 'transferSatang', 'totalSatang'].map((key) => (
+                      <td key={key} className={`shift-numeric ${key === 'totalSatang' ? 'shift-income' : ''}`}>
+                        {shift.report?.summary
+                          ? money(shift.report.summary[key])
+                          : !shift.closedAt ? 'รอปิดกะ' : 'โหลดไม่สำเร็จ'}
+                      </td>
+                    ))}
                     <td className="shift-numeric">{(shift._count?.sales ?? 0).toLocaleString('th-TH')}</td>
                     <td className={`shift-numeric shift-difference ${shift.cashDifferenceSatang < 0 ? 'is-short' : shift.cashDifferenceSatang > 0 ? 'is-over' : ''}`}>
                       {shift.cashDifferenceSatang == null

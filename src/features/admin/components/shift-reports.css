@@ -15,7 +15,7 @@
 }
 .admin-business-reports .shift-report-table {
   width: 100%;
-  min-width: 980px;
+  min-width: 1380px;
   font-variant-numeric: tabular-nums;
 }
 .admin-business-reports .shift-report-table th,
@@ -48,6 +48,12 @@
 .admin-business-reports .shift-report-table thead th:nth-child(3) {
   text-align: right;
 }
+.admin-business-reports .shift-report-table thead th:nth-child(4),
+.admin-business-reports .shift-report-table thead th:nth-child(5),
+.admin-business-reports .shift-report-table thead th:nth-child(6) { text-align: right; }
+.admin-business-reports .shift-report-table .shift-income { font-weight: 700; color: #20633e; }
+.admin-record-dialog .admin-report-stats { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+.admin-record-dialog .admin-report-stats strong { overflow-wrap: normal; font-variant-numeric: tabular-nums; }
 .admin-business-reports .shift-difference { font-weight: 700; }
 .admin-business-reports .shift-report-table .is-short { color: #a22924; }
 .admin-business-reports .shift-report-table .is-over { color: #20633e; }
