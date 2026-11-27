@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Dialog from '../../../components/Dialog.jsx';
 import Pager from './AdminPagination.jsx';
+import './shift-reports.css';
 
 const today = () =>
   new Intl.DateTimeFormat('en-CA', {
@@ -248,15 +249,16 @@ export default function AdminBusinessReports({ api }) {
       <p className="admin-help">
         {data.total} รายการ • ยอดสรุปด้านบนรวมการชำระทุกประเภทในช่วงวันที่ที่เลือก
       </p>
-      <div className="admin-table-wrap">
-        <table className="admin-responsive-table">
+      {view === 'shifts' && <p className="shift-report-hint">1 กะต่อ 1 แถว • จำนวนเงินเป็นบาท • เลื่อนตารางซ้าย–ขวาบนจอเล็กเพื่อดูข้อมูลทั้งหมด</p>}
+      <div className="admin-table-wrap" tabIndex={view === 'shifts' ? 0 : undefined} role={view === 'shifts' ? 'region' : undefined} aria-label={view === 'shifts' ? 'ตารางกะเปิด–ปิดร้าน เลื่อนแนวนอนได้' : undefined}>
+        <table className={view === 'shifts' ? 'shift-report-table' : 'admin-responsive-table'}>
           <thead>
             <tr>
               {(view === 'sales'
                 ? ['เลขบิล / เวลา', 'พนักงาน', 'การชำระ', 'ยอดสุทธิ', 'รายละเอียด']
-                : ['วันที่กะ / เวลาเปิด', 'เวลาปิด', 'จำนวนบิล', 'เงินสดขาด–เกิน', 'รายละเอียด']
+                : ['วันที่กะ', 'จำนวนบิล', 'เงินสดขาด–เกิน (บาท)', 'เวลาเปิด', 'เวลาปิด', 'สถานะ', 'รายละเอียด']
               ).map((label) => (
-                <th key={label}>{label}</th>
+                <th key={label} scope="col">{label}</th>
               ))}
             </tr>
           </thead>
@@ -284,17 +286,17 @@ export default function AdminBusinessReports({ api }) {
                 ))
               : (data.shifts || []).map((shift) => (
                   <tr key={shift.id}>
-                    <td data-label="กะ">
-                      {shift.businessDate}
-                      <small>{date(shift.openedAt)}</small>
-                    </td>
-                    <td data-label="เวลาปิด">{date(shift.closedAt)}</td>
-                    <td data-label="จำนวนบิล">{shift._count?.sales || 0}</td>
-                    <td data-label="ส่วนต่าง">
+                    <th scope="row">{shift.businessDate}</th>
+                    <td className="shift-numeric">{(shift._count?.sales ?? 0).toLocaleString('th-TH')}</td>
+                    <td className={`shift-numeric shift-difference ${shift.cashDifferenceSatang < 0 ? 'is-short' : shift.cashDifferenceSatang > 0 ? 'is-over' : ''}`}>
                       {shift.cashDifferenceSatang == null
-                        ? 'กะเปิดอยู่'
-                        : money(shift.cashDifferenceSatang)}
+                        ? '—'
+                        : `${shift.cashDifferenceSatang > 0 ? '+' : ''}${money(shift.cashDifferenceSatang)}`}
+                      {shift.cashDifferenceSatang != null && <span className="shift-difference-label">{shift.cashDifferenceSatang < 0 ? 'ขาด' : shift.cashDifferenceSatang > 0 ? 'เกิน' : 'พอดี'}</span>}
                     </td>
+                    <td>{date(shift.openedAt)}</td>
+                    <td>{date(shift.closedAt)}</td>
+                    <td><span className={`shift-status ${shift.closedAt ? 'is-closed' : 'is-open'}`}>{shift.closedAt ? 'ปิดแล้ว' : 'เปิดอยู่'}</span></td>
                     <td>
                       <button
                         className="admin-link"

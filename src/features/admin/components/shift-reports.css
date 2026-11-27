@@ -1,0 +1,67 @@
+﻿.admin-business-reports .shift-report-hint {
+  color: #64543c;
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0 0 12px;
+}
+.admin-business-reports .admin-table-wrap {
+  max-width: 100%;
+  min-width: 0;
+  border-radius: 8px;
+}
+.admin-business-reports .admin-table-wrap:focus-visible {
+  outline: 2px solid #8b342c;
+  outline-offset: 3px;
+}
+.admin-business-reports .shift-report-table {
+  width: 100%;
+  min-width: 980px;
+  font-variant-numeric: tabular-nums;
+}
+.admin-business-reports .shift-report-table th,
+.admin-business-reports .shift-report-table td {
+  padding: 12px 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: nowrap;
+  color: #3f3527;
+  border-bottom: 1px solid #e3ddcd;
+}
+.admin-business-reports .shift-report-table thead th {
+  font-size: 13px;
+  font-weight: 600;
+  background: #eee8db;
+}
+.admin-business-reports .shift-report-table tbody th {
+  font-weight: 600;
+  background: #fffdf7;
+  text-align: left;
+}
+.admin-business-reports .shift-report-table tbody tr:nth-child(even) td {
+  background: #faf7ef;
+}
+.admin-business-reports .shift-report-table tbody tr:hover td {
+  background: #f2ecdf;
+}
+.admin-business-reports .shift-report-table .shift-numeric,
+.admin-business-reports .shift-report-table thead th:nth-child(2),
+.admin-business-reports .shift-report-table thead th:nth-child(3) {
+  text-align: right;
+}
+.admin-business-reports .shift-difference { font-weight: 700; }
+.admin-business-reports .shift-report-table .is-short { color: #a22924; }
+.admin-business-reports .shift-report-table .is-over { color: #20633e; }
+.shift-difference-label { margin-left: 8px; font-size: 12px; font-weight: 400; }
+.shift-status { padding: 4px 9px; border-radius: 6px; font-size: 12px; background: #ece8df; }
+.shift-status.is-open { background: #e3f1e7; color: #20633e; }
+.admin-business-reports .shift-report-table .admin-link { font-size: 14px; min-height: 44px; padding: 8px; }
+@media (max-width: 700px) {
+  .admin-business-reports .shift-report-table tbody th {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    box-shadow: 2px 0 4px #3f352710;
+  }
+  .admin-business-reports .shift-report-table th,
+  .admin-business-reports .shift-report-table td { padding: 10px 12px; }
+}

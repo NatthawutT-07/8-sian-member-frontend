@@ -3,6 +3,7 @@ import { ArrowUpRight, Banknote, ReceiptText, ShoppingBag, Wallet } from 'lucide
 import { reportToday, reportMoney as money, useSalesReport } from './sales-report.js';
 import SalesReportFilters from './SalesReportFilters.jsx';
 import './sales-reports.css';
+import './sales-dashboard.css';
 
 export function SalesDashboardContent({ data }) {
   const { summary, daily, products } = data;
@@ -24,7 +25,7 @@ export function SalesDashboardContent({ data }) {
       <section className="sales-card">
         <div className="sales-card-heading"><div><h3>แนวโน้มยอดขายรายวัน</h3><p>ยอดสุทธิ • ตามวันชำระประเทศไทย</p></div><span>{daily.length} วัน</span></div>
         <div className="sales-chart-scroll" tabIndex={0} aria-label="กราฟยอดขายรายวัน เลื่อนแนวนอนเพื่อดูครบทุกวัน">
-          <div className="sales-bar-chart" style={{ minWidth: `${Math.max(320, daily.length * 62)}px` }}>
+          <div className="sales-bar-chart" style={{ minWidth: `${Math.max(280, daily.length * 100)}px` }}>
             {daily.map((day) => <div className="sales-chart-column" key={day.date}>
               <span className="sales-chart-value">{money(day.totalSatang)}</span>
               <div className="sales-chart-track"><div className="sales-chart-bar" style={{ height: `${day.totalSatang / max * 100}%` }} title={`${day.date}: ${money(day.totalSatang)} บาท · ${day.billCount} บิล`} /></div>
@@ -33,11 +34,12 @@ export function SalesDashboardContent({ data }) {
             </div>)}
           </div>
         </div>
+        <p className="sales-note sales-chart-hint">ยอดขายเป็นบาท • เลื่อนซ้าย–ขวาเพื่อดูครบทุกวัน</p>
       </section>
       <section className="sales-card sales-payment-card">
         <h3>สัดส่วนการรับชำระ</h3><p>เงินสดเป็นยอดสุทธิหลังทอน</p>
-        <div className="sales-payment-line"><Banknote size={20} /><span>เงินสด</span><strong>฿{money(summary.cashSatang)}</strong></div>
-        <div className="sales-payment-line"><Wallet size={20} /><span>เงินโอน</span><strong>฿{money(summary.transferSatang)}</strong></div>
+        <div className="sales-payment-line"><Banknote size={20} aria-hidden="true" /><span>เงินสด<small>{cashPercent}% ของยอดขาย</small></span><strong>฿{money(summary.cashSatang)}</strong></div>
+        <div className="sales-payment-line"><Wallet size={20} aria-hidden="true" /><span>เงินโอน<small>{summary.totalSatang ? 100 - cashPercent : 0}% ของยอดขาย</small></span><strong>฿{money(summary.transferSatang)}</strong></div>
         <div className="sales-payment-bar" role="img" aria-label={`เงินสด ${cashPercent}% เงินโอน ${summary.totalSatang ? 100 - cashPercent : 0}%`}><span style={{ width: `${cashPercent}%` }} /></div>
         <p>บิลสด + โอน แยกยอดตามจำนวนที่รับจริง</p>
         <dl className="sales-totals"><div><dt>ยอดก่อนคูปอง</dt><dd>฿{money(summary.subtotalSatang)}</dd></div><div><dt>ส่วนลดคูปอง</dt><dd>฿{money(summary.discountSatang)}</dd></div></dl>
@@ -45,8 +47,9 @@ export function SalesDashboardContent({ data }) {
     </div>
     <section className="sales-card">
       <div className="sales-card-heading"><div><h3>ขายอะไรไปบ้าง</h3><p>รวมทุกบิลในช่วงวันที่เลือก เรียงตามยอดขายสินค้า</p></div><span>{products.length} รายการ</span></div>
-      <div className="sales-table-scroll"><table className="sales-flat-table">
-        <thead><tr><th>สินค้า / รายการ</th><th className="numeric">ราคาต่อหน่วย</th><th className="numeric">จำนวนที่ขาย</th><th className="numeric">ยอดรวม</th></tr></thead>
+      <p className="sales-note sales-products-hint">จำนวนเงินเป็นบาท • บนจอเล็กเลื่อนตารางซ้าย–ขวาได้</p>
+      <div className="sales-table-scroll" tabIndex={0} role="region" aria-label="สินค้าที่ขาย เลื่อนแนวนอนเพื่อดูราคาจำนวนและยอดรวม"><table className="sales-flat-table sales-products-table">
+        <thead><tr><th scope="col">สินค้า / รายการ</th><th scope="col" className="numeric">ราคาต่อหน่วย</th><th scope="col" className="numeric">จำนวนที่ขาย</th><th scope="col" className="numeric">ยอดรวม</th></tr></thead>
         <tbody>{products.map((item, index) => <tr key={`${item.productId}-${item.priceSatang}-${index}`}>
           <td>{item.name}{item.priceSatang < 0 && <span className="sales-badge">ส่วนลด</span>}</td><td className="numeric">{money(item.priceSatang)}</td><td className="numeric">{item.quantity.toLocaleString('th-TH')}</td><td className="numeric"><strong>{money(item.totalSatang)}</strong></td>
         </tr>)}</tbody>
@@ -62,10 +65,11 @@ export default function AdminSalesDashboard({ api }) {
   const [filter, setFilter] = useState(() => ({ from: reportToday(), to: reportToday() }));
   const [applied, setApplied] = useState(filter);
   const { data, busy, error, reload } = useSalesReport(api, `/pos/dashboard?${new URLSearchParams(applied)}`);
-  return <section className="admin-panel sales-report-page" aria-busy={busy}>
+  return <section className="admin-panel sales-report-page sales-dashboard-page" aria-busy={busy}>
     <div className="sales-page-heading"><div><div className="eyebrow">SALES OVERVIEW</div><h2>แดชบอร์ดยอดขาย</h2><p>มองภาพรวมรายได้และสินค้าที่ขายในช่วงเวลาที่เลือก</p></div><button className="admin-secondary" disabled={busy} onClick={reload}>รีเฟรช</button></div>
     <SalesReportFilters filter={filter} setFilter={setFilter} busy={busy} onApply={() => { setApplied({ ...filter }); reload(); }} />
     <p className="sales-note">เลือกได้ไม่เกิน 93 วัน • นับเฉพาะบิลชำระสำเร็จตามเวลาไทย</p>
+    <div className="sales-dashboard-period"><span>ช่วงวันที่ของรายงาน</span><strong>{applied.from.split('-').reverse().join('/')} – {applied.to.split('-').reverse().join('/')}</strong></div>
     {busy && <p role="status">กำลังโหลดแดชบอร์ด…</p>}
     {error && <p className="admin-error" role="alert">{error}</p>}
     {data && <SalesDashboardContent data={data} />}
